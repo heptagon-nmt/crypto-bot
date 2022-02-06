@@ -5,7 +5,7 @@ import ast
 import matplotlib.pyplot as plt
 import numpy as np
 
-cryptocurrency = "BTC"
+cryptocurrency = "XRP"
 
 scraper = CmcScraper(cryptocurrency)
 json_data = ast.literal_eval(scraper.get_data("json"))
