@@ -9,3 +9,13 @@ Apply machine learning to cryptocurrency data
 - scikit-learn==1.0.2
 - numpy==1.22.2
 - matplotlib==3.5.1
+- yahoo-fin==0.8.9.1
+
+# Data Sources
+https://finance.yahoo.com
+https://www.coingecko.com/en/coins/
+
+# Coin ID reference in coin\_list.json
+
+# Data Collector
+The data collector takes a list of symbols then starts
