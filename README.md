@@ -17,5 +17,10 @@ https://www.coingecko.com/en/coins/
 
 # Coin ID reference in coin\_list.json
 
-# Data Collector
-The data collector takes a list of symbols then starts
+# Real-time data collection
+
+# Historical BTC/USD, ETH/USD, LTC/USD
+Go to https://www.cryptodatadownload.com/data/gemini/ and download the minute 
+CSVs. Then move the CSV files into the data folder and run train\_model.py 
+(doesn't yet exist)
+
