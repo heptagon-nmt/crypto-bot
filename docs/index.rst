@@ -13,6 +13,7 @@ Welcome to crypto-bot's documentation!
 .. automodule:: src 
    :members:
 
+hi
 
 Indices and tables
 ==================
