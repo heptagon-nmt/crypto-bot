@@ -67,9 +67,8 @@ def get_n_days(coin_id, n):
     end = time.time()
     start = end - 24 * 60 * 60 * n
     return get_market_range(coin_id, start, end)
-
+"""
 ##### Real time data:
-
 # Request OHLC data from Coingecko every 30 minutes
 from keras.models import Sequential
 from keras import layers
@@ -94,7 +93,6 @@ def get_classifier():
     classifier.add(layers.Dense(2, "softmax"))
     return classifier
 
-"""
 if __name__ == "__main__":
     data_list = []
     initial_time = time.time()
