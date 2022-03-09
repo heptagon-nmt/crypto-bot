@@ -42,7 +42,7 @@ def parameter_gridsearch(data):
 			steps              = 10,
 			refit              = True,
 			metric             = 'mean_squared_error',
-			initial_train_size = int(len(data_train)*0.5),
+			initial_train_size = int(len(data)*0.5),
 			return_best        = True,
 			verbose            = False
 		)
