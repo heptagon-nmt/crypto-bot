@@ -6,12 +6,10 @@ from sklearn.linear_model import Lasso
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
-
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from skforecast.ForecasterAutoregCustom import ForecasterAutoregCustom
 from skforecast.ForecasterAutoregMultiOutput import ForecasterAutoregMultiOutput
 from skforecast.model_selection import grid_search_forecaster
-from skforecast.model_selection import backtesting_forecaster
 import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
@@ -22,7 +20,7 @@ def xgboost_forecast_single_step_predict(data):
 	model.fit(np.vstack(np.array(X)), np.vstack(np.array(data)))
 	yhat = model.predict(np.vstack(np.array([len(data)])))
 	return list(yhat)[0]
-def predict_next_N_timesteps(data, lags, N, random_state):
+def predict_next_N_timesteps(data, lags, N, random_state=10):
 	assert type(data) is list, "price data must be a list"
 	forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=random_state), lags = lags)
 	data_train = pd.Series(data)

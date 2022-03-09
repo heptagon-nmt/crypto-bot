@@ -2,8 +2,13 @@
 The unit test mechanism.
 """
 import time
-import get_historical as gh
+#import get_historical as gh
 
+import ML_predictor_backend as ML
+
+ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 2, 4)
+
+"""
 assert len(gh.get_ids()) > 0, "Id list is malformed"
 
 assert gh.get_market_range(gh.get_ids()[0], time.time(),
@@ -27,4 +32,4 @@ import ML_predictor_backend as ml
 
 assert isinstance(ml.parameter_gridsearch,
         grid_search_forecaster), "Something is wrong?"
-
+"""
