@@ -1,3 +1,6 @@
+"""
+Library code for the Machine Learning prediction backend
+"""
 from cryptocmd import CmcScraper
 from sklearn.linear_model import LinearRegression
 import ast
@@ -17,56 +20,50 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
-from sklearn.datasets import load_boston
 
-def xgboost_forecast(data):
+def xgboost_forecast_single_step_predict(data):
 	X = [i for i in range(len(data))]
 	model = XGBRegressor(objective='reg:squarederror', n_estimators=1000)
 	model.fit(np.vstack(np.array(X)), np.vstack(np.array(data)))
 	yhat = model.predict(np.vstack(np.array([len(data)])))
 	return list(yhat)[0]
 
-cryptocurrency = "ETH"
+#grab data from CMC scraper
+#cryptocurrency = "ETH"
+#scraper = CmcScraper(cryptocurrency)
+#json_data = ast.literal_eval(scraper.get_data("json"))
+#json_data.reverse()
+#data = []
+#data_dict = {}
+#for a in json_data:
+#	data.append(a["Open"])
+#	data.append(a["Close"])
 
-scraper = CmcScraper(cryptocurrency)
-json_data = ast.literal_eval(scraper.get_data("json"))
+def plot_and_save_price_graph(data, filename, file_extension):
+	assert file_extension in ["pdf", "png", "jpg"]
+	assert type(filename) is str
+	assert type(file_extension) is str
+	assert type(data) is list
+	plt.plot([a for a in range(len(data))], data, "-b.")
+	plt.savefig("figures/"+cryptocurrency+"."+file_extension)
+	plt.close()
+	return None
+def predict_next_N_timesteps(data, lags, N):
+	assert type(data) is list
+	forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=123), lags = lags)
+	data_train = pd.Series(data)
+	forecaster.fit(y=data_train)
+	predictions = forecaster.predict(steps=N)
+	return list(predictions)
 
-json_data.reverse()
 
-data = []
-data_dict = {}
-for a in json_data:
-	data.append(a["Open"])
-	data.append(a["Close"])
 
-plt.plot([a for a in range(len(data))], data, "-b.")
-plt.savefig("figures/"+cryptocurrency+".pdf")
-plt.close()
-
-steps = 10
-
-data_train = data[:-steps]
-data_test  = data[-steps:]
-print(data_test)
-out = xgboost_forecast(data_train)
-print(out)
-
-forecaster = ForecasterAutoreg(
-                regressor = RandomForestRegressor(random_state=123),
-                lags = 6
-             )
-print(len(data_train))
-data_train = pd.Series(data_train)
-forecaster.fit(y=data_train)
-predictions = forecaster.predict(steps=10)
-print(predictions)
-
+"""
+Parameter gridsearch
 param_grid = {'n_estimators': [500],
               'max_depth': [10]}
 
-# Lags used as predictors
 lags_grid = [10, 20]
-
 results_grid = grid_search_forecaster(
                         forecaster         = forecaster,
                         y                  = data_train,
@@ -81,3 +78,4 @@ results_grid = grid_search_forecaster(
                    )
 
 print(results_grid)
+"""
