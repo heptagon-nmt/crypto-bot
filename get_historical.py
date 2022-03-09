@@ -52,3 +52,16 @@ def get_n_days(coin_id, n):
 
 if __name__ == "__main__":
     pass
+
+
+#grab data from CMC scraper
+#cryptocurrency = "ETH"
+#scraper = CmcScraper(cryptocurrency)
+#json_data = ast.literal_eval(scraper.get_data("json"))
+#json_data.reverse()
+#data = []
+#data_dict = {}
+#for a in json_data:
+#       data.append(a["Open"])
+#       data.append(a["Close"])
+
