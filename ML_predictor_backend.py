@@ -1,9 +1,6 @@
 """
 Library code for the Machine Learning prediction backend
 """
-from cryptocmd import CmcScraper
-from sklearn.linear_model import LinearRegression
-import ast
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
 from sklearn.ensemble import RandomForestRegressor
@@ -28,17 +25,19 @@ def xgboost_forecast_single_step_predict(data):
 	yhat = model.predict(np.vstack(np.array([len(data)])))
 	return list(yhat)[0]
 def plot_and_save_price_graph(data, filename, file_extension):
-	assert file_extension in ["pdf", "png", "jpg"]
+	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
 	assert type(filename) is str
 	assert type(file_extension) is str
 	assert type(data) is list
 	plt.plot([a for a in range(len(data))], data, "-b.")
+	plt.xlabel("USD price")
+	plt.ylabel("Time index")
 	plt.savefig("figures/"+cryptocurrency+"."+file_extension)
 	plt.close()
 	return None
-def predict_next_N_timesteps(data, lags, N):
-	assert type(data) is list
-	forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=123), lags = lags)
+def predict_next_N_timesteps(data, lags, N, random_state):
+	assert type(data) is list, "price data must be a list"
+	forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=random_state), lags = lags)
 	data_train = pd.Series(data)
 	forecaster.fit(y=data_train)
 	predictions = forecaster.predict(steps=N)
