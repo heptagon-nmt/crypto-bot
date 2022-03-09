@@ -10,7 +10,7 @@ Welcome to crypto-bot's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: doc_example 
+.. automodule:: crypto-bot 
    :members:
 
 
