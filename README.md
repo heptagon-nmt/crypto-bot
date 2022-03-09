@@ -1,5 +1,5 @@
 # crypto-bot
-Apply machine learning to cryptocurrency data
+The user level command line script is `crypto_util.py`
 
 # Code Health
 
