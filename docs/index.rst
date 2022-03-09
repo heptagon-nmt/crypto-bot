@@ -10,6 +10,8 @@ Welcome to crypto-bot's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. automodule:: get_historical 
+   :members:
 
 
 Indices and tables
