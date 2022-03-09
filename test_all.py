@@ -6,7 +6,10 @@ import time
 
 import ML_predictor_backend as ML
 
-ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 2, 4)
+pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 2, 4)
+assert type(pred) is list
+assert len(pred) == 4
+assert type(pred[0]) is int
 
 """
 assert len(gh.get_ids()) > 0, "Id list is malformed"
