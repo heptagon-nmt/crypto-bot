@@ -10,10 +10,8 @@ Welcome to crypto-bot's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: src 
+.. automodule:: auto_doc 
    :members:
-
-hi
 
 Indices and tables
 ==================
