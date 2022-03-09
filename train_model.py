@@ -1,3 +1,4 @@
+"""
 from tkinter import W
 from keras.models import Sequential
 from keras import layers
@@ -117,3 +118,4 @@ if __name__ == "__main__":
     #data, labels = create_inputs_and_labels(df)
     data, labels = get_test_data()
     classifier.fit(data, labels, batch_size = BATCH_SIZE, epochs = EPOCHS)
+"""
