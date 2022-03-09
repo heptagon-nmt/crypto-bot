@@ -1,4 +1,4 @@
-name: Pages
+name: Generate Documentation
 on:
   push:
     branches:
