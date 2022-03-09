@@ -1,5 +1,5 @@
 """
-The name of your module goes here.
+Description of your module.
 """
 
 class ExapleClass():
