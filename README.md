@@ -1,6 +1,12 @@
 # crypto-bot
 Apply machine learning to cryptocurrency data
 
+# Code Health
+
+[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml)
+
+[![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml)
+
 # Requirements
 - python 3.9.1
 - Anaconda
