@@ -1,5 +1,5 @@
 """
-The unit test mecanism.
+The unit test mechanism.
 """
 import time
 import get_historical as gh

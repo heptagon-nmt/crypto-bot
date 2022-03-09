@@ -1,7 +1,7 @@
 from cryptocmd import CmcScraper
 import ast
 
-def pull_CMC_scraper_data(cryptocurrency_name)
+def pull_CMC_scraper_data(cryptocurrency_name):
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
 	"""
