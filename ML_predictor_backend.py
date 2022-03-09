@@ -36,7 +36,7 @@ def parameter_gridsearch(data):
 	lags_grid = [10, 20]
 	results_grid = grid_search_forecaster(
 			forecaster         = forecaster,
-			y                  = data_train,
+			y                  = data,
 			param_grid         = param_grid,
 			lags_grid          = lags_grid,
 			steps              = 10,
