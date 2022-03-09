@@ -29,7 +29,9 @@ def predict_next_N_timesteps(data, lags, N, random_state):
 	forecaster.fit(y=data_train)
 	predictions = forecaster.predict(steps=N)
 	return list(predictions)
-def parameter_gridsearch():
+def parameter_gridsearch(data):
+	assert type(data) is list, "price data must be a list"
+	forecaster = ForecasterAutoreg(regressor = RandomForestRegressor()
 	param_grid = {'n_estimators': [500], 'max_depth': [10]}
 	lags_grid = [10, 20]
 	results_grid = grid_search_forecaster(
