@@ -1,11 +1,13 @@
+[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml)
+
+
 # crypto-bot
-Apply machine learning to cryptocurrency data
+The user level command line script is `crypto_util.py`
 
-# Code Health
+# Example Usage
+- `python3 crypto_util.py --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze needs to specified. 
 
-[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml)
-
-[![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml)
+- `python3 crypto_util.py --help` displays the usage and required arguments for the utility to work. 
 
 # Requirements
 - python 3.9.1
@@ -18,8 +20,9 @@ Apply machine learning to cryptocurrency data
 - yahoo-fin==0.8.9.1
 
 # Data Sources
-https://finance.yahoo.com
-https://www.coingecko.com/en/coins/
+- https://finance.yahoo.com
+
+- https://www.coingecko.com/en/coins/
 
 # Coin ID reference in coin\_list.json
 

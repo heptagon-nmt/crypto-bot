@@ -13,6 +13,8 @@ TODO validate Kraken data. The intervals between rows don't seem correct
     first row since it's the most recent value, so it doesn't have the closing 
     price
 """
+import ast
+from cryptocmd import CmcScraper
 import json
 import numpy as np
 import os
@@ -23,6 +25,20 @@ from yahoo_fin import stock_info as si
 
 url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}", 
                 "kraken" : "https://api.kraken.com/0/public/{}"}
+
+def pull_CMC_scraper_data(cryptocurrency_name):
+	"""
+	Query CMC Scraper API to get the cryptocurrency price data
+	"""
+	assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
+	scraper = CmcScraper(cryptocurrency_name)
+	json_data = ast.literal_eval(scraper.get_data("json"))
+	json_data.reverse()
+	data = []
+	for a in json_data:
+		data.append(a["Open"])
+		data.append(a["Close"])
+	return data
 
 
 def get_available_sources():
