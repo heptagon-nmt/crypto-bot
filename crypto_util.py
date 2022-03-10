@@ -3,7 +3,7 @@ from get_data import pull_CMC_scraper_data
 from utils import *
 import argparse
 
-models = ["xgboost", "random_forest", "linear", "lasso", "gradient_boosting"]
+models = ["xgboost", "random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 sources = ["kraken", "coingecko", "cmc"]
 
 def main():
@@ -50,6 +50,10 @@ def main():
 	prediction = predict_next_N_timesteps(data, 10, 5, "lasso")
 	print(prediction)
 	prediction = predict_next_N_timesteps(data, 10, 5, "gradient_boosting")
+	print(prediction)
+	prediction = predict_next_N_timesteps(data, 10, 5, "bagging")
+	print(prediction)
+	prediction = predict_next_N_timesteps(data, 10, 5, "ridge")
 	print(prediction)
 	return
 
