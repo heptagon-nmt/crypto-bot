@@ -1,5 +1,6 @@
 from ML_predictor_backend import xgboost_forecast_single_step_predict
 from get_data import pull_CMC_scraper_data
+from utils import *
 import argparse
 
 models = ["xgboost", "random_forest", "linear"]
