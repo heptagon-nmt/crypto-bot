@@ -13,6 +13,7 @@ from skforecast.model_selection import grid_search_forecaster
 import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
+import sys
 
 def xgboost_forecast_single_step_predict(data):
 	X = [i for i in range(len(data))]
@@ -20,9 +21,18 @@ def xgboost_forecast_single_step_predict(data):
 	model.fit(np.vstack(np.array(X)), np.vstack(np.array(data)))
 	yhat = model.predict(np.vstack(np.array([len(data)])))
 	return list(yhat)[0]
-def predict_next_N_timesteps(data, lags, N, random_state=10):
+def predict_next_N_timesteps(data, lags, N, model_name, random_state=10):
 	assert type(data) is list, "price data must be a list"
-	forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=random_state), lags = lags)
+	assert type(lags) is int, "lag parameter must be an integer"
+	assert type(N) is int, "Number of steps to predict into the future must be an integer"
+	assert type(model_name) is str, "model name must be a string"
+	if model_name == "random_forest":
+		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=random_state), lags = lags)
+	elif model_name == "linear":
+		forecaster = ForecasterAutoreg(regressor = LinearRegression(), lags = lags)
+	else:
+		print("model not recognized, exiting")
+		sys.exit()
 	data_train = pd.Series(data)
 	forecaster.fit(y=data_train)
 	predictions = forecaster.predict(steps=N)
