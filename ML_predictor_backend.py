@@ -4,11 +4,8 @@ Library code for the Machine Learning prediction backend
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
-from sklearn.preprocessing import StandardScaler
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
-from skforecast.ForecasterAutoregCustom import ForecasterAutoregCustom
-from skforecast.ForecasterAutoregMultiOutput import ForecasterAutoregMultiOutput
+from sklearn.ensemble import GradientBoostingRegressor
 from skforecast.model_selection import grid_search_forecaster
 import numpy as np
 import pandas as pd
@@ -30,6 +27,10 @@ def predict_next_N_timesteps(data, lags, N, model_name, random_state=10):
 		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(random_state=random_state), lags = lags)
 	elif model_name == "linear":
 		forecaster = ForecasterAutoreg(regressor = LinearRegression(), lags = lags)
+	elif model_name == "lasso":
+		forecaster = ForecasterAutoreg(regressor = Lasso(), lags = lags)
+	elif model_name == "gradient_boosting":
+		forecaster = ForecasterAutoreg(regressor = GradientBoostingRegressor(), lags = lags)
 	else:
 		print("model not recognized, exiting")
 		sys.exit()

@@ -3,7 +3,7 @@ from get_data import pull_CMC_scraper_data
 from utils import *
 import argparse
 
-models = ["xgboost", "random_forest", "linear"]
+models = ["xgboost", "random_forest", "linear", "lasso", "gradient_boosting"]
 sources = ["kraken", "coingecko", "cmc"]
 
 def main():
@@ -40,11 +40,16 @@ def main():
 
 	
 	# Get the data
-	cryptocurrency = "ETH" if not args.crypto else args.crypto
-	data = pull_CMC_scraper_data(cryptocurrency)
+	data = pull_CMC_scraper_data(args.crypto)
 	next_day_prediction = xgboost_forecast_single_step_predict(data)
-	print("The next predicted price of "+cryptocurrency+" is", next_day_prediction)
+	print("The next predicted price of "+args.crypto+" is", next_day_prediction)
 	prediction = predict_next_N_timesteps(data, 10, 5, "linear")
+	print(prediction)
+	prediction = predict_next_N_timesteps(data, 10, 5, "random_forest")
+	print(prediction)
+	prediction = predict_next_N_timesteps(data, 10, 5, "lasso")
+	print(prediction)
+	prediction = predict_next_N_timesteps(data, 10, 5, "gradient_boosting")
 	print(prediction)
 	return
 
