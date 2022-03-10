@@ -4,6 +4,11 @@
 # crypto-bot
 The user level command line script is `crypto_util.py`
 
+# Example Usage
+- `python3 crypto_util.py --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze needs to specified. 
+
+- `python3 crypto_util.py --help` displays the usage and required arguments for the utility to work. 
+
 # Requirements
 - python 3.9.1
 - Anaconda
@@ -15,8 +20,9 @@ The user level command line script is `crypto_util.py`
 - yahoo-fin==0.8.9.1
 
 # Data Sources
-https://finance.yahoo.com
-https://www.coingecko.com/en/coins/
+- https://finance.yahoo.com
+
+- https://www.coingecko.com/en/coins/
 
 # Coin ID reference in coin\_list.json
 
