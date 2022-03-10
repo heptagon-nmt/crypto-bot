@@ -26,9 +26,17 @@ def plot_and_save_price_graph(data, filename, file_extension):
 	plt.savefig("figures/"+filename+"."+file_extension)
 	plt.close()
 	return None
-
+def plot_and_save_price_data_with_analysis(data, filename, file_extension):
+	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
+	assert type(filename) is str
+	assert type(file_extension) is str
+	assert type(data) is list
+	df = array_to_dataframe(data)
+	mpf.plot(df, type = "candle", style = "mike", mav = [5], tight_layout = True)
+	plt.savefig("figures/"+filename+"."+file_extension)
+"""
 if __name__ == "__main__":
     data = get_ohlc_coingecko("litecoin", "usd", 90)
     df = array_to_dataframe(data)
     mpf.plot(df, type = "candle", style = "mike", mav = [5], tight_layout = True)
-
+"""
