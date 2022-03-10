@@ -12,6 +12,7 @@ def main():
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict")
 	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies")
 	parser.add_argument("--model", "-m", type=str, required=False, help="Regression model to predict the price given historical data")
+	parser.add_argument("--plot", "-p", action="store_true", required=False, help="Plot the data")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use")
 	args = parser.parse_args()
 
