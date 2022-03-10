@@ -1,26 +1,17 @@
 """
-The unit test mecanism.
+The unit test mechanism.
 """
 import time
-import get_historical as gh
+import get_data as gd
 
-assert len(gh.get_ids()) > 0, "Id list is malformed"
+assert len(gd.get_ids()) > 0, "Id list is malformed"
 
-assert gh.get_market_range(gh.get_ids()[0], time.time(),
+assert gd.get_market_range(gd.get_ids()[0], time.time(),
         time.time() - 60 * 60 * 24 * 5) is dict, "Query does not return json"
 
-assert gh.is_valid_id("    ") is False, "Invalid id was found"
+assert gd.is_valid_id_coingecko("    ") is False, "Invalid id was found"
 
-assert gh.is_valid_id(gh.get_ids()[0]) is True, "Valid id was not found"
-
-assert gh.get_n_days(gh.get_ids()[0], 1) is dict, "Query does not return json"
-
-import get_real_time as gr
-from keras.models import Sequential
-
-assert gr.get_data("ethereum") is dict, "Query does not return json"
-
-assert isinstance(gr.get_classifier(), Sequential), "Something is wrong?"
+assert gd.is_valid_id_kraken(gd.get_ids()[0]) is True, "Valid id was not found"
 
 from skforecast.model_selection import grid_search_forecaster
 import ML_predictor_backend as ml

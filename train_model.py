@@ -17,13 +17,15 @@ BATCH_SIZE = 20
 cols = ["Open", "High", "Low", "Close", "Volume", "Time"]
 ohlc = ["Open", "High", "Low", "Close"]
 
-#   Temporarily store the CSV file in the data/ folder for training. The most 
-# current data can be downloaded from 
-# https://www.cryptodatadownload.com/data/gemini/. 
-# Get 2022_1minute data for BTC/ETH/LTC/XRP.
-#   Note: apparently, there are holes in the Gemini 2022_1minute data, so you 
-# should also download 1minute from FTX, which can be used to patch the Gemini
-# datasets. 
+"""
+    Temporarily store the CSV file in the data/ folder for training. The most 
+current data can be downloaded from 
+https://www.cryptodatadownload.com/data/gemini/. 
+Get 2022_1minute data for BTC/ETH/LTC/XRP.
+Note: apparently, there are holes in the Gemini 2022_1minute data, so you 
+should also download 1minute from FTX, which can be used to patch the Gemini
+datasets. 
+"""
 def load_data(filename):
     # Check if the file exists
     if not os.path.isfile(os.path.join("data/", filename)):
@@ -33,8 +35,8 @@ def load_data(filename):
         data = pd.read_csv(f)
     return data
 
-#   Pull the data from both Gemini and FTX for specified symbol, then combine 
-# missing entries.
+"""   Pull the data from both Gemini and FTX for specified symbol, then combine 
+missing entries. """
 def get_patched_data(gemini, FTX):
     columns = ["Unix Timestamp", "Date", "Symbol", "Open", "High", "Low", "Close", "Volume"]
     df1 = load_data(gemini)[::-1]
@@ -52,15 +54,16 @@ def modify_date(row):
 
 #  TODO Convert 1-minute OHLC to 30-minute OHLC
 
-#   Write function to format the data to be fed to the network. 
-# Takes the dataframe and returns an ordered pair of the inputs with the 
-# corresponding labels. The shape of the output labels needs to be considered
-# when writing get_classifier (e.g. if the actual output is a single boolean output, 
-# then the last layer needs to have one unit)
-#   Example function: Takes the pandas dataframe, calculates the percent change 
-# of the OHLC between each thirty minute interval, then partitions the resulting
-# numpy matrix into frames with a specified frame size. In this example, the labels
-# simply indicate whether the next. THIS IS REALLY FUCKING SLOW CURRENTLY
+"""
+    Write function to format the data to be fed to the network. 
+Takes the dataframe and returns an ordered pair of the inputs with the 
+corresponding labels. The shape of the output labels needs to be considered
+when writing get_classifier (e.g. if the actual output is a single boolean output, 
+then the last layer needs to have one unit)
+    Example function: Takes the pandas dataframe, calculates the percent change 
+of the OHLC between each thirty minute interval, then partitions the resulting
+numpy matrix into frames with a specified frame size. In this example, the labels
+simply indicate whether the next.
 def create_inputs_and_labels(df, lag = 30, frame_size = 10):
     df["Time"] = df.apply(modify_date, axis = 1)
     percent_change = get_ohlc_lag(df, lag)
@@ -77,6 +80,7 @@ def create_inputs_and_labels(df, lag = 30, frame_size = 10):
                     >= np.array(percent_change[ohlc][frame_size + i - 1 : frame_size + i])))
         print(i)
     return inputs, labels
+"""
 
 #   Return the percent change of the OHLC data from minute k to minute k + n
 # as a pandas dataframe
@@ -91,10 +95,11 @@ def get_test_data():
     print(labels.shape)
     return data, labels
 
-#   This function converts the OHLC price data into percent changes with 
-# specified time intervals. If you have k price points then you'll get k-1
-# percent changes. Since the first entry in the CSV is the most current price
-# available, the dataframe must be reversed before processing.
+"""  
+    This function converts the OHLC price data into percent changes with 
+specified time intervals. If you have k price points then you'll get k-1
+percent changes. Since the first entry in the CSV is the most current price
+available, the dataframe must be reversed before processing."""
 def percent_change(df, lag):
     rev = df[::-1]
     delta = np.array(rev[ohlc][1:]) / np.array(rev[cols][0 : -1]) - 1
