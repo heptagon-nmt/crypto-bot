@@ -12,6 +12,7 @@ import csv
 def export_csv(data: dict[str, list[float]], filename: str = "data/data_out.csv") -> None:
     """
     Exports prediction data as a CSV file.
+
     :arg data: A colection of predictions from the ml unit, with prediction
     types as keys.
     :arg filename: The name of the file to save to within data/
@@ -29,6 +30,7 @@ def export_csv(data: dict[str, list[float]], filename: str = "data/data_out.csv"
 def print_motd() -> None:
     """
     Prints the motd with asci art.
+
     :return: None
     """
     print(art.text2art("Crypto Util", "cybermedum"))
@@ -36,6 +38,7 @@ def print_motd() -> None:
 def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	"""
 	Saves the historical price data as an image file in `figures/`
+
 	:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
 	:arg filename: Filename under which to save the data in the directory `figures/`
 	:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
