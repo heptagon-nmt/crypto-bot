@@ -25,6 +25,11 @@ or
 
 - `podman run yacu --help` displays the usage and required arguments for the utility to work. 
 
+## Documentation
+
+Auto-maigcly generated documentation can be found
+[here](https://1103s.github.io/crypto-bot/).
+
 ## Requirements
 
 - docker or podman
