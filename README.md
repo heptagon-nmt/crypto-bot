@@ -1,7 +1,9 @@
 [![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml) [![Publish To Docker](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml)
 
-# crypto-bot
-The user level command line script is `crypto_util.py`
+# Yet Another Crypto Util
+
+Your one-stop shop for calculating crypto prices and predicting what they will
+be using cutting edge machine learning. Works on Linux, macOS, and Windows.
 
 ## Install
 
@@ -14,8 +16,6 @@ to install.
 ## Usage
 
 Run with:
-`yacu`
-or
 `docker run yacu`
 or
 `podman run yacu`.
