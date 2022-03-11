@@ -2,6 +2,7 @@ from ML_predictor_backend import predict_next_N_timesteps
 from get_data import *
 from utils import *
 import argparse
+import ast
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 sources = ["kraken", "coingecko", "cmc"]
@@ -12,12 +13,11 @@ def main():
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
 	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken. ")
 	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all. Default is all")
-	parser.add_argument("--plot_historical", "-ph", action="store_true", required=False, help="Plot the past price data. Default True. File is written to figures/")
-	parser.add_argument("--plot_prediction", "-pp", action="store_true", required=False, help="Plot the past data and predicted data. Default True. File is written to figures/")
+	parser.add_argument("--plot_data", "-p", type=str, required=False, help="Plot the past data and predicted data. Options are True and False. Default is True. File is written to figures/")
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data to. Default is data")
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
-	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 200")
+	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 200")
 	parser.add_argument("--csv", action="store_true", help="Outputs prediction data to a csv in the `data/` directory to a file called `data_out.csv`")
 	args = parser.parse_args()
 	
@@ -49,19 +49,19 @@ def main():
 		print("Please specify a positive number of days to predict")
 		exit(1)
 	if args.days > 14:
-		print("NOTE typicaly these machine learning models will have higher accuracy for more near term predictions")
-	if args.model is None:
-		args.model = "xgboost"		# Set default model
+		print("\nNOTE typicaly these machine learning models will have higher accuracy for more near term predictions\n")
 	if args.source is None:
 		args.source = "cmc"		# Set default source
 	if args.filename is None:
 		args.filename = "data"
 	if args.filetype is None:
 		args.filetype = "pdf"
-	if args.plot_historical is False:
-		args.plot_historical = True
-	if args.plot_prediction is False:
-		args.plot_prediction = True
+	if args.plot_data is None:
+		args.plot_data = True
+	if args.plot_data not in ["True", "False"]:
+		print("plot_data argument must be either True or False. ")
+		exit(1)
+	args.plot_data = ast.literal_eval(args.plot_data)
 
 	# Get the data
 	if args.source == "cmc":
@@ -73,7 +73,7 @@ def main():
 	else:
 		print("Data source not recognized, exiting")
 		exit(1)
-	if args.plot_historical:
+	if args.plot_data:
 		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
 	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
 	if args.model == "all":
@@ -85,7 +85,7 @@ def main():
 				print("Predicted Day "+str(index+1)+" price = "+str(p))
 			predictions_over_models[model] = prediction
 			print("\n")
-		if args.plot_prediction:
+		if args.plot_data:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, predictions_over_models)
 		print_summary_statistics_of_predicted_prices(predictions_over_models)
 		if(args.csv):
@@ -96,7 +96,7 @@ def main():
 		for (index, p) in enumerate(prediction):
 			print("Predicted Day "+str(index+1)+" price = "+str(p))
 		print("\n")
-		if args.plot_prediction:
+		if args.plot_data:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
 		if(args.csv):
 			export.export_csv({args.model: prediction})
