@@ -18,6 +18,6 @@ def test_default() -> None:
 	"""
 	get_data module
 	"""
-	from get_data import *
-	price_data = pull_CMC_scraper_data("BTC")
+	import get_data
+	price_data = get_data.pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
