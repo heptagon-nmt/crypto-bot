@@ -7,17 +7,17 @@ models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "r
 sources = ["kraken", "coingecko", "cmc"]
 
 def main():
-	parser = argparse.ArgumentParser(description="")
+	parser = argparse.ArgumentParser(description="Command Line Cryptocurrency price prediction utility")
 	parser.add_argument("--crypto", "-c", type=str, required=True, help="Symbol of the cryptocurrency")
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
 	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken. ")
-	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all")
+	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all. Default is all")
 	parser.add_argument("--plot_historical", "-ph", action="store_true", required=False, help="Plot the past price data. Default True. File is written to figures/")
 	parser.add_argument("--plot_prediction", "-pp", action="store_true", required=False, help="Plot the past data and predicted data. Default True. File is written to figures/")
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data to. Default is data")
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
-	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 20")
+	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 100")
 	args = parser.parse_args()
 	
 	print_motd()
@@ -35,7 +35,7 @@ def main():
 			pass
 		exit(0)
 	if args.lags is None:
-		args.lags = 20
+		args.lags = 100
 	if (args.model not in models) and (args.model != None) and (args.model != "all"):
 		print("Invalid model. Options: {}".format(models))
 		exit(1)

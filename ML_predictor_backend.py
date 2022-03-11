@@ -19,17 +19,18 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	assert type(N) is int, "Number of steps to predict into the future must be an integer"
 	assert type(model_name) is str, "model name must be a string"
 	if model_name == "random_forest":
+		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(n_estimators=200, max_depth=1000), lags = lags)
 		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(), lags = lags)
 	elif model_name == "linear":
 		forecaster = ForecasterAutoreg(regressor = LinearRegression(), lags = lags)
 	elif model_name == "lasso":
-		forecaster = ForecasterAutoreg(regressor = Lasso(), lags = lags)
+		forecaster = ForecasterAutoreg(regressor = Lasso(max_iter=100000), lags = lags)
 	elif model_name == "gradient_boosting":
-		forecaster = ForecasterAutoreg(regressor=GradientBoostingRegressor(), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=GradientBoostingRegressor(max_depth=20, n_estimators=200), lags=lags)
 	elif model_name == "bagging":
-		forecaster = ForecasterAutoreg(regressor=BaggingRegressor(), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=BaggingRegressor(n_estimators=20), lags=lags)
 	elif model_name == "ridge":
-		forecaster = ForecasterAutoreg(regressor=Ridge(), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=Ridge(max_iter=100000), lags=lags)
 	else:
 		print("model not recognized, exiting")
 		sys.exit()
