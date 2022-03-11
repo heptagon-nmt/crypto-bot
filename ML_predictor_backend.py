@@ -15,6 +15,7 @@ import pandas as pd
 def predict_next_N_timesteps(data, lags, N, model_name):
 	"""
 	Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
+
 	:arg data: Input time-ordered historical price data to predict on
 	:arg lags: Integer hyperparamater for the forecasting prediction
 	:arg N: Integer number of time steps (days) in the future to predict the price

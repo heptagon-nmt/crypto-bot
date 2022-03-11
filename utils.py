@@ -65,6 +65,7 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	"""
 	Saves the prediction price data as an image file. 50 days of historical data is also plotted to show in the near term where the prediction trends are going. 
 	If there are multiple ML model predictions, all of the model predictions are plotted. Image is saved to `figures/`
+
 	:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
 	:arg filename: Filename under which to save the data in the directory `figures/`
 	:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
@@ -96,6 +97,7 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 def print_summary_statistics_of_predicted_prices(predictions_for_different_models):
 	"""
 	Prints summary statistics for the predicted daily prices across the ensemble of ML models
+
 	:arg predictions_for_different_models: A dictionary where keys are ML model names and values are the predicted prices over time
 	:return: None
 	"""

@@ -17,7 +17,7 @@ def main():
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data to. Default is data")
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
-	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 200")
+	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 300")
 	parser.add_argument("--csv", action="store_true", help="Outputs prediction data to a csv in the `data/` directory to a file called `data_out.csv`")
 	args = parser.parse_args()
 	
@@ -31,7 +31,7 @@ def main():
 		get_available_symbols_from_source(args.source)
 		exit(0)
 	if args.lags is None:
-		args.lags = 200
+		args.lags = 300
 	if (args.model not in models) and (args.model != None) and (args.model != "all"):
 		print("Invalid model. Options: {}".format(models))
 		exit(1)
