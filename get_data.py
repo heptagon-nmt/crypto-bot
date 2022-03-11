@@ -2,14 +2,6 @@
     This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
 things such as getting the most recent price/volume data (spot prices or OHLC).
-TODO Implement CmcScraper APIs
-TODO Maybe make KrakenAPI/CoingeckoAPI interface classes since most of the 
-    functionality is parallel between them
-TODO validate Kraken data. The intervals between rows don't seem correct 
-    currently. It may be that if you don't go far enough back in the range it
-    simply returns some default data. Also it may be necessary to remove the 
-    first row since it's the most recent value, so it doesn't have the closing 
-    price
 """
 import ast
 from cryptocmd import CmcScraper
@@ -118,6 +110,7 @@ def get_opening_price_coingecko(id, vs_currency, days):
     days > 31: 4 day intervals
 
     :return: Coingecko's opening price for each time interval 
+    :rtype: list
     """
     data = get_ohlc_coingecko(id, vs_currency, days).transpose()
     assert len(data) > 1 
@@ -161,6 +154,7 @@ def get_opening_price_coingecko(id, vs_currency, days):
     1-2 days: 30 minute intervals
     3 < days < 30: 4 hour intervals
     days > 31: 4 day intervals
+
     :return: Coingecko's opening price for each time interval 
     """
     data = get_ohlc_coingecko(id, vs_currency, days).transpose()
@@ -175,7 +169,8 @@ def get_opening_price_kraken(pair, days, interval = 30):
 def get_ids_coingecko(update_cache = True):
     """
     If the cache is updated, then the data is saved to a json file first
-    then loaded back from that file. Inefficient? Maybe
+    then loaded back from that file.
+
     :param bool update_cache: Whether to update the local JSON files
     :return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko
     """
