@@ -19,7 +19,6 @@ def main():
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
 	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 100")
-	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 20")
 	parser.add_argument("--csv", action="store_true", help="Outputs data to a csv in the current dir.")
 	args = parser.parse_args()
 	
