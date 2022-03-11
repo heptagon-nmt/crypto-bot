@@ -1,21 +1,21 @@
 """
-Crypto-Bot Sub-Module Documentation
+Crypto-Util Sub-Module Documentation
 -----------------------------------
 
-
-export.py
-^^^^^^^^^^^^^^^^^^^^^
-..  automodule:: export
-    :members:
 
 get_data.py
 ^^^^^^^^^^^^^^^^^^^^^
 ..  automodule:: get_data
     :members:
 
-doc_example.py
+ML_predictor_backend.py
 ^^^^^^^^^^^^^^^^^^^^^
-..  automodule:: doc_example
+..  automodule:: ML_predictor_backend
+    :members:
+
+utils.py
+^^^^^^^^^^^^^^^^^^^^^
+..  automodule:: utils
     :members:
 
 """

@@ -20,10 +20,10 @@ import os
 import re
 import requests
 import time
-from yahoo_fin import stock_info as si
 
 class KrakenCurrencyTableParser(HTMLParser):
-    """ This class is for the get_ids_kraken() function, which needs to parse a 
+    """
+    This class is for the get_ids_kraken() function, which needs to parse a 
     specific HTML document from Kraken's website when the update_cache flag is
     passed for retrieving the coin list from the server.
     
@@ -53,6 +53,7 @@ url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}",
                 "kraken" : "https://api.kraken.com/0/public/{}"}
 
 def pull_CMC_scraper_data(cryptocurrency_name):
+<<<<<<< HEAD
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
     :param str cryptocurrency_name: 
@@ -65,11 +66,29 @@ def pull_CMC_scraper_data(cryptocurrency_name):
 	for a in json_data:
 		data.append(a["Open"])
 	return data
+=======
+    """
+    Query CMC Scraper API to get the cryptocurrency price data
+
+    :arg cryptocurrency_name: String specifying which cryptocurrency to query. For example Bitcoin is BTC
+    :return: Opening daily price data going back to the beginning of the cryptocurrency. 
+    :rtype: list
+    """
+    assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
+    scraper = CmcScraper(cryptocurrency_name)
+    json_data = ast.literal_eval(scraper.get_data("json"))
+    json_data.reverse()
+    data = []
+    for a in json_data:
+        data.append(a["Open"])
+    return data
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 
 
 def get_available_sources():
     """
     TODO Add CmcScraper and also yahoo_finance?
+
     :return: list of available sources
     """
     return list(url_prefixes.keys()).append("yahoo_fin")
@@ -94,6 +113,7 @@ def get_ohlc_coingecko(id, vs_currency, days):
         1-2 days: 30 minute intervals
         3 < days < 30: 4 hour intervals
         days > 31: 4 day intervals
+
     :param str id: The Coingecko coin ID (ethereum, litecoin, etc.)
     :param str vs_currency: The currency to weigh the coin against (usd, eur, etc.)
     :return: Timestamp (ms), Open, High, Low, Close in a numpy array
@@ -107,11 +127,33 @@ def get_ohlc_coingecko(id, vs_currency, days):
     assert isinstance(data, list)
     return np.array(data)
 
+<<<<<<< HEAD
+=======
+def get_opening_price_coingecko(id, vs_currency, days):
+    """
+    Remember, granularity is determined by the number of days specified. 
+    1-2 days: 30 minute intervals
+    3 < days < 30: 4 hour intervals
+    days > 31: 4 day intervals
+
+    :return: Coingecko's opening price for each time interval 
+    """
+    data = get_ohlc_coingecko(id, vs_currency, days).transpose()
+    assert len(data) > 1 
+    return data[1]
+
+def get_opening_price_kraken(pair, days, interval = 30):
+    data = get_ohlc_kraken(pair, days, interval).transpose()
+    assert len(data) > 1
+    return data[1]
+
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ohlc_kraken(pair, days, interval = 30):
     """
     Retrieve OHLC that ranges from a specified date to current. The granularity 
     can be supplied as well. This one might be preferable to the user since it 
     is quite a bit more flexible with time step intervals.
+
     :param str pair: This is a ticker pair, such as ETHUSD, XRPUSD, BTCETH, etc.
     :param int days: Number of days to go back to 
     :type days: integer
@@ -133,6 +175,7 @@ def get_ohlc_kraken(pair, days, interval = 30):
     assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
     return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
 
+<<<<<<< HEAD
 def get_opening_price_coingecko(id, vs_currency, days):
     """
     Remember, granularity is determined by the number of days specified. 
@@ -150,11 +193,17 @@ def get_opening_price_kraken(pair, days, interval = 30):
     assert len(data) > 1
     return data[1]
 
+=======
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ids_coingecko(update_cache = True):
     """
     If the cache is updated, then the data is saved to a json file first
     then loaded back from that file. Inefficient? Maybe
+<<<<<<< HEAD
     :param bool update_cache: Determine 
+=======
+
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
     :return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko
     """
     file_name = "data/coingecko_id_list.json"
@@ -168,16 +217,20 @@ def get_ids_coingecko(update_cache = True):
     ids = [data[i]['id'] for i in range(len(data))]
     return ids
 
+<<<<<<< HEAD
 def get_all_coingecko():
     file_name = "data/coingecko_id_list.json"
     with open(file_name, "r") as f:
         data = json.load(f)
     return data
 
+=======
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ids_kraken(update_cache = True):
     """
     If update_cache pull the html from a table on Kraken's website and parse
     it for the available base currencies.
+
     :return: a list of available symbol pairs offered by Kraken. The base 
         currency will always be USD. (ETHUSD, BTCUSD, LTCUSD, etc.)
     """
@@ -211,7 +264,7 @@ def get_market_range_coingecko(coin_id, start, end):
     :param int end: The ending time in the range (UTC Unix Timestamp)
     :return: Returns spot price/volume data in json format if coin_id is valid. 
         Otherwise, None is returned.
-    :rtype: json 
+    :rtype: json
     """
     assert start < end
     assert(is_valid_id_coingecko(coin_id))
@@ -238,6 +291,3 @@ def is_valid_id_kraken(pair):
     """
     pairs = get_ids_kraken()
     return pair in pairs
-
-if __name__ == "__main__":
-    pass

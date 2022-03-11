@@ -1,51 +1,49 @@
 [![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml) [![Publish To Docker](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml)
 
-# Yet Another Crypto Util
+# Crypto Util
 
-Your one-stop shop for calculating crypto prices and predicting what they will
-be using cutting edge machine learning. Works on Linux, macOS, and Windows.
+Real time cryptocurrency price data gathering and future price prediction command line utility using machine learning regression. Cross platform compatible on Linux, macOS, and Windows. 
 
 ## Install
 
-Use:
-`docker pull yetanothercryptoutil/yacu`
-or
-`podman pull yetanothercryptoutil/yacu`
-to install.
+### Docker or podman
+
+
+- `docker pull yetanothercryptoutil/yacu` or
+
+- `podman pull yetanothercryptoutil/yacu`
+
+
+### Local installation
+- Download and install anaconda
+- git clone `https://github.com/1103s/crypto-bot.git`
+- cd crypto-bot
+- conda create --name crypto-util python=3.9.7
+- source activate crypto-util
+- python3 -m pip install -r requirements.txt
 
 ## Usage
 
-Run with:
-`docker run yacu`
-or
-`podman run yacu`.
+### Local command line usage
 
-### Example Usage
-- `podman run yacu --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze needs to specified. 
+- `python3 crypto_util.py --crypto BTC`: The basic functionality requires the user to input at least the cryptocurrency symbol. 
+- `python3 crypto_uitl.py --crypto ETH --days 10 --lags 80`: More specific flags can be specified, such as the number of days into the future to predict the price.
+- `python3 crypto_util.py --ls --source kraken`: In order for the user to see what cryptocurrency symbols are available for an API source, the utility allows for this listing argument with no additional flags. 
+
+### Docker or podman
+
+- `docker run yacu` or
+- `podman run yacu`
+
+### Example Docker or podman Usage
+- `podman run yacu --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze is a required flag. 
 
 - `podman run yacu --help` displays the usage and required arguments for the utility to work. 
 
 ## Documentation
 
-Auto-maigcly generated documentation can be found
-[here](https://1103s.github.io/crypto-bot/).
+Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## Requirements
 
-- docker or podman
-
-## Data Sources
-
-### Real-time data collection
-- https://finance.yahoo.com
-
-- https://www.coingecko.com/en/coins/
-
-Coin ID reference in [here](./data/coingecko_id_list.json) and
-[here](./data/kraken_pairs_list.json).
-
-### Historical BTC/USD, ETH/USD, LTC/USD
-Go to https://www.cryptodatadownload.com/data/gemini/ and download the minute 
-CSVs. Then move the CSV files into the data folder and run train\_model.py 
-(doesn't yet exist :) )
-
+- docker, podman, or anaconda
