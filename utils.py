@@ -34,6 +34,14 @@ def print_motd() -> None:
     print(art.text2art("Crypto Util", "cybermedum"))
 
 def plot_and_save_price_graph(data, filename, file_extension, crypto):
+	"""
+	Saves the historical price data as an image file in `figures/`
+	:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
+	:arg filename: Filename under which to save the data in the directory `figures/`
+	:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
+	:arg crypto: The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)
+	:return: None
+	"""
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
 	assert type(filename) is str
 	assert type(file_extension) is str
@@ -51,6 +59,16 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	return None
 
 def plot_and_save_price_graph_with_predictions(data, filename, file_extension, crypto, predictions):
+	"""
+	Saves the prediction price data as an image file. 50 days of historical data is also plotted to show in the near term where the prediction trends are going. 
+	If there are multiple ML model predictions, all of the model predictions are plotted. Image is saved to `figures/`
+	:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
+	:arg filename: Filename under which to save the data in the directory `figures/`
+	:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
+	:arg crypto: The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)
+	:arg predictions: Dictionary where the keys are ML model names (e.g. random_forest) and the values are lists of time ordered price predictions
+	:return: None
+	"""
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
 	assert type(filename) is str
 	assert type(file_extension) is str
@@ -71,6 +89,7 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	plt.close()
 	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+filename+"_prediction."+file_extension)
 	return None
+
 def print_summary_statistics_of_predicted_prices(predictions_for_different_models):
 	"""
 	Prints summary statistics for the predicted daily prices across the ensemble of ML models
@@ -85,3 +104,4 @@ def print_summary_statistics_of_predicted_prices(predictions_for_different_model
 			vector.append(predictions_for_different_models[k][i])
 		print("Day "+str(i+1)+" mean predicted price across all ML models is "+str(round(np.mean(vector), 4))+" USD with a standard deviation of "+str(round(np.std(vector), 4)))
 	print("=================\n")
+	return None
