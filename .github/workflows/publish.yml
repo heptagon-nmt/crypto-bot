@@ -9,15 +9,14 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-steps:
-  - name: Checkout
-    uses: actions/checkout@v1
-  - run: docker build -t crypto-bot .
-  - name: crypto-bot
-    if: success()
-    uses: manusa/actions-publish-docker@v1.1.2
-    with:
-      name: yetanothercryptoutil/yacu
-      username: ${{ secrets.DOCKER_HUB_USER }}
-      password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - run: docker build -t crypto-bot .
+      - name: crypto-bot
+        if: success()
+        uses: manusa/actions-publish-docker@v1.1.2
+        with:
+          name: yetanothercryptoutil/yacu
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
