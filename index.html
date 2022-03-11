@@ -60,14 +60,25 @@ TODO Maybe make KrakenAPI/CoingeckoAPI interface classes since most of the</p>
 <div><p>functionality is parallel between them</p>
 </div></blockquote>
 <dl class="simple">
-<dt>TODO fix is_valid_ids_kraken. It doesn’t work for values like “ETHUSD” or </dt><dd><p>“BTCUSD”.</p>
-</dd>
 <dt>TODO validate Kraken data. The intervals between rows don’t seem correct </dt><dd><p>currently. It may be that if you don’t go far enough back in the range it
 simply returns some default data. Also it may be necessary to remove the 
 first row since it’s the most recent value, so it doesn’t have the closing 
 price</p>
 </dd>
 </dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="get_data.KrakenCurrencyTableParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">KrakenCurrencyTableParser</span></span><a class="headerlink" href="#get_data.KrakenCurrencyTableParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is for the get_ids_kraken() function, which needs to parse a 
+specific HTML document from Kraken’s website when the update_cache flag is
+passed for retrieving the coin list from the server.</p>
+<dl class="simple">
+<dt>Attributes: </dt><dd><p>coins               A list to contain the symbols located on the webpage
+ignore_currencies   Currencies to ignore when parsing</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.get_available_sources">
 <span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_available_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_available_sources" title="Permalink to this definition">¶</a></dt>
@@ -90,23 +101,21 @@ price</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.get_ids_coingecko">
-<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ids_coingecko</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ids_coingecko" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of IDs (ethereum, litecoin, etc.) available for CoinGecko</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ids_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ids_coingecko" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the cache is updated, then the data is saved to a json file first
+then loaded back from that file. Inefficient? Maybe
+:return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.get_ids_kraken">
-<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ids_kraken</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ids_kraken" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of available symbol pairs offered by Kraken 
-(ETHUSD, BTCUSD, BTCETH, etc.)</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ids_kraken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ids_kraken" title="Permalink to this definition">¶</a></dt>
+<dd><p>If update_cache pull the html from a table on Kraken’s website and parse
+it for the available base currencies.
+:return: a list of available symbol pairs offered by Kraken. The base</p>
+<blockquote>
+<div><p>currency will always be USD. (ETHUSD, BTCUSD, LTCUSD, etc.)</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
@@ -140,20 +149,35 @@ Otherwise, None is returned.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.get_ohlc_coingecko">
 <span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ohlc_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs_currency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ohlc_coingecko" title="Permalink to this definition">¶</a></dt>
-<dd><p>Coingecko’s OHLC API for OHLC data
-:param str id: The Coingecko coin ID (ethereum, litecoin, etc.)
-:param str vs_currency: The currency to weigh the coin against (usd, eur, etc.)
-:return:</p>
+<dd><p>Coingecko’s OHLC API for OHLC data. The time step intervals are 
+automatically set by Coingecko as follows:</p>
+<blockquote>
+<div><p>1-2 days: 30 minute intervals
+3 &lt; days &lt; 30: 4 hour intervals
+days &gt; 31: 4 day intervals</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – The Coingecko coin ID (ethereum, litecoin, etc.)</p></li>
+<li><p><strong>vs_currency</strong> (<em>str</em>) – The currency to weigh the coin against (usd, eur, etc.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timestamp (ms), Open, High, Low, Close in a numpy array</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.get_ohlc_kraken">
-<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ohlc_kraken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ohlc_kraken" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ohlc_kraken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ohlc_kraken" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve OHLC that ranges from a specified date to current. The granularity 
 can be supplied as well. This one might be preferable to the user since it 
 is quite a bit more flexible with time step intervals.
 :param str pair: This is a ticker pair, such as ETHUSD, XRPUSD, BTCETH, etc.
-:param int since: UNIX timestamp for the beginning of the data
+:param int days: Number of days to go back to 
+:type days: integer
 :param int interval: An integer which specifies the OHLC time interval in</p>
 <blockquote>
 <div><p>minutes. Valid values are 1, 5, 15, 30, 60, 240, 1440, 10080, 21600</p>
@@ -168,6 +192,16 @@ cannot be completed either because an invalid symbol pair was passed or
 for some other reason. All fields are converted to np.float32 type</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_opening_price_coingecko">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_opening_price_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs_currency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_opening_price_coingecko" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember, granularity is determined by the number of days specified. 
+1-2 days: 30 minute intervals
+3 &lt; days &lt; 30: 4 hour intervals
+days &gt; 31: 4 day intervals
+:return: Coingecko’s opening price for each time interval</p>
 </dd></dl>
 
 <dl class="py function">
