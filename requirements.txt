@@ -4,5 +4,6 @@ numpy==1.22.2
 matplotlib==3.5.1
 cryptocmd @ git+git://github.com/guptarohit/cryptoCMD.git@86ed81feed1ba533f4a526f885e021efbc53956d
 skforecast==0.4.2
-art
+art==5.5
 numpy==1.22.2
+requests==2.27.1
