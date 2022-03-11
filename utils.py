@@ -1,7 +1,4 @@
-from datetime import datetime
-from get_data import *
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import art
 import random
@@ -9,18 +6,10 @@ import numpy as np
 
 def print_motd() -> None:
     """
-    Prints the motd with random asci art.
+    Prints the motd with asci art.
+    :return: None
     """
-    print(art.text2art("Yet Another Crypto Util", "cybermedum"))
-def convert_timestamp(timestamp):
-    val = timestamp["Date"]
-    return datetime.utcfromtimestamp(val / 1000)
-
-def array_to_dataframe(data):
-    df = pd.DataFrame(data, columns = ["Date", "Open", "High", "Low", "Close"])
-    df["Date"] = df.apply(convert_timestamp, axis = 1)
-    df = df.set_index("Date")
-    return df
+    print(art.text2art("Crypto Util", "cybermedum"))
 
 def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
