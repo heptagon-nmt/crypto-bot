@@ -10,7 +10,7 @@ import numpy as np
 import csv
 import matplotlib.patches as mpatches
 
-def export_csv(data: dict[str, list[float]], filename: str = "data/data_out.csv") -> None:
+def export_csv(data, filename = "data/data_out.csv"):
     """
     Exports prediction data as a CSV file.
 
@@ -28,7 +28,7 @@ def export_csv(data: dict[str, list[float]], filename: str = "data/data_out.csv"
     except Exception as e:
         print(f'Could not write output file: {e}')
 
-def print_motd() -> None:
+def print_motd():
     """
     Prints the motd with asci art.
 
