@@ -11,6 +11,7 @@ from sklearn.linear_model import Ridge
 from skforecast.model_selection import grid_search_forecaster
 import numpy as np
 import pandas as pd
+import time
 
 def predict_next_N_timesteps(data, lags, N, model_name):
 	"""
@@ -44,6 +45,10 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 		print("model not recognized, exiting")
 		exit(0)
 	data_train = pd.Series(data)
+	print("Training model "+str(model_name)+" ...")
+	start = time.time()
 	forecaster.fit(y=data_train)
+	end = time.time()
+	print("Total training time = "+str(round(end-start, 4))+" seconds")
 	predictions = forecaster.predict(steps=N)
 	return list(predictions)

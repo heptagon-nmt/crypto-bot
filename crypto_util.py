@@ -17,7 +17,7 @@ def main():
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data to. Default is data")
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
-	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 300")
+	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 300. Larger lag values requires more training time, and also typically results in higher accuracy. ")
 	parser.add_argument("--csv", action="store_true", help="Outputs prediction data to a csv in the `data/` directory to a file called `data_out.csv`")
 	args = parser.parse_args()
 
@@ -78,7 +78,6 @@ def main():
 	else:
 		print("Source not recognized, exiting")
 		exit(1)
-	print(data)
 	if args.plot_data:
 		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
 	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
