@@ -1,4 +1,4 @@
-from ML_predictor_backend import xgboost_forecast_single_step_predict, predict_next_N_timesteps
+from ML_predictor_backend import predict_next_N_timesteps
 from get_data import *
 from utils import *
 import argparse
@@ -23,7 +23,6 @@ def main():
 	print_motd()
 
 	# Check all arguments
-
 	if args.ls:		# TODO: List all the cryptocurrencies
 		if args.source is None:
 			print("Querying available cryptocurrency symbols requires --source flag to be specified")
@@ -57,7 +56,6 @@ def main():
 		args.model = "xgboost"		# Set default model
 	if args.source is None:
 		args.source = "cmc"		# Set default source
-	#if args.plot_historical:
 	if args.filename is None:
 		args.filename = "data"
 	if args.filetype is None:
@@ -79,29 +77,25 @@ def main():
 		exit(1)
 	if args.plot_historical == True:
 		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
-	print("\nNote that day 1 corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
+	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
 	if args.model == "all":
 		predictions_over_models = {}
 		for model in models:
-			print(model)
-			prediction = predict_next_N_timesteps(data, args.lags, args.days*2, model)
-			print("The predicted prices of "+args.crypto+" over the next "+str(args.days*2)+" time steps (this corresponds to the predicted opening and closing prices over the next "+str(args.days)+" days) based on the "+args.model+" model are:\n")
+			prediction = predict_next_N_timesteps(data, args.lags, args.days, model)
+			print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+model+" model are:\n")
 			pairs = [tuple(prediction[i:i+2]) for i in range(0, len(prediction), 2)]
 			for (index, p) in enumerate(pairs):
-				print("Predicted Day "+str(index+1)+" Open price = "+str(p[0]))
-				print("Predicted Day "+str(index+1)+" Close price = "+str(p[1]))
-				print()
+				print("Predicted Day "+str(index+1)+" price = "+str(p[0]))
 			predictions_over_models[model] = prediction
+			print("\n")
 		if args.plot_prediction:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, predictions_over_models)
 	else:
-		prediction = predict_next_N_timesteps(data, args.lags, args.days*2, args.model)
-		print("The predicted prices of "+args.crypto+" over the next "+str(args.days*2)+" time steps (this corresponds to the predicted opening and closing prices over the next "+str(args.days)+" days) based on the "+args.model+" model are:\n")
-		pairs = [tuple(prediction[i:i+2]) for i in range(0, len(prediction), 2)]
-		for (index, p) in enumerate(pairs):
-			print("Predicted Day "+str(index+1)+" Open price = "+str(p[0]))
-			print("Predicted Day "+str(index+1)+" Close price = "+str(p[1]))
-			print()
+		prediction = predict_next_N_timesteps(data, args.lags, args.days, args.model)
+		print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+args.model+" model are:\n")
+		for (index, p) in enumerate(prediction):
+			print("Predicted Day "+str(index+1)+" price = "+str(p[0]))
+		print("\n")
 		if args.plot_prediction:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
 	return

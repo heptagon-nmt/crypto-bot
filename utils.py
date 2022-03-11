@@ -45,11 +45,11 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	assert type(data) is list
 	assert type(crypto) is str
 	assert type(predictions) is dict
-	truncate_data = 60
+	truncate_data = 50
 	data = data[-truncate_data:]
 	plt.plot([a for a in range(len(data))], data, "-b.", label=crypto)
 	fig = plt.gcf()
-	fig.set_size_inches(18, 10)
+	fig.set_size_inches(12, 8)
 	plt.ylabel("USD price")
 	plt.xlabel("Time index")
 	for k in predictions:
@@ -57,6 +57,6 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	plt.legend()
 	plt.savefig("figures/"+filename+"_prediction."+file_extension)
 	plt.close()
-	print("Figure of (truncated) price data for the last 30 days with predictions has been written to "+"figures/"+filename+"."+file_extension)
+	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+filename+"_prediction."+file_extension)
 	return None
 
