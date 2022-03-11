@@ -11,15 +11,8 @@ from sklearn.linear_model import Ridge
 from skforecast.model_selection import grid_search_forecaster
 import numpy as np
 import pandas as pd
-from xgboost import XGBRegressor
 import sys
 
-def xgboost_forecast_single_step_predict(data):
-	X = [i for i in range(len(data))]
-	model = XGBRegressor(objective='reg:squarederror', n_estimators=1000)
-	model.fit(np.vstack(np.array(X)), np.vstack(np.array(data)))
-	yhat = model.predict(np.vstack(np.array([len(data)])))
-	return list(yhat)[0]
 def predict_next_N_timesteps(data, lags, N, model_name):
 	assert type(data) is list, "price data must be a list"
 	assert type(lags) is int, "lag parameter must be an integer"

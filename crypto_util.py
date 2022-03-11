@@ -80,10 +80,7 @@ def main():
 	if args.plot_historical == True:
 		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
 	print("\nNote that day 1 corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
-	if args.model == "xgboost":
-		next_day_prediction = xgboost_forecast_single_step_predict(data)
-		print("The next predicted price of "+args.crypto+" is", next_day_prediction)
-	elif args.model == "all":
+	if args.model == "all":
 		predictions_over_models = {}
 		for model in models:
 			print(model)
