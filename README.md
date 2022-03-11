@@ -44,7 +44,7 @@ Auto-maigcly generated documentation can be found
 Coin ID reference in [here](./data/coingecko_id_list.json) and
 [here](./data/kraken_pairs_list.json).
 
-## Historical BTC/USD, ETH/USD, LTC/USD
+### Historical BTC/USD, ETH/USD, LTC/USD
 Go to https://www.cryptodatadownload.com/data/gemini/ and download the minute 
 CSVs. Then move the CSV files into the data folder and run train\_model.py 
 (doesn't yet exist :) )
