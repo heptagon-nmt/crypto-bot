@@ -31,12 +31,6 @@ def plot_and_save_price_data_with_analysis(data, filename, file_extension):
 	assert type(filename) is str
 	assert type(file_extension) is str
 	assert type(data) is list
-	df = array_to_dataframe(data)
-	mpf.plot(df, type = "candle", style = "mike", mav = [5], tight_layout = True)
+	#df = array_to_dataframe(data)
+	mpf.plot(pd.DataFrame(data), type = "candle", style = "mike", mav = [5], tight_layout = True)
 	plt.savefig("figures/"+filename+"."+file_extension)
-"""
-if __name__ == "__main__":
-    data = get_ohlc_coingecko("litecoin", "usd", 90)
-    df = array_to_dataframe(data)
-    mpf.plot(df, type = "candle", style = "mike", mav = [5], tight_layout = True)
-"""
