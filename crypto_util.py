@@ -31,9 +31,13 @@ def main():
 		if args.source is None:
 			print("Querying available cryptocurrency symbols requires --source flag to be specified. Exiting")
 			exit(1)
-		print("\nFor the data source "+args.source+", the available cryptocurrency symbols you can query are:\n\n")
-		print(get_available_symbols_from_source(args.source))
-		exit(0)
+		if args.source != "cmc":
+			print("\nFor the data source "+args.source+", the available cryptocurrency symbols you can query are:\n\n")
+			print(get_available_symbols_from_source(args.source))
+			exit(0)
+		else:
+			print("CMC symobl list has not been added, exiting")
+			exit(0)
 	if args.crypto is None:
 		print("Cryptocurrency symbol required. Specify using --crypto")
 		exit(1)

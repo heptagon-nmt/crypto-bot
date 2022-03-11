@@ -30,7 +30,6 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	assert type(model_name) is str, "model name must be a string"
 	if model_name == "random_forest":
 		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(n_estimators=200, max_depth=1000), lags = lags)
-		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(), lags = lags)
 	elif model_name == "linear":
 		forecaster = ForecasterAutoreg(regressor = LinearRegression(), lags = lags)
 	elif model_name == "lasso":
