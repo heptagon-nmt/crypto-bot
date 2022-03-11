@@ -2,11 +2,9 @@
 The unit test mechanism.
 """
 import time
-<<<<<<< HEAD
 import get_data as gd
 
 assert len(gd.get_ids()) > 0, "Id list is malformed"
-=======
 #import get_historical as gh
 
 import ML_predictor_backend as ML
