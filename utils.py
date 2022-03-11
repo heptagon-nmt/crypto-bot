@@ -61,6 +61,10 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+filename+"_prediction."+file_extension)
 	return None
 def print_summary_statistics_of_predicted_prices(predictions_for_different_models):
+	"""
+	:param predictions_for_different_models: A dictionary where keys are ML model names and values are the predicted prices over time
+	:return: None
+	"""
 	print("\n=== Model Ensemble Statistics ===")
 	N = len(predictions_for_different_models[list(predictions_for_different_models.keys())[0]])
 	for i in range(N):

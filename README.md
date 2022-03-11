@@ -27,8 +27,7 @@ or
 
 ## Documentation
 
-Auto-maigcly generated documentation can be found
-[here](https://1103s.github.io/crypto-bot/).
+Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## Requirements
 
