@@ -1,15 +1,14 @@
 """
-Used to export data to diffrent formats.
+Used to export data to different formats.
 """
 import csv
 
-def export_csv(data: dict[str, list[float]],
-        filename: str = "data_out.csv") -> None:
+def export_csv(data: dict[str, list[float]], filename: str = "data/data_out.csv") -> None:
     """
-    Exports data as a coma seperated file.
-    :arg data: A colection of predicitons from the ml unit, with prediction
+    Exports data as a CSV file.
+    :arg data: A colection of predictions from the ml unit, with prediction
     types as keys.
-    :arg filename: The name of the file to save to.
+    :arg filename: The name of the file to save to within data/
     """
     try:
         with open(filename, "w", newline='') as csv_file:

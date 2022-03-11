@@ -55,6 +55,9 @@ url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}",
 def pull_CMC_scraper_data(cryptocurrency_name):
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
+	:arg cryptocurrency_name: String specifying which cryptocurrency to query. For example Bitcoin is BTC
+	:return: Opening daily price data going back to the beginning of the cryptocurrency. 
+	:rtype: list
 	"""
 	assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
 	scraper = CmcScraper(cryptocurrency_name)
@@ -230,6 +233,3 @@ def is_valid_id_kraken(pair):
     """
     pairs = get_ids_kraken()
     return pair in pairs
-
-if __name__ == "__main__":
-    pass

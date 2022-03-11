@@ -11,15 +11,15 @@ from sklearn.linear_model import Ridge
 from skforecast.model_selection import grid_search_forecaster
 import numpy as np
 import pandas as pd
-import sys
 
 def predict_next_N_timesteps(data, lags, N, model_name):
 	"""
+	Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
 	:arg data: Input time-ordered historical price data to predict on
 	:arg lags: Integer hyperparamater for the forecasting prediction
-	:arg N: Number of time steps (days) in the future to predict the price
-	:arg model_name: machine learning model name. Corresponds to a sklearn regression algorithm
-	:return: List of time-ordered price predictions
+	:arg N: Integer number of time steps (days) in the future to predict the price
+	:arg model_name: String machine learning model name. Corresponds to a sklearn regression algorithm. 
+	:return: List of time-ordered price predictions. Exits if the specified model_name is not recognized. 
 	:rtype: list
 	"""
 	assert type(data) is list, "price data must be a list"
@@ -41,7 +41,7 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 		forecaster = ForecasterAutoreg(regressor=Ridge(max_iter=10000), lags=lags)
 	else:
 		print("model not recognized, exiting")
-		sys.exit()
+		exit(0)
 	data_train = pd.Series(data)
 	forecaster.fit(y=data_train)
 	predictions = forecaster.predict(steps=N)

@@ -19,7 +19,7 @@ def main():
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
 	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 200")
-	parser.add_argument("--csv", action="store_true", help="Outputs data to a csv in the current dir.")
+	parser.add_argument("--csv", action="store_true", help="Outputs prediction data to a csv in the `data/` directory to a file called `data_out.csv`")
 	args = parser.parse_args()
 	
 	print_motd()
@@ -29,12 +29,7 @@ def main():
 		if args.source is None:
 			print("Querying available cryptocurrency symbols requires --source flag to be specified")
 			exit(1)
-		if args.source == "kraken":
-			print(get_ids_kraken())
-		elif args.source == "cmc":
-			pass
-		elif args.source == "coingecko":
-			pass
+		get_available_symbols_from_source(args.source)
 		exit(0)
 	if args.lags is None:
 		args.lags = 200
