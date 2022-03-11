@@ -2,7 +2,7 @@
     This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
 things such as getting the most recent price/volume data (spot prices or OHLC).
-TODO Implement yahoo_finance and CmcScraper APIs
+TODO Implement CmcScraper APIs
 TODO Maybe make KrakenAPI/CoingeckoAPI interface classes since most of the 
     functionality is parallel between them
 TODO validate Kraken data. The intervals between rows don't seem correct 
@@ -53,6 +53,20 @@ url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}",
                 "kraken" : "https://api.kraken.com/0/public/{}"}
 
 def pull_CMC_scraper_data(cryptocurrency_name):
+<<<<<<< HEAD
+	"""
+	Query CMC Scraper API to get the cryptocurrency price data
+    :param str cryptocurrency_name: 
+	"""
+	assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
+	scraper = CmcScraper(cryptocurrency_name)
+	json_data = ast.literal_eval(scraper.get_data("json"))
+	json_data.reverse()
+	data = []
+	for a in json_data:
+		data.append(a["Open"])
+	return data
+=======
     """
     Query CMC Scraper API to get the cryptocurrency price data
 
@@ -68,6 +82,7 @@ def pull_CMC_scraper_data(cryptocurrency_name):
     for a in json_data:
         data.append(a["Open"])
     return data
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 
 
 def get_available_sources():
@@ -112,6 +127,8 @@ def get_ohlc_coingecko(id, vs_currency, days):
     assert isinstance(data, list)
     return np.array(data)
 
+<<<<<<< HEAD
+=======
 def get_opening_price_coingecko(id, vs_currency, days):
     """
     Remember, granularity is determined by the number of days specified. 
@@ -130,6 +147,7 @@ def get_opening_price_kraken(pair, days, interval = 30):
     assert len(data) > 1
     return data[1]
 
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ohlc_kraken(pair, days, interval = 30):
     """
     Retrieve OHLC that ranges from a specified date to current. The granularity 
@@ -157,15 +175,39 @@ def get_ohlc_kraken(pair, days, interval = 30):
     assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
     return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
 
+<<<<<<< HEAD
+def get_opening_price_coingecko(id, vs_currency, days):
+    """
+    Remember, granularity is determined by the number of days specified. 
+    1-2 days: 30 minute intervals
+    3 < days < 30: 4 hour intervals
+    days > 31: 4 day intervals
+    :return: Coingecko's opening price for each time interval 
+    """
+    data = get_ohlc_coingecko(id, vs_currency, days).transpose()
+    assert len(data) > 1 
+    return data[1]
+
+def get_opening_price_kraken(pair, days, interval = 30):
+    data = get_ohlc_kraken(pair, days, interval).transpose()
+    assert len(data) > 1
+    return data[1]
+
+=======
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ids_coingecko(update_cache = True):
     """
     If the cache is updated, then the data is saved to a json file first
     then loaded back from that file. Inefficient? Maybe
+<<<<<<< HEAD
+    :param bool update_cache: Determine 
+=======
 
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
     :return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko
     """
     file_name = "data/coingecko_id_list.json"
-    if update_cache:
+    if update_cache or not os.path.isfile(file_name):
         r = requests.get(url_prefixes["coingecko"].format("coins/list"))
         data = r.json()
         with open(file_name, "w") as f:
@@ -175,6 +217,15 @@ def get_ids_coingecko(update_cache = True):
     ids = [data[i]['id'] for i in range(len(data))]
     return ids
 
+<<<<<<< HEAD
+def get_all_coingecko():
+    file_name = "data/coingecko_id_list.json"
+    with open(file_name, "r") as f:
+        data = json.load(f)
+    return data
+
+=======
+>>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ids_kraken(update_cache = True):
     """
     If update_cache pull the html from a table on Kraken's website and parse
