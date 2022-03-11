@@ -53,10 +53,9 @@ url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}",
                 "kraken" : "https://api.kraken.com/0/public/{}"}
 
 def pull_CMC_scraper_data(cryptocurrency_name):
-<<<<<<< HEAD
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
-    :param str cryptocurrency_name: 
+	:param str cryptocurrency_name: 
 	"""
 	assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
 	scraper = CmcScraper(cryptocurrency_name)
@@ -66,24 +65,6 @@ def pull_CMC_scraper_data(cryptocurrency_name):
 	for a in json_data:
 		data.append(a["Open"])
 	return data
-=======
-    """
-    Query CMC Scraper API to get the cryptocurrency price data
-
-    :arg cryptocurrency_name: String specifying which cryptocurrency to query. For example Bitcoin is BTC
-    :return: Opening daily price data going back to the beginning of the cryptocurrency. 
-    :rtype: list
-    """
-    assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
-    scraper = CmcScraper(cryptocurrency_name)
-    json_data = ast.literal_eval(scraper.get_data("json"))
-    json_data.reverse()
-    data = []
-    for a in json_data:
-        data.append(a["Open"])
-    return data
->>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
-
 
 def get_available_sources():
     """
@@ -95,6 +76,8 @@ def get_available_sources():
 
 def get_available_symbols_from_source(source):
     """
+    Return the available cryptocurrency symbols from kraken and coingecko
+    
     :return: A list of available symbols 
     :rtype: list
     """
@@ -127,8 +110,6 @@ def get_ohlc_coingecko(id, vs_currency, days):
     assert isinstance(data, list)
     return np.array(data)
 
-<<<<<<< HEAD
-=======
 def get_opening_price_coingecko(id, vs_currency, days):
     """
     Remember, granularity is determined by the number of days specified. 
@@ -147,7 +128,6 @@ def get_opening_price_kraken(pair, days, interval = 30):
     assert len(data) > 1
     return data[1]
 
->>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ohlc_kraken(pair, days, interval = 30):
     """
     Retrieve OHLC that ranges from a specified date to current. The granularity 
@@ -175,7 +155,6 @@ def get_ohlc_kraken(pair, days, interval = 30):
     assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
     return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
 
-<<<<<<< HEAD
 def get_opening_price_coingecko(id, vs_currency, days):
     """
     Remember, granularity is determined by the number of days specified. 
@@ -193,17 +172,11 @@ def get_opening_price_kraken(pair, days, interval = 30):
     assert len(data) > 1
     return data[1]
 
-=======
->>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ids_coingecko(update_cache = True):
     """
     If the cache is updated, then the data is saved to a json file first
     then loaded back from that file. Inefficient? Maybe
-<<<<<<< HEAD
-    :param bool update_cache: Determine 
-=======
-
->>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
+    :param bool update_cache: Whether to update the local JSON files
     :return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko
     """
     file_name = "data/coingecko_id_list.json"
@@ -217,15 +190,12 @@ def get_ids_coingecko(update_cache = True):
     ids = [data[i]['id'] for i in range(len(data))]
     return ids
 
-<<<<<<< HEAD
 def get_all_coingecko():
     file_name = "data/coingecko_id_list.json"
     with open(file_name, "r") as f:
         data = json.load(f)
     return data
 
-=======
->>>>>>> 8c580880aca47135da717ba9629487ee56f0a827
 def get_ids_kraken(update_cache = True):
     """
     If update_cache pull the html from a table on Kraken's website and parse
