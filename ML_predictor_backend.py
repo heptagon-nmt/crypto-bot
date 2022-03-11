@@ -14,6 +14,14 @@ import pandas as pd
 import sys
 
 def predict_next_N_timesteps(data, lags, N, model_name):
+	"""
+	:arg data: Input time-ordered historical price data to predict on
+	:arg lags: Integer hyperparamater for the forecasting prediction
+	:arg N: Number of time steps (days) in the future to predict the price
+	:arg model_name: machine learning model name. Corresponds to a sklearn regression algorithm
+	:return: List of time-ordered price predictions
+	:rtype: list
+	"""
 	assert type(data) is list, "price data must be a list"
 	assert type(lags) is int, "lag parameter must be an integer"
 	assert type(N) is int, "Number of steps to predict into the future must be an integer"
