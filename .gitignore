@@ -2,3 +2,5 @@
 *.pdf
 __pycache__/*
 *.vscode
+*.png
+*.jpg

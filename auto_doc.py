@@ -3,7 +3,17 @@ Crypto-Bot Sub-Module Documentation
 -----------------------------------
 
 
-file_name_goe_here.py
+export.py
+^^^^^^^^^^^^^^^^^^^^^
+..  automodule:: export
+    :members:
+
+get_data.py
+^^^^^^^^^^^^^^^^^^^^^
+..  automodule:: get_data
+    :members:
+
+doc_example.py
 ^^^^^^^^^^^^^^^^^^^^^
 ..  automodule:: doc_example
     :members:

@@ -63,7 +63,6 @@ def pull_CMC_scraper_data(cryptocurrency_name):
 	data = []
 	for a in json_data:
 		data.append(a["Open"])
-		data.append(a["Close"])
 	return data
 
 
