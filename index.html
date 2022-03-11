@@ -244,8 +244,57 @@ available Kraken symbol pairs.</p>
 </dd></dl>
 
 </section>
-<section id="utils-py">
-<h3>utils.py<a class="headerlink" href="#utils-py" title="Permalink to this headline">¶</a></h3>
+<section id="module-utils">
+<span id="utils-py"></span><h3>utils.py<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h3>
+<p>Utility module for plotting and printing information</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.export_csv">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/data_out.csv'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.export_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports prediction data as a CSV file.
+:arg data: A colection of predictions from the ml unit, with prediction
+types as keys.
+:arg filename: The name of the file to save to within data/</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.plot_and_save_price_graph">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">plot_and_save_price_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.plot_and_save_price_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the historical price data as an image file in <cite>figures/</cite>
+:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
+:arg filename: Filename under which to save the data in the directory <cite>figures/</cite>
+:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
+:arg crypto: The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)
+:return: None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.plot_and_save_price_graph_with_predictions">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">plot_and_save_price_graph_with_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.plot_and_save_price_graph_with_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the prediction price data as an image file. 50 days of historical data is also plotted to show in the near term where the prediction trends are going. 
+If there are multiple ML model predictions, all of the model predictions are plotted. Image is saved to <cite>figures/</cite>
+:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
+:arg filename: Filename under which to save the data in the directory <cite>figures/</cite>
+:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
+:arg crypto: The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)
+:arg predictions: Dictionary where the keys are ML model names (e.g. random_forest) and the values are lists of time ordered price predictions
+:return: None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.print_motd">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_motd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#utils.print_motd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the motd with asci art.
+:return: None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.print_summary_statistics_of_predicted_prices">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_summary_statistics_of_predicted_prices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions_for_different_models</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.print_summary_statistics_of_predicted_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints summary statistics for the predicted daily prices across the ensemble of ML models
+:arg predictions_for_different_models: A dictionary where keys are ML model names and values are the predicted prices over time
+:return: None</p>
+</dd></dl>
+
 </section>
 </section>
 </section>
