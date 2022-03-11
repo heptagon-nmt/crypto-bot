@@ -234,13 +234,23 @@ available Kraken symbol pairs.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ML_predictor_backend.predict_next_N_timesteps">
 <span class="sig-prename descclassname"><span class="pre">ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
-:arg data: Input time-ordered historical price data to predict on
-:arg lags: Integer hyperparamater for the forecasting prediction
-:arg N: Integer number of time steps (days) in the future to predict the price
-:arg model_name: String machine learning model name. Corresponds to a sklearn regression algorithm. 
-:return: List of time-ordered price predictions. Exits if the specified model_name is not recognized. 
-:rtype: list</p>
+<dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Input time-ordered historical price data to predict on</p></li>
+<li><p><strong>lags</strong> – Integer hyperparamater for the forecasting prediction</p></li>
+<li><p><strong>N</strong> – Integer number of time steps (days) in the future to predict the price</p></li>
+<li><p><strong>model_name</strong> – String machine learning model name. Corresponds to a sklearn regression algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of time-ordered price predictions. Exits if the specified model_name is not recognized.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -283,13 +293,21 @@ available Kraken symbol pairs.</p>
 <dt class="sig sig-object py" id="utils.plot_and_save_price_graph_with_predictions">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">plot_and_save_price_graph_with_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.plot_and_save_price_graph_with_predictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the prediction price data as an image file. 50 days of historical data is also plotted to show in the near term where the prediction trends are going. 
-If there are multiple ML model predictions, all of the model predictions are plotted. Image is saved to <cite>figures/</cite>
-:arg data: Time ordered list of prices to plot (assumed to be in USD based on the API sources)
-:arg filename: Filename under which to save the data in the directory <cite>figures/</cite>
-:arg file_extension: file extension to save the image as. Either png, jpg, or pdf
-:arg crypto: The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)
-:arg predictions: Dictionary where the keys are ML model names (e.g. random_forest) and the values are lists of time ordered price predictions
-:return: None</p>
+If there are multiple ML model predictions, all of the model predictions are plotted. Image is saved to <cite>figures/</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Time ordered list of prices to plot (assumed to be in USD based on the API sources)</p></li>
+<li><p><strong>filename</strong> – Filename under which to save the data in the directory <cite>figures/</cite></p></li>
+<li><p><strong>file_extension</strong> – file extension to save the image as. Either png, jpg, or pdf</p></li>
+<li><p><strong>crypto</strong> – The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)</p></li>
+<li><p><strong>predictions</strong> – Dictionary where the keys are ML model names (e.g. random_forest) and the values are lists of time ordered price predictions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -306,9 +324,15 @@ If there are multiple ML model predictions, all of the model predictions are plo
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.print_summary_statistics_of_predicted_prices">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_summary_statistics_of_predicted_prices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions_for_different_models</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.print_summary_statistics_of_predicted_prices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prints summary statistics for the predicted daily prices across the ensemble of ML models
-:arg predictions_for_different_models: A dictionary where keys are ML model names and values are the predicted prices over time
-:return: None</p>
+<dd><p>Prints summary statistics for the predicted daily prices across the ensemble of ML models</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>predictions_for_different_models</strong> – A dictionary where keys are ML model names and values are the predicted prices over time</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
