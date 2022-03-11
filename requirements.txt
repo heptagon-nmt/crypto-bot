@@ -7,3 +7,4 @@ cryptocmd @ git+git://github.com/guptarohit/cryptoCMD.git@86ed81feed1ba533f4a526
 skforecast==0.4.2
 mplfinance==0.12.8b9
 art
+numpy==1.22.2

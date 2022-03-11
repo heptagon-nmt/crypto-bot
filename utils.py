@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import art
 import random
+import numpy as np
 
 def print_motd() -> None:
     """
@@ -59,4 +60,12 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	plt.close()
 	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+filename+"_prediction."+file_extension)
 	return None
-
+def print_summary_statistics_of_predicted_prices(predictions_for_different_models):
+	print("\n=== Model Ensemble Statistics ===")
+	N = len(predictions_for_different_models[list(predictions_for_different_models.keys())[0]])
+	for i in range(N):
+		vector = []
+		for k in predictions_for_different_models:
+			vector.append(predictions_for_different_models[k][i])
+		print("Day "+str(i+1)+" mean predicted price across all ML models is "+str(round(np.mean(vector), 4))+" USD with a standard deviation of "+str(round(np.std(vector), 4)))
+	print("=================\n")
