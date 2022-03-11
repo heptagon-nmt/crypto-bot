@@ -1,3 +1,7 @@
+"""
+Utility module for plotting and printing information
+"""
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import art
@@ -51,7 +55,8 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	return None
 def print_summary_statistics_of_predicted_prices(predictions_for_different_models):
 	"""
-	:param predictions_for_different_models: A dictionary where keys are ML model names and values are the predicted prices over time
+	Prints summary statistics for the predicted daily prices across the ensemble of ML models
+	:arg predictions_for_different_models: A dictionary where keys are ML model names and values are the predicted prices over time
 	:return: None
 	"""
 	print("\n=== Model Ensemble Statistics ===")

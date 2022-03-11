@@ -1,5 +1,5 @@
 """
-Crypto-Bot Sub-Module Documentation
+Crypto-Util Sub-Module Documentation
 -----------------------------------
 
 
@@ -18,9 +18,8 @@ ML_predictor_backend.py
 ..  automodule:: ML_predictor_backend
     :members:
 
-doc_example.py
+util.py
 ^^^^^^^^^^^^^^^^^^^^^
-..  automodule:: doc_example
-    :members:
-
+..  automodule:: util
+    :members
 """
