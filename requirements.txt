@@ -7,3 +7,4 @@ xgboost==1.5.2
 cryptocmd @ git+git://github.com/guptarohit/cryptoCMD.git@86ed81feed1ba533f4a526f885e021efbc53956d
 skforecast==0.4.2
 mplfinance==0.12.8b9
+art
