@@ -150,7 +150,7 @@ def get_opening_price_kraken(pair, days, interval = 30):
     assert len(data) > 1
     return data[1]
 
-def get_ids_coingecko(update_cache = False):
+def get_ids_coingecko(update_cache = True):
     """
     If the cache is updated, then the data is saved to a json file first
     then loaded back from that file. Inefficient? Maybe
@@ -174,7 +174,7 @@ def get_all_coingecko():
         data = json.load(f)
     return data
 
-def get_ids_kraken(update_cache = False):
+def get_ids_kraken(update_cache = True):
     """
     If update_cache pull the html from a table on Kraken's website and parse
     it for the available base currencies.
