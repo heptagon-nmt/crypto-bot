@@ -5,6 +5,5 @@ matplotlib==3.5.1
 yahoo-fin==0.8.9.1
 cryptocmd @ git+git://github.com/guptarohit/cryptoCMD.git@86ed81feed1ba533f4a526f885e021efbc53956d
 skforecast==0.4.2
-mplfinance==0.12.8b9
 art
 numpy==1.22.2

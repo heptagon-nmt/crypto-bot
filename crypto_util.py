@@ -2,7 +2,6 @@ from ML_predictor_backend import predict_next_N_timesteps
 from get_data import *
 from utils import *
 import argparse
-import export
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 sources = ["kraken", "coingecko", "cmc"]
