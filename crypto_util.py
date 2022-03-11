@@ -25,7 +25,7 @@ def main():
 	print_motd()
 
 	# Check all arguments
-	if args.ls:		# TODO: List all the cryptocurrencies
+	if args.ls:
 		if args.source is None:
 			print("Querying available cryptocurrency symbols requires --source flag to be specified")
 			exit(1)

@@ -36,7 +36,7 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	plt.legend()
 	plt.savefig("figures/"+filename+"."+file_extension)
 	plt.close()
-	print("Figure of price data has been written to "+"figures/"+filename+"."+file_extension)
+	print("Figure of historical price data has been written to "+"figures/"+filename+"."+file_extension)
 	return None
 
 def plot_and_save_price_graph_with_predictions(data, filename, file_extension, crypto, predictions):
