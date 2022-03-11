@@ -49,7 +49,7 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
 	assert type(filename) is str
 	assert type(file_extension) is str
-	assert type(data) is list
+	assert type(data) is np.ndarray
 	assert type(crypto) is str
 	plt.plot([a for a in range(len(data))], data, "-b.", label=crypto)
 	fig = plt.gcf()
