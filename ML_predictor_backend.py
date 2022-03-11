@@ -30,7 +30,7 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	elif model_name == "bagging":
 		forecaster = ForecasterAutoreg(regressor=BaggingRegressor(n_estimators=20), lags=lags)
 	elif model_name == "ridge":
-		forecaster = ForecasterAutoreg(regressor=Ridge(max_iter=100000), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=Ridge(max_iter=10000), lags=lags)
 	else:
 		print("model not recognized, exiting")
 		sys.exit()
