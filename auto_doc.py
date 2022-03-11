@@ -13,7 +13,7 @@ ML_predictor_backend.py
 ..  automodule:: ML_predictor_backend
     :members:
 
-util.py
+utils.py
 ^^^^^^^^^^^^^^^^^^^^^
 ..  automodule:: util
     :members
