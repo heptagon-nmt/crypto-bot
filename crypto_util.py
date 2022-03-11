@@ -83,9 +83,8 @@ def main():
 		for model in models:
 			prediction = predict_next_N_timesteps(data, args.lags, args.days, model)
 			print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+model+" model are:\n")
-			pairs = [tuple(prediction[i:i+2]) for i in range(0, len(prediction), 2)]
-			for (index, p) in enumerate(pairs):
-				print("Predicted Day "+str(index+1)+" price = "+str(p[0]))
+			for (index, p) in enumerate(prediction):
+				print("Predicted Day "+str(index+1)+" price = "+str(p))
 			predictions_over_models[model] = prediction
 			print("\n")
 		if args.plot_prediction:
@@ -94,7 +93,7 @@ def main():
 		prediction = predict_next_N_timesteps(data, args.lags, args.days, args.model)
 		print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+args.model+" model are:\n")
 		for (index, p) in enumerate(prediction):
-			print("Predicted Day "+str(index+1)+" price = "+str(p[0]))
+			print("Predicted Day "+str(index+1)+" price = "+str(p))
 		print("\n")
 		if args.plot_prediction:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
