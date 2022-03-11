@@ -35,7 +35,7 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	elif model_name == "lasso":
 		forecaster = ForecasterAutoreg(regressor = Lasso(max_iter=100000), lags = lags)
 	elif model_name == "gradient_boosting":
-		forecaster = ForecasterAutoreg(regressor=GradientBoostingRegressor(max_depth=20, n_estimators=200), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=GradientBoostingRegressor(max_depth=4, n_estimators=120), lags=lags)
 	elif model_name == "bagging":
 		forecaster = ForecasterAutoreg(regressor=BaggingRegressor(n_estimators=20), lags=lags)
 	elif model_name == "ridge":
