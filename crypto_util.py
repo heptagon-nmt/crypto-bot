@@ -11,7 +11,7 @@ def main():
 	parser = argparse.ArgumentParser(description="Command Line Cryptocurrency price prediction utility")
 	parser.add_argument("--crypto", "-c", type=str, required=False, help="Symbol of the cryptocurrency. Required unless --ls is called")
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
-	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken. ")
+	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken, and the cryptocurrency symbols will be written to local files in `data/` ")
 	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all. Default is all")
 	parser.add_argument("--plot_data", "-p", type=str, required=False, help="Plot the past data and predicted data. Options are True and False. Default is True. File is written to figures/")
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data to. Default is data")
