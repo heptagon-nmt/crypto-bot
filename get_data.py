@@ -47,7 +47,8 @@ url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}",
 def pull_CMC_scraper_data(cryptocurrency_name):
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
-	:param str cryptocurrency_name: 
+
+	:param cryptocurrency_name: String specifying the cryptocurrency symbol to query the CMC scraper with
 	"""
 	assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
 	scraper = CmcScraper(cryptocurrency_name)
