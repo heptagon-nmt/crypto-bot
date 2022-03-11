@@ -12,10 +12,10 @@ def main():
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
 	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken. ")
 	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all")
-	parser.add_argument("--plot_historical", "-ph", action="store_true", required=False, help="Plot the past price data. If specified then --filename and --filetype must also be specified. File is written to figures/")
-	parser.add_argument("--plot_prediction", "-pp", action="store_true", required=False, help="Plot the past data and predicted data. If specified then --filename and --filetype must also be specified. File is written to figures/")
+	parser.add_argument("--plot_historical", "-ph", action="store_true", required=False, help="Plot the past price data. Default True. File is written to figures/")
+	parser.add_argument("--plot_prediction", "-pp", action="store_true", required=False, help="Plot the past data and predicted data. Default True. File is written to figures/")
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data to. Default is data")
-	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is jpg")
+	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources))
 	parser.add_argument("--lags", "-lg", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 20")
 	args = parser.parse_args()
@@ -57,11 +57,15 @@ def main():
 		args.model = "xgboost"		# Set default model
 	if args.source is None:
 		args.source = "cmc"		# Set default source
-	if args.plot_historical:
-		if args.filename is None:
-			args.filename = "data"
-		if args.filetype is None:
-			args.filetype = "jpg"
+	#if args.plot_historical:
+	if args.filename is None:
+		args.filename = "data"
+	if args.filetype is None:
+		args.filetype = "pdf"
+	if args.plot_historical is False:
+		args.plot_historical = True
+	if args.plot_prediction is False:
+		args.plot_prediction = True
 
 	# Get the data
 	if args.source == "cmc":
@@ -71,10 +75,10 @@ def main():
 	elif args.source == "coingecko":
 		pass
 	else:
-		print("Source not recognized, exiting")
+		print("Data source not recognized, exiting")
 		exit(1)
-	if args.plot_historical:
-		plot_and_save_price_graph(data, "test", "pdf")
+	if args.plot_historical == True:
+		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
 	if args.model == "xgboost":
 		next_day_prediction = xgboost_forecast_single_step_predict(data)
 		print("The next predicted price of "+args.crypto+" is", next_day_prediction)
@@ -88,6 +92,9 @@ def main():
 		for (index, p) in enumerate(pairs):
 			print("Predicted Day "+str(index+1)+" Open price = "+str(p[0]))
 			print("Predicted Day "+str(index+1)+" Close price = "+str(p[1]))
+			print()
+		if args.plot_prediction:
+			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
 	return
 
 if __name__ == "__main__":
