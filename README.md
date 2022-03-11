@@ -1,4 +1,29 @@
-[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml) [![Publish Docker](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml)
+[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml) [![Publish To Docker](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml)
+
+
+## Install
+
+Use:
+`docker pull yetanothercryptoutil/yacu && echo "#!/bin/bash\ndocker run yacu $@" > ~/.local/bin/yacu && chmod u+x ~/.local/bin/yacu`
+or
+`podman pull yetanothercryptoutil/yacu`
+
+### Usage
+
+Run with:
+`yacu`
+or
+`docker run yacu`
+or
+`podman run yacu`
+
+## Example Usage
+- `yacu --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze needs to specified. 
+
+- `yacu --help` displays the usage and required arguments for the utility to work. 
+
+
+
 
 
 # crypto-bot
