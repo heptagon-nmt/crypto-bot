@@ -22,6 +22,4 @@ def test_default() -> None:
 	price_data = get_data.pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
 	assert len(price_data) > 1
-	check_valid = get_data.is_valid_id_coingecko("BTC")
-	assert check_valid == False
 
