@@ -17,7 +17,7 @@ Real time cryptocurrency price data gathering and future price prediction comman
 ### Local installation
 - Download and install anaconda
 - git clone `https://github.com/1103s/crypto-bot.git`
-- cd crpto-bot
+- cd crypto-bot
 - conda create --name crypto-util python=3.9.7
 - source activate crypto-util
 - python3 -m pip install -r requirements.txt

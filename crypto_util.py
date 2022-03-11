@@ -9,7 +9,7 @@ sources = ["kraken", "coingecko", "cmc"]
 
 def main():
 	parser = argparse.ArgumentParser(description="Command Line Cryptocurrency price prediction utility")
-	parser.add_argument("--crypto", "-c", type=str, required=True, help="Symbol of the cryptocurrency")
+	parser.add_argument("--crypto", "-c", type=str, required=False, help="Symbol of the cryptocurrency. Required unless --ls is called")
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
 	parser.add_argument("--ls", "-l", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken. ")
 	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all. Default is all")
@@ -20,16 +20,23 @@ def main():
 	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 300")
 	parser.add_argument("--csv", action="store_true", help="Outputs prediction data to a csv in the `data/` directory to a file called `data_out.csv`")
 	args = parser.parse_args()
-	
+
 	print_motd()
 
 	# Check all arguments
+	if args.source not in sources and args.source != None:
+		print("Invalid source. Options: {}".format(sources))
+		exit(1)
 	if args.ls:
 		if args.source is None:
-			print("Querying available cryptocurrency symbols requires --source flag to be specified")
+			print("Querying available cryptocurrency symbols requires --source flag to be specified. Exiting")
 			exit(1)
-		get_available_symbols_from_source(args.source)
+		print("\nFor the data source "+args.source+", the available cryptocurrency symbols you can query are:\n\n")
+		print(get_available_symbols_from_source(args.source))
 		exit(0)
+	if args.crypto is None:
+		print("Cryptocurrency symbol required. Specify using --crypto")
+		exit(1)
 	if args.lags is None:
 		args.lags = 300
 	if (args.model not in models) and (args.model != None) and (args.model != "all"):
@@ -37,9 +44,6 @@ def main():
 		exit(1)
 	if args.model is None:
 		args.model = "all"
-	if args.source not in sources and args.source != None:
-		print("Invalid source. Options: {}".format(sources))
-		exit(1)
 	if args.crypto is None:
 		print("Please specify a cryptocurrency")
 		exit(1)
@@ -58,21 +62,23 @@ def main():
 		args.filetype = "pdf"
 	if args.plot_data is None:
 		args.plot_data = True
-	if args.plot_data not in ["True", "False"]:
+	if args.plot_data not in ["True", "False", True]:
 		print("plot_data argument must be either True or False. ")
 		exit(1)
-	args.plot_data = ast.literal_eval(args.plot_data)
+	if type(args.plot_data) is str:
+		args.plot_data = ast.literal_eval(args.plot_data)
 
 	# Get the data
 	if args.source == "cmc":
 		data = pull_CMC_scraper_data(args.crypto)
 	elif args.source == "kraken":
-		pass
+		get_opening_price_kraken(args.crypto, "USD", 10000)
 	elif args.source == "coingecko":
-		pass
+		data = get_opening_price_coingecko(args.crypto, "USD", 10000)
 	else:
-		print("Data source not recognized, exiting")
+		print("Source not recognized, exiting")
 		exit(1)
+	print(data)
 	if args.plot_data:
 		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
 	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
