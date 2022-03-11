@@ -20,7 +20,7 @@ def xgboost_forecast_single_step_predict(data):
 	model.fit(np.vstack(np.array(X)), np.vstack(np.array(data)))
 	yhat = model.predict(np.vstack(np.array([len(data)])))
 	return list(yhat)[0]
-def predict_next_N_timesteps(data, lags, N, model_name, random_state=10):
+def predict_next_N_timesteps(data, lags, N, model_name):
 	assert type(data) is list, "price data must be a list"
 	assert type(lags) is int, "lag parameter must be an integer"
 	assert type(N) is int, "Number of steps to predict into the future must be an integer"

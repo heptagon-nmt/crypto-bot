@@ -4,7 +4,13 @@ import matplotlib.pyplot as plt
 import mplfinance as mpf
 import numpy as np
 import pandas as pd
+import art
 
+def print_motd() -> None:
+    """
+    Prints the motd with random asci art.
+    """
+    print(art.text2art("Yet Another Crypto Util", "cybermedum"))
 def convert_timestamp(timestamp):
     val = timestamp["Date"]
     return datetime.utcfromtimestamp(val / 1000)
