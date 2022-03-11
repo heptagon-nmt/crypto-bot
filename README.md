@@ -2,7 +2,7 @@
 
 # Crypto Util
 
-Real time cryptocurrency price data gathering and future price prediction command line utility using machine learning regression. Cross platform compatible on Linux, macOS, and Windows. 
+Real time cryptocurrency price data prediction command line utility using machine learning regression. Cross platform compatible on Linux, macOS, and Windows. Written in Python3. 
 
 ## Install
 
@@ -16,11 +16,11 @@ Real time cryptocurrency price data gathering and future price prediction comman
 
 ### Local installation
 - Download and install anaconda
-- git clone `https://github.com/1103s/crypto-bot.git`
-- cd crypto-bot
-- conda create --name crypto-util python=3.9.7
-- source activate crypto-util
-- python3 -m pip install -r requirements.txt
+- `git clone https://github.com/1103s/crypto-bot.git`
+- `cd crypto-bot
+- `conda create --name crypto-util python=3.9.7
+- `source activate crypto-util
+- `python3 -m pip install -r requirements.txt
 
 ## Usage
 

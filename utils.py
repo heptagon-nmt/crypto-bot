@@ -8,6 +8,7 @@ import art
 import random
 import numpy as np
 import csv
+import matplotlib.patches as mpatches
 
 def export_csv(data: dict[str, list[float]], filename: str = "data/data_out.csv") -> None:
     """
@@ -33,7 +34,7 @@ def print_motd() -> None:
 
     :return: None
     """
-    print(art.text2art("Crypto Util", "cybermedum"))
+    print(art.text2art("Welcome to Crypto Util", "cybermedum"))
 
 def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	"""
@@ -53,6 +54,7 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	plt.plot([a for a in range(len(data))], data, "-b.", label=crypto)
 	fig = plt.gcf()
 	fig.set_size_inches(12, 8)
+	plt.title("Historical price data of "+crypto)
 	plt.ylabel("USD price")
 	plt.xlabel("Time index")
 	plt.legend()
@@ -81,14 +83,20 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	assert type(predictions) is dict
 	truncate_data = 50
 	data = data[-truncate_data:]
+	fig, ax = plt.subplots()
+	k = list(predictions.keys())[0]
+	ax.axvspan(len(data), len(data)+len(predictions[k]), alpha=0.1, color='green')
 	plt.plot([a for a in range(len(data))], data, "-b.", label=crypto)
 	fig = plt.gcf()
 	fig.set_size_inches(12, 8)
 	plt.ylabel("USD price")
 	plt.xlabel("Time index")
+	plt.title(crypto+" predicted USD price over the next "+str(len(predictions[k]))+" days")
 	for k in predictions:
-		plt.plot([i+len(data) for i in range(len(predictions[k]))], predictions[k], color=(random.randint(1, 255)/255.0, random.randint(1, 255)/255.0, random.randint(1, 255)/255.0), marker="^", label=k)
-	plt.legend()
+		plt.plot([i+len(data) for i in range(len(predictions[k]))], predictions[k], color=(random.randint(1, 255)/255.0, random.randint(1, 255)/255.0, random.randint(1, 255)/255.0), marker=random.choice(["^", "o", "*", "P"]), label=k)
+	red_patch = mpatches.Patch(color='green', label='Future prediction region', alpha=0.1)
+	h, l = ax.get_legend_handles_labels()
+	plt.legend(handles=[red_patch]+h)
 	plt.savefig("figures/"+filename+"_prediction."+file_extension)
 	plt.close()
 	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+filename+"_prediction."+file_extension)
