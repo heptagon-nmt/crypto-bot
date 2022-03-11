@@ -20,7 +20,6 @@ import os
 import re
 import requests
 import time
-from yahoo_fin import stock_info as si
 
 class KrakenCurrencyTableParser(HTMLParser):
     """
@@ -158,7 +157,7 @@ def get_ohlc_kraken(pair, days, interval = 30):
     assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
     return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
 
-def get_ids_coingecko(update_cache = False):
+def get_ids_coingecko(update_cache = True):
     """
     If the cache is updated, then the data is saved to a json file first
     then loaded back from that file. Inefficient? Maybe
@@ -176,7 +175,7 @@ def get_ids_coingecko(update_cache = False):
     ids = [data[i]['id'] for i in range(len(data))]
     return ids
 
-def get_ids_kraken(update_cache = False):
+def get_ids_kraken(update_cache = True):
     """
     If update_cache pull the html from a table on Kraken's website and parse
     it for the available base currencies.
@@ -214,7 +213,7 @@ def get_market_range_coingecko(coin_id, start, end):
     :param int end: The ending time in the range (UTC Unix Timestamp)
     :return: Returns spot price/volume data in json format if coin_id is valid. 
         Otherwise, None is returned.
-    :rtype: json 
+    :rtype: json
     """
     assert start < end
     assert(is_valid_id_coingecko(coin_id))
