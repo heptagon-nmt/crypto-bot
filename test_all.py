@@ -26,6 +26,6 @@ def test_default() -> None:
 	#assert type(crypto_symbols_kraken) is list
 	#assert len(crypto_symbols_kraken) > 1
 	
-	crypto_symbols_coingecko = get_data.get_ids_coingecko()
-	assert type(crypto_symbols_coingecko) is list
-	assert len(crypto_symbols_coingecko) > 1
+	#crypto_symbols_coingecko = get_data.get_ids_coingecko()
+	#assert type(crypto_symbols_coingecko) is list
+	#assert len(crypto_symbols_coingecko) > 1
