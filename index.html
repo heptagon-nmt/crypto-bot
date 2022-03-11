@@ -39,14 +39,14 @@
 <h2>Crypto-Bot Sub-Module Documentation<a class="headerlink" href="#crypto-bot-sub-module-documentation" title="Permalink to this headline">¶</a></h2>
 <section id="module-export">
 <span id="export-py"></span><h3>export.py<a class="headerlink" href="#module-export" title="Permalink to this headline">¶</a></h3>
-<p>Used to export data to diffrent formats.</p>
+<p>Used to export data to different formats.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="export.export_csv">
-<span class="sig-prename descclassname"><span class="pre">export.</span></span><span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data_out.csv'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#export.export_csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exports data as a coma seperated file.
-:arg data: A colection of predicitons from the ml unit, with prediction
+<span class="sig-prename descclassname"><span class="pre">export.</span></span><span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/data_out.csv'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#export.export_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports data as a CSV file.
+:arg data: A colection of predictions from the ml unit, with prediction
 types as keys.
-:arg filename: The name of the file to save to.</p>
+:arg filename: The name of the file to save to within data/</p>
 </dd></dl>
 
 </section>
@@ -234,7 +234,10 @@ available Kraken symbol pairs.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.pull_CMC_scraper_data">
 <span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">pull_CMC_scraper_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cryptocurrency_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.pull_CMC_scraper_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query CMC Scraper API to get the cryptocurrency price data</p>
+<dd><p>Query CMC Scraper API to get the cryptocurrency price data
+:arg cryptocurrency_name: String specifying which cryptocurrency to query. For example Bitcoin is BTC
+:return: Opening daily price data going back to the beginning of the cryptocurrency. 
+:rtype: list</p>
 </dd></dl>
 
 </section>
@@ -244,22 +247,13 @@ available Kraken symbol pairs.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ML_predictor_backend.predict_next_N_timesteps">
 <span class="sig-prename descclassname"><span class="pre">ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Input time-ordered historical price data to predict on</p></li>
-<li><p><strong>lags</strong> – Integer hyperparamater for the forecasting prediction</p></li>
-<li><p><strong>N</strong> – Number of time steps (days) in the future to predict the price</p></li>
-<li><p><strong>model_name</strong> – machine learning model name. Corresponds to a sklearn regression algorithm</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of time-ordered price predictions</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
+<dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
+:arg data: Input time-ordered historical price data to predict on
+:arg lags: Integer hyperparamater for the forecasting prediction
+:arg N: Integer number of time steps (days) in the future to predict the price
+:arg model_name: String machine learning model name. Corresponds to a sklearn regression algorithm. 
+:return: List of time-ordered price predictions. Exits if the specified model_name is not recognized. 
+:rtype: list</p>
 </dd></dl>
 
 </section>
