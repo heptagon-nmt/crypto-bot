@@ -53,20 +53,20 @@ url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}",
                 "kraken" : "https://api.kraken.com/0/public/{}"}
 
 def pull_CMC_scraper_data(cryptocurrency_name):
-	"""
-	Query CMC Scraper API to get the cryptocurrency price data
-	:arg cryptocurrency_name: String specifying which cryptocurrency to query. For example Bitcoin is BTC
-	:return: Opening daily price data going back to the beginning of the cryptocurrency. 
-	:rtype: list
-	"""
-	assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
-	scraper = CmcScraper(cryptocurrency_name)
-	json_data = ast.literal_eval(scraper.get_data("json"))
-	json_data.reverse()
-	data = []
-	for a in json_data:
-		data.append(a["Open"])
-	return data
+    """
+    Query CMC Scraper API to get the cryptocurrency price data
+    :arg cryptocurrency_name: String specifying which cryptocurrency to query. For example Bitcoin is BTC
+    :return: Opening daily price data going back to the beginning of the cryptocurrency. 
+    :rtype: list
+    """
+    assert type(cryptocurrency_name) is str, "Cryptocurrency name must be a string"
+    scraper = CmcScraper(cryptocurrency_name)
+    json_data = ast.literal_eval(scraper.get_data("json"))
+    json_data.reverse()
+    data = []
+    for a in json_data:
+        data.append(a["Open"])
+    return data
 
 
 def get_available_sources():
