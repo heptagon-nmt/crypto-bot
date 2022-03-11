@@ -238,6 +238,31 @@ available Kraken symbol pairs.</p>
 </dd></dl>
 
 </section>
+<section id="ml-predictor-backend-py">
+<h3>ML_predictor_backend.py<a class="headerlink" href="#ml-predictor-backend-py" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-ML_predictor_backend"></span><p>Library code for the Machine Learning prediction backend</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ML_predictor_backend.predict_next_N_timesteps">
+<span class="sig-prename descclassname"><span class="pre">ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Input time-ordered historical price data to predict on</p></li>
+<li><p><strong>lags</strong> – Integer hyperparamater for the forecasting prediction</p></li>
+<li><p><strong>N</strong> – Number of time steps (days) in the future to predict the price</p></li>
+<li><p><strong>model_name</strong> – machine learning model name. Corresponds to a sklearn regression algorithm</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of time-ordered price predictions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-doc_example">
 <span id="doc-example-py"></span><h3>doc_example.py<a class="headerlink" href="#module-doc_example" title="Permalink to this headline">¶</a></h3>
 <p>Description of your module.</p>
