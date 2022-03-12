@@ -79,10 +79,11 @@ def search_symbols(symbol, source):
 
 def get_available_sources():
     """
-    TODO Add CmcScraper and also yahoo_finance?
+    return available API data sources
+
     :return: list of available sources
     """
-    return list(url_prefixes.keys()).append("yahoo_fin")
+    return list(url_prefixes.keys())
 
 def get_available_symbols_from_source(source):
     """
