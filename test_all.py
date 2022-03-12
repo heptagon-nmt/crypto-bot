@@ -4,7 +4,7 @@ The unit test mechanism.
 import numpy as np
 import subprocess as sp
 
-DO_DETAIL = True
+DO_DETAIL = False
 
 def run(cmd):
     """
