@@ -17,9 +17,9 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'crypto-bot'
-copyright = '2022, Oy ill fix this in a bit'
-author = 'Oy ill fix this in a bit'
+project = 'YACU'
+copyright = 'YACU-Team'
+author = 'YACU-Team'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'
