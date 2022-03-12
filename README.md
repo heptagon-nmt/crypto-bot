@@ -38,7 +38,7 @@ Real time cryptocurrency price data prediction command line utility using machin
 - `podman run yacu`
 
 ### Example Docker or podman Usage
-- `podman run yacu --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze is a required flag. 
+- `podman run yacu --crypto ETH`: In this case the settings are set to default. However, the cryptocurrency you want to analyze is a required flag.  
 
 - `podman run yacu --help` displays the usage and required arguments for the utility to work. 
 
