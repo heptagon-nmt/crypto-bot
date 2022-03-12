@@ -13,6 +13,7 @@ def test_default() -> None:
 	"""
 	import ML_predictor_backend as ML
 	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "linear")
+	#Linear regression is expected to predict linear functions well, as opposed to other models
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
@@ -26,7 +27,7 @@ def test_default() -> None:
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "lasso")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "ridge")
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
