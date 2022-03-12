@@ -113,9 +113,17 @@ def get_ohlc_coingecko(id, vs_currency, days):
     id = id.lower()
     assert is_valid_id_coingecko(id)
     url_suffix = "coins/{}/ohlc/?vs_currency={}&days={}".format(id, vs_currency.lower(), days)
+    alt_url_suffix = "coins/{}/ohlc/?vs_currency={}&days=max".format(id, vs_currency.lower())
     url = url_prefixes['coingecko'].format(url_suffix)
+    alt_url = url_prefixes['coingecko'].format(alt_url_suffix)
     response = requests.get(url)
-    data = response.json()
+    try:
+        data = response.json()
+    except Exception as e:
+        response = requests.get(alt_url)
+        data = response.json()
+        print(f'Warning: {days} days is more than the allowed amount for this'
+        f' api. Processing wil continue with {len(data)} as this is the max.')
     assert isinstance(data, list)
     return np.array(data)
 

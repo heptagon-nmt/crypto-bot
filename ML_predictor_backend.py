@@ -24,6 +24,8 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	:return: List of time-ordered price predictions. Exits if the specified model_name is not recognized. 
 	:rtype: list
 	"""
+    ## NOTE temp fix till i ask elijah about this list vs nd array thing
+	data = list(data)
 	assert type(data) is list, "price data must be a list"
 	assert type(lags) is int, "lag parameter must be an integer"
 	assert type(N) is int, "Number of steps to predict into the future must be an integer"
