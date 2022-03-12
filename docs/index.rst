@@ -9,6 +9,8 @@ Welcome to crypto-bot's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :glob:
+   *.py
 
 .. automodule:: auto_doc 
    :members:
