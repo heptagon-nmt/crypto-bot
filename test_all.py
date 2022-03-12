@@ -12,7 +12,7 @@ def test_default() -> None:
 	ML prediction module
 	"""
 	import ML_predictor_backend as ML
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 2, 4, "linear")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "linear")
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
@@ -21,7 +21,16 @@ def test_default() -> None:
 	np.testing.assert_allclose(9, pred[2])
 	np.testing.assert_allclose(10, pred[3])
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 2, 4, "random_forest")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "random_forest")
+	assert type(pred) is list
+	assert len(pred) == 4
+	assert type(pred[0]) is float
+	np.testing.assert_allclose(7, pred[0])
+	np.testing.assert_allclose(8, pred[1])
+	np.testing.assert_allclose(9, pred[2])
+	np.testing.assert_allclose(10, pred[3])
+
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "lasso")
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
