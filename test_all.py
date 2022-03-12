@@ -1,6 +1,8 @@
 """
 The unit test mechanism.
 """
+import numpy as np
+
 def test_default() -> None:
 	"""
 	The default tests to be run.
@@ -14,7 +16,11 @@ def test_default() -> None:
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
-	
+	np.testing.assert_allclose(7, pred[0])
+	np.testing.assert_allclose(8, pred[1])
+	np.testing.assert_allclose(9, pred[2])
+	np.testing.assert_allclose(10, pred[3])
+
 	"""
 	get_data module
 	"""
