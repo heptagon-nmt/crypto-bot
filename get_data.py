@@ -44,6 +44,8 @@ class KrakenCurrencyTableParser(HTMLParser):
 url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}", 
                 "kraken" : "https://api.kraken.com/0/public/{}"}
 
+sources_list = ["coingecko", "kraken", "cmcscraper"]
+
 def pull_CMC_scraper_data(cryptocurrency_name):
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
@@ -58,6 +60,22 @@ def pull_CMC_scraper_data(cryptocurrency_name):
 	for a in json_data:
 		data.append(a["Open"])
 	return data
+
+def search_symbols(symbol, source):
+    assert source in sources_list, "Needs to be one of %s" % sources_list
+    found = []
+    if source == "kraken":
+        for sym in get_ids_kraken(update_cache = False):
+            if symbol.upper() == sym.upper():
+                found.append(sym)
+        return found
+    if source == "coingecko":
+        for coin_dict in get_dict_ids_coingecko(update_cache = False):
+            if symbol.upper() == coin_dict['symbol'].upper():
+                found.append(coin_dict['id'])
+        return found
+    if source == "cmcscraper":
+        pass
 
 def get_available_sources():
     """
@@ -166,29 +184,9 @@ def get_opening_price_kraken(pair, days, interval = 30):
     return data[1]
 
 def get_ids_coingecko(update_cache = True):
-    """
-    If the cache is updated, then the data is saved to a json file first
-    then loaded back from that file.
-
-    :param bool update_cache: Whether to update the local JSON files
-    :return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko
-    """
-    file_name = "data/coingecko_id_list.json"
-    if update_cache or not os.path.isfile(file_name):
-        r = requests.get(url_prefixes["coingecko"].format("coins/list"))
-        data = r.json()
-        with open(file_name, "w") as f:
-            json.dump(data, f)
-    with open(file_name, "r") as f:
-        data = json.load(f)
+    data = get_dict_ids_coingecko(update_cache)
     ids = [data[i]['id'] for i in range(len(data))]
     return ids
-
-def get_all_coingecko():
-    file_name = "data/coingecko_id_list.json"
-    with open(file_name, "r") as f:
-        data = json.load(f)
-    return data
 
 def get_ids_kraken(update_cache = True):
     """
@@ -200,6 +198,8 @@ def get_ids_kraken(update_cache = True):
     """
     support_url = "https://support.kraken.com/hc/en-us/articles/201893658-Currency-pairs-available-for-trading-on-Kraken"
     file_name = "data/kraken_pairs_list.json"
+    if not os.path.isdir("data"): 
+        os.mkdir("data")
     if update_cache or not os.path.isfile(file_name):
         r = requests.get(support_url, headers = {"User-Agent" : "Mozilla/5.0"})
         raw_text = r.text
@@ -207,13 +207,33 @@ def get_ids_kraken(update_cache = True):
         parser.feed(raw_text)
         pairs_list = parser.get_coins()
         for i, coin in enumerate(pairs_list):
-            pairs_list[i] = coin + "USD"
+            pairs_list[i] = coin
         with open(file_name, "w") as f:
             json.dump(pairs_list, f)
     assert(os.path.isfile(file_name))
     with open(file_name, "r") as f:
         pairs_list = list(json.load(f))
     return pairs_list
+
+def get_dict_ids_coingecko(update_cache = False):
+    """
+    If the cache is updated, then the data is saved to a json file first
+    then loaded back from that file.
+
+    :param bool update_cache: Whether to update the local JSON files
+    :return: a list of IDs (ethereum, litecoin, etc.) available for CoinGecko
+    """
+    file_name = "data/coingecko_id_list.json"
+    if not os.path.isdir("data"): os.mkdir("data")
+    if update_cache or not os.path.isfile(file_name):
+        r = requests.get(url_prefixes["coingecko"].format("coins/list"))
+        data = r.json()
+        with open(file_name, "w") as f:
+            json.dump(data, f)
+    with open(file_name, "r") as f:
+        data = json.load(f)
+    return data
+
 
 def get_market_range_coingecko(coin_id, start, end):
     """
