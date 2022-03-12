@@ -5,12 +5,19 @@
 
 Welcome to crypto-bot's documentation!
 ======================================
+Each component file and its corasponding methods are documeted below.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   intro
-   auto_doc
+
 
 .. automodule:: auto_doc 
    :members:
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
