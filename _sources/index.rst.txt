@@ -9,15 +9,8 @@ Welcome to crypto-bot's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   :glob:
-   *
+   intro
+   auto_doc
 
 .. automodule:: auto_doc 
    :members:
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
