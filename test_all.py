@@ -32,11 +32,30 @@ def test_default() -> None:
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "bagging")
+	assert type(pred) is list
+	assert len(pred) == 4
+	assert type(pred[0]) is float
+
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "gradient_boosting")
+	assert type(pred) is list
+	assert len(pred) == 4
+	assert type(pred[0]) is float
+
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "lasso")
+	assert type(pred) is list
+	assert len(pred) == 4
+	assert type(pred[0]) is float
+
+
 	"""
 	get_data module
 	"""
 	import get_data
 	price_data = get_data.pull_CMC_scraper_data("BTC")
+	assert type(price_data) is list
+	assert len(price_data) > 1
+	price_data = get_data.pull_CMC_scraper_data("ETH")
 	assert type(price_data) is list
 	assert len(price_data) > 1
 
