@@ -65,7 +65,7 @@ def search_symbols(symbol, source):
     assert source in sources_list, "Needs to be one of %s" % sources_list
     found = []
     if source == "kraken":
-        for sym in get_ids_kraken(update_cache = False):
+        for sym in list(set(get_ids_kraken(update_cache = False))):
             if symbol.upper() == sym.upper():
                 found.append(sym)
         return found
