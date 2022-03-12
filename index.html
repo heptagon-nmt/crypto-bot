@@ -95,12 +95,299 @@
 <h2>Crypto-Util Sub-Module Documentation<a class="headerlink" href="#crypto-util-sub-module-documentation" title="Permalink to this headline"><span>#</span></a></h2>
 <section id="get-data-py">
 <h3>get_data.py<a class="headerlink" href="#get-data-py" title="Permalink to this headline"><span>#</span></a></h3>
+<p>or real-time). The command-line utility can call these functions for doing 
+things such as getting the most recent price/volume data (spot prices or OHLC).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="get_data.KrakenCurrencyTableParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">KrakenCurrencyTableParser</span></span><a class="headerlink" href="#get_data.KrakenCurrencyTableParser" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>This class is for the get_ids_kraken() function, which needs to parse a 
+specific HTML document from Kraken’s website when the update_cache flag is
+passed for retrieving the coin list from the server.</p>
+<dl class="simple">
+<dt>Attributes: </dt><dd><p>coins               A list to contain the symbols located on the webpage
+ignore_currencies   Currencies to ignore when parsing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_available_sources">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_available_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_available_sources" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>TODO Add CmcScraper and also yahoo_finance?
+:return: list of available sources</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_available_symbols_from_source">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_available_symbols_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_available_symbols_from_source" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Return the available cryptocurrency symbols from kraken and coingecko
+:return: A list of available symbols 
+:rtype: list</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_dict_ids_coingecko">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_dict_ids_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_dict_ids_coingecko" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>If the cache is updated, then the data is saved to a json file first
+then loaded back from that file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>update_cache</strong> (<em>bool</em>) – Whether to update the local JSON files</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of IDs (ethereum, litecoin, etc.) available for CoinGecko</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_ids_kraken">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ids_kraken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ids_kraken" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>If update_cache pull the html from a table on Kraken’s website and parse
+it for the available base currencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of available symbol pairs offered by Kraken. The base 
+currency will always be USD. (ETHUSD, BTCUSD, LTCUSD, etc.)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_market_range_coingecko">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_market_range_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coin_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_market_range_coingecko" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Granularity is automatically determined by Coingecko using the following 
+specifications:</p>
+<blockquote>
+<div><p>5-minute intervals: 1 day from query time
+hourly intervals: 1-90 days from query time
+daily intervals: More than 90 days from query time</p>
+</div></blockquote>
+<p>Use unix UTC for start and end</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>int</em>) – The starting time in the range (UTC Unix Timestamp)</p></li>
+<li><p><strong>end</strong> (<em>int</em>) – The ending time in the range (UTC Unix Timestamp)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns spot price/volume data in json format if coin_id is valid. 
+Otherwise, None is returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_ohlc_coingecko">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ohlc_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs_currency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ohlc_coingecko" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Coingecko’s OHLC API for OHLC data. The time step intervals are 
+automatically set by Coingecko as follows:</p>
+<blockquote>
+<div><p>1-2 days: 30 minute intervals
+3 &lt; days &lt; 30: 4 hour intervals
+days &gt; 31: 4 day intervals</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – The Coingecko coin ID (ethereum, litecoin, etc.)</p></li>
+<li><p><strong>vs_currency</strong> (<em>str</em>) – The currency to weigh the coin against (usd, eur, etc.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timestamp (ms), Open, High, Low, Close in a numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_ohlc_kraken">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_ohlc_kraken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_ohlc_kraken" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Retrieve OHLC that ranges from a specified date to current. The granularity 
+can be supplied as well. This one might be preferable to the user since it 
+is quite a bit more flexible with time step intervals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pair</strong> (<em>str</em>) – This is a ticker pair, such as ETHUSD, XRPUSD, BTCETH, etc.</p></li>
+<li><p><strong>days</strong> (<em>integer</em>) – Number of days to go back to</p></li>
+<li><p><strong>interval</strong> (<em>integer</em><em> or </em><em>None</em>) – An integer which specifies the OHLC time interval in 
+minutes. Valid values are 1, 5, 15, 30, 60, 240, 1440, 10080, 21600</p></li>
+<li><p><strong>kraken</strong> (<em>str</em>) – The external source of the data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a numpy array of volume (USD) and OHLC data; or None if the request
+cannot be completed either because an invalid symbol pair was passed or
+for some other reason. All fields are converted to np.float32 type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.get_opening_price_coingecko">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_opening_price_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs_currency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_opening_price_coingecko" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Remember, granularity is determined by the number of days specified. 
+1-2 days: 30 minute intervals
+3 &lt; days &lt; 30: 4 hour intervals
+days &gt; 31: 4 day intervals</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Coingecko’s opening price for each time interval</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.is_valid_id_coingecko">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">is_valid_id_coingecko</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coin_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.is_valid_id_coingecko" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether a given coin ID is in the list of available Coingecko IDs</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.is_valid_id_kraken">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">is_valid_id_kraken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.is_valid_id_kraken" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether a given symbol pair (e.g. ETHUSD) is in the list of 
+available Kraken symbol pairs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="get_data.pull_CMC_scraper_data">
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">pull_CMC_scraper_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cryptocurrency_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.pull_CMC_scraper_data" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Query CMC Scraper API to get the cryptocurrency price data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cryptocurrency_name</strong> – String specifying the cryptocurrency symbol to query the CMC scraper with</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="ml-predictor-backend-py">
 <h3>ML_predictor_backend.py<a class="headerlink" href="#ml-predictor-backend-py" title="Permalink to this headline"><span>#</span></a></h3>
+<span class="target" id="module-ML_predictor_backend"></span><p>Library code for the Machine Learning prediction backend</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ML_predictor_backend.predict_next_N_timesteps">
+<span class="sig-prename descclassname"><span class="pre">ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Input time-ordered historical price data to predict on</p></li>
+<li><p><strong>lags</strong> – Integer hyperparamater for the forecasting prediction</p></li>
+<li><p><strong>N</strong> – Integer number of time steps (days) in the future to predict the price</p></li>
+<li><p><strong>model_name</strong> – String machine learning model name. Corresponds to a sklearn regression algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of time-ordered price predictions. Exits if the specified model_name is not recognized.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="utils-py">
-<h3>utils.py<a class="headerlink" href="#utils-py" title="Permalink to this headline"><span>#</span></a></h3>
+<section id="module-utils">
+<span id="utils-py"></span><h3>utils.py<a class="headerlink" href="#module-utils" title="Permalink to this headline"><span>#</span></a></h3>
+<p>Utility module for plotting and printing information</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.export_csv">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/data_out.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.export_csv" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Exports prediction data as a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – A colection of predictions from the ml unit, with prediction</p>
+</dd>
+</dl>
+<p>types as keys.
+:arg filename: The name of the file to save to within data/</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.plot_and_save_price_graph">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">plot_and_save_price_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.plot_and_save_price_graph" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Saves the historical price data as an image file in <cite>figures/</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Time ordered list of prices to plot (assumed to be in USD based on the API sources)</p></li>
+<li><p><strong>filename</strong> – Filename under which to save the data in the directory <cite>figures/</cite></p></li>
+<li><p><strong>file_extension</strong> – file extension to save the image as. Either png, jpg, or pdf</p></li>
+<li><p><strong>crypto</strong> – The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.plot_and_save_price_graph_with_predictions">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">plot_and_save_price_graph_with_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crypto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.plot_and_save_price_graph_with_predictions" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Saves the prediction price data as an image file. 50 days of historical data is also plotted to show in the near term where the prediction trends are going. 
+If there are multiple ML model predictions, all of the model predictions are plotted. Image is saved to <cite>figures/</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Time ordered list of prices to plot (assumed to be in USD based on the API sources)</p></li>
+<li><p><strong>filename</strong> – Filename under which to save the data in the directory <cite>figures/</cite></p></li>
+<li><p><strong>file_extension</strong> – file extension to save the image as. Either png, jpg, or pdf</p></li>
+<li><p><strong>crypto</strong> – The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)</p></li>
+<li><p><strong>predictions</strong> – Dictionary where the keys are ML model names (e.g. random_forest) and the values are lists of time ordered price predictions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.print_motd">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_motd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.print_motd" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Prints the motd with asci art.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.print_summary_statistics_of_predicted_prices">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">print_summary_statistics_of_predicted_prices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions_for_different_models</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.print_summary_statistics_of_predicted_prices" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Prints summary statistics for the predicted daily prices across the ensemble of ML models</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>predictions_for_different_models</strong> – A dictionary where keys are ML model names and values are the predicted prices over time</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 </section>
