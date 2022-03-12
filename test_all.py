@@ -2,10 +2,72 @@
 The unit test mechanism.
 """
 import numpy as np
+import subprocess as sp
+
+DO_DETAIL = True
+
+def run(cmd):
+    """
+    A more detailed test.
+    """
+    if (not DO_DETAIL):
+        return
+    sp.    run(cmd, capture_output=True, shell=True, check=True)
+
+def test_help():
+    run("python3 crypto_util.py -h")
+
+
+def test_list_kraken():
+    run("python3 crypto_util.py --source kraken --ls")
+
+
+def test_list_coingecko():
+    run("python3 crypto_util.py --source coingecko --ls")
+
+
+def test_list_cms():
+    run("python3 crypto_util.py --source cmc --ls")
+
+
+def test_predict_kraken():
+    run("python3 crypto_util.py --source kraken -c USD -d 10")
+
+
+def test_predict_coingecko():
+    run("python3 crypto_util.py --source coingecko -c zeon -d 10")
+
+
+def test_predict_cmc():
+    run("python3 crypto_util.py --source cmc -c BTC -d 10")
+
+
+def test_csv():
+    run("python3 crypto_util.py --source coingecko -c zeon --csv")
+
+
+def test_no_plot():
+    run("python3 crypto_util.py --source coingecko -c zeon -p False")
+
+
+def test_file_name():
+    run("python3 crypto_util.py --source coingecko -c zeon -f test")
+
+
+def test_file_png():
+    run("python3 crypto_util.py --source coingecko -c zeon -f test -ft png")
+
+
+def test_file_jpg():
+    run("python3 crypto_util.py --source coingecko -c zeon -f test -ft jpg")
+
+
+def test_lags():
+    run("python3 crypto_util.py --source coingecko -c zeon --lags 100")
 
 def test_default() -> None:
 	"""
-	The default tests to be run.
+	The default tests to be     run.
 	"""
 
 	"""
