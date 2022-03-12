@@ -1,5 +1,5 @@
 """
-    This module is to handle everything related to data collection (historical
+This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
 things such as getting the most recent price/volume data (spot prices or OHLC).
 """
