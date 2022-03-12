@@ -114,7 +114,7 @@ def test_default() -> None:
 	get_data module
 	"""
 	import get_data
-	price_data = pull_CMC_scraper_data("BTC")
+	price_data = get_data.pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
 	assert len(price_data) > 1
 	price_data = get_data.pull_CMC_scraper_data("ETH")
