@@ -113,7 +113,7 @@ def test_default() -> None:
 	"""
 	get_data module
 	"""
-	from get_data import CoinGecko, Kraken, pull_CMC_scraper_data
+	import get_data
 	price_data = pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
 	assert len(price_data) > 1
@@ -121,13 +121,7 @@ def test_default() -> None:
 	assert type(price_data) is list
 	assert len(price_data) > 1
 
-	cgi = CoinGecko()
-	assert isinstance(cgi, CoinGecko)
-	kraken = Kraken()
-	assert isinstance(kraken, Kraken)
-
 	
 	"""
 	utils module
 	"""
-
