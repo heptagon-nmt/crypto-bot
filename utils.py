@@ -46,10 +46,11 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	:arg crypto: The name of cryptocurrency being plotted. Typically the symbol of the cryptocurrency (e.g. BTC)
 	:return: None
 	"""
+	data = list(data)
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
 	assert type(filename) is str
 	assert type(file_extension) is str
-	assert type(data) is np.ndarray
+	assert type(data) is list
 	assert type(crypto) is str
 	plt.plot([a for a in range(len(data))], data, "-b.", label=crypto)
 	fig = plt.gcf()
