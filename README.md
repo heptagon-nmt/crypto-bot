@@ -17,10 +17,10 @@ Real time cryptocurrency price data prediction command line utility using machin
 ### Local installation via anaconda
 - Download and install anaconda
 - `git clone https://github.com/1103s/crypto-bot.git`
-- `cd crypto-bot
-- `conda create --name crypto_util python=3.9.7
-- `source activate crypto_util
-- `python3 -m pip install -r requirements.txt
+- `cd crypto-bot`
+- `conda create --name crypto_util python=3.9.7`
+- `source activate crypto_util`
+- `python3 -m pip install -r requirements.txt`
 
 ## Usage
 
