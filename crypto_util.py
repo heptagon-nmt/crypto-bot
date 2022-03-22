@@ -1,3 +1,4 @@
+from tkinter import W
 from ML_predictor_backend import predict_next_N_timesteps
 from get_data import *
 from utils import *
@@ -31,13 +32,9 @@ def main():
 		if args.source is None:
 			print("Querying available cryptocurrency symbols requires --source flag to be specified. Exiting")
 			exit(1)
-		if args.source != "cmc":
-			print("\nFor the data source "+args.source+", the available cryptocurrency symbols you can query are:\n\n")
-			print(get_available_symbols_from_source(args.source))
-			exit(0)
-		else:
-			print("CMC symobl list has not been added, exiting")
-			exit(0)
+		print("\nFor the data source "+args.source+", the available cryptocurrency symbols you can query are:\n\n")
+		print(get_available_symbols_from_source(args.source))
+		exit(0)
 	if args.crypto is None:
 		print("Cryptocurrency symbol required. Specify using --crypto")
 		exit(1)
@@ -74,12 +71,14 @@ def main():
 
 	# Get the data
 	if args.source == "cmc":
+		api = CMC()
 		data = pull_CMC_scraper_data(args.crypto)
 	elif args.source == "kraken":
-		get_opening_price_kraken(args.crypto, "USD", 10000)
+		api = Kraken()
 	elif args.source == "coingecko":
-		data = get_opening_price_coingecko(args.crypto, "USD", 10000)
+		api = CoinGecko()
 	else:
+		data = api.get_opening_price(args.crypto, "USD", 10000)
 		print("Source not recognized, exiting")
 		exit(1)
 	if args.plot_data:
