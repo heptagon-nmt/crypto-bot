@@ -49,6 +49,11 @@ class KrakenCurrencyTableParser(HTMLParser):
         return self.coins
 
 class CMCCurrencyTableParser(KrakenCurrencyTableParser):
+    """
+    This goes to the CoinMarketCap website and tries to find a list of
+    available symbols. This is a temporary solution, since it only return a 
+    small subset of available coins.
+    """
     def __init__(self):
         super().__init__()
     def handle_starttag(self, tag, attrs):
@@ -67,6 +72,8 @@ class APIInterface:
     def search_symbols(self, symbol):
         """
         Tries to locate the given symbol in the list of valid input symbols
+        :param str symbol: A string to compare with each ID 
+        :return: a list symbols matching the input parameter
         """
         found = []
         for sym in list(set(self.get_ids(update_cache = False))):
@@ -74,6 +81,15 @@ class APIInterface:
                 found.append(sym.upper())
         return found
     def get_ids(self, update_cache = False):
+        """
+        :return: a list of useable IDs for the specific API
+        :rtype: list
+        """
+        pass
+    def get_intervals(self):
+        """
+        :return: a list of integers for each available interval (in minutes)
+        """
         pass
     def is_valid_id(self, id):
         """
@@ -102,7 +118,9 @@ class CMC(APIInterface):
         with open(self.file_name, "r") as f:
             coin_list = json.load(f)
         return coin_list
-    def get_opening_prices(self, id, vs_currency, days):
+    def get_intervals(self):
+        return [60 * 24]
+    def get_opening_price(self, id, vs_currency, days):
         """
         Query CMC Scraper API to get the cryptocurrency price data
 
@@ -143,8 +161,10 @@ class Kraken(APIInterface):
                 json.dump(pairs_list, f)
         assert(os.path.isfile(file_name))
         with open(file_name, "r") as f:
-            pairs_list = list(json.load(f))
+            pairs_list = list(set(json.load(f)))
         return pairs_list
+    def get_intervals(self):
+        return [1, 5, 15, 30, 60, 240, 1440, 10080, 21600]
     def get_ohlc(self, id, vs_currency, days, interval):
         """
         Retrieve OHLC that ranges from a specified date to current. The granularity 
@@ -185,7 +205,7 @@ class CoinGecko(APIInterface):
         super().__init__()
     def search_symbols(self, symbol):
         """
-
+        
         """
         found = []
         for coin_dict in self.get_dict_ids(update_cache = False):
@@ -214,6 +234,8 @@ class CoinGecko(APIInterface):
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
         return ids
+    def get_intervals(self):
+        return [30, 30 * 4, 60 * 24 * 4]
     def get_ohlc(self, id, vs_currency, days):
         """
         Coingecko's OHLC API for OHLC data. The time step intervals are 

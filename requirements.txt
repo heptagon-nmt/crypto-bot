@@ -7,4 +7,5 @@ skforecast==0.4.2
 art==5.5
 numpy==1.22.2
 requests==2.27.1
+pyqt5==5.15.6
 sphinxawesome_theme
