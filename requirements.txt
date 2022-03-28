@@ -9,3 +9,6 @@ numpy==1.22.2
 requests==2.27.1
 pyqt5==5.15.6
 sphinxawesome_theme
+pyside6==6.2.4
+PyQt5==5.15.6
+pyqtgraph==0.12.4

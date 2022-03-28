@@ -4,6 +4,7 @@ or real-time). The command-line utility can call these functions for doing
 things such as getting the most recent price/volume data (spot prices or OHLC).
 """
 import ast
+from datetime import datetime, timedelta
 from cryptocmd import CmcScraper
 from html.parser import HTMLParser
 import json
@@ -120,7 +121,7 @@ class CMC(APIInterface):
         return coin_list
     def get_intervals(self):
         return [60 * 24]
-    def get_opening_price(self, id, vs_currency, days):
+    def get_opening_price(self, id):
         """
         Query CMC Scraper API to get the cryptocurrency price data
 
@@ -183,7 +184,8 @@ class Kraken(APIInterface):
             for some other reason. All fields are converted to np.float32 type
         """
         id = id.upper()
-        assert self.is_valid_id(id), "Symbol pair not found."
+        assert self.is_valid_id(id), "Symbol not found."
+        assert interval in self.get_intervals()
         since = time.time() - days * 24 * 60 * 60
         url_suffix = "OHLC?pair={}&since={}&interval={}".format(id.upper() + \
             vs_currency, since, interval)
@@ -233,16 +235,16 @@ class CoinGecko(APIInterface):
     def get_ids(self, update_cache = False):
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
+        ids.remove("")
         return ids
     def get_intervals(self):
-        return [30, 30 * 4, 60 * 24 * 4]
+        return [30, 60 * 4, 60 * 24 * 4]
     def get_ohlc(self, id, vs_currency, days):
         """
         Coingecko's OHLC API for OHLC data. The time step intervals are 
         automatically set by Coingecko as follows:
             1-2 days: 30 minute intervals
-            3 < days < 30: 4 hour intervals
-            days > 31: 4 day intervals
+            2 < days <= 30: 4 hour intervals
 
         :param str id: The Coingecko coin ID (ethereum, litecoin, etc.)
         :param str vs_currency: The currency to weigh the coin against (usd, eur, etc.)
@@ -263,7 +265,7 @@ class CoinGecko(APIInterface):
             f' api. Processing wil continue with {len(data)} as this is the max.')
         assert isinstance(data, list)
         return np.array(data)
-    def get_opening_price(self, id, vs_currency, days):
+    def get_opening_price(self, id: str, vs_currency: str, days: int) -> np.ndarray:
         """
         Remember, granularity is determined by the number of days specified. 
         1-2 days: 30 minute intervals
