@@ -185,7 +185,7 @@ class APIWindow(QWidget):
             interval = int(td.seconds / 60)
             print("Interval %d" % interval)
         if source == "kraken":
-            data = np.array(self.api_dict[source].get_ohlc(symbol, "USD", rangeVal, interval)["Open"])
+            data = np.array(self.api_dict[source].get_ohlc(symbol, "USD", rangeVal, interval))
         if source == "coingecko":
             data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal)
         if source == "cmc":
