@@ -2,7 +2,7 @@ pandas==1.3.5
 scikit-learn==1.0.2
 numpy==1.22.2
 matplotlib==3.5.1
-cryptocmd @ git+git://github.com/guptarohit/cryptoCMD.git@86ed81feed1ba533f4a526f885e021efbc53956d
+git+git://github.com/guptarohit/cryptoCMD.git
 skforecast==0.4.2
 art==5.5
 numpy==1.22.2
