@@ -82,7 +82,6 @@ class CentralWidget(QWidget):
         data = self.apiWindow.getData()
         if data is None:
             return
-        print(len(data))
         print(data)
 
 class APIWindow(QWidget):
@@ -212,7 +211,7 @@ class MLWindow(QWidget):
         self.maxIterLineEdit = QLineEdit()
         self.maxIterLineEdit.setValidator(lineEditValidator)
         #self.maxIterLineEdit.setPlaceholderText("Applied to lasso and ridge models")
-        self.trainButton = QPushButton("Train")
+        self.trainButton = QPushButton("Forecast")
         self.formLayout.addRow("Regression Model:", self.modelComboBox)
         self.formLayout.addRow("Lags:", self.lagsLineEdit)
         self.formLayout.addRow("Number of Estimators:", self.nEstimatorsLineEdit)

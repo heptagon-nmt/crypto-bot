@@ -52,7 +52,8 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## TODOs
 
-- Add method to handle the different time intervals provided by the kraken and coingecko APIs (at the moment CMC scraper time intervals are fixed to 1 day).
 - Add user input flag that allows the user to specify those time intervals, which are associated with the source APIs.
-- Add method to save and load previously trained ML model files usinge the python library `pickle`.
+- Add method to save and load previously trained ML model files using the python library `pickle`.
 - Create GUI and integrate all user input functionality into it. 
+- Finish graphing functionality in GUI (partially done/needs tabs maybe??)
+- Implement training functionality (get_data already done)
