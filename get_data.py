@@ -12,7 +12,6 @@ import numpy as np
 import os
 import re
 import requests
-from selenium import webdriver
 import time
 
 url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}", 
