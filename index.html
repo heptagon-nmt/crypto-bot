@@ -96,27 +96,33 @@
 <span id="get-data-py"></span><h2>get_data.py<a class="headerlink" href="#module-get_data" title="Permalink to this headline"><span>#</span></a></h2>
 <p>This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
-things such as getting the most recent price/volume data (spot prices or OHLC).</p>
+things such as getting the most recent price/volume data (spot prices or OHLC).
+Requests to the CoinGecko API that take longer than 8 seconds are cancelled.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="get_data.CMC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">CMC</span></span><a class="headerlink" href="#get_data.CMC" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>CMC API… Similar to the other two</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="get_data.CMC.get_ids">
-<span class="sig-name descname"><span class="pre">get_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.CMC.get_ids" title="Permalink to this definition"><span>#</span></a></dt>
-<dd><dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">get_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#get_data.CMC.get_ids" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>To get IDs for the CoinMarketCap API, a page on their website is scraped
+for available symbols. Unfortunately, this only returns a small portion 
+of the symbols that are actually available through the API, since the 
+webpage is resistant to scraping (i.e. the web page wants a browser to
+make the requests).</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of useable IDs for the specific API</p>
+<dd class="field-odd"><p>A list of symbols for available cryptocurrencies on CMC</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list</p>
+<dd class="field-even"><p>a list of strings</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="get_data.CMC.get_intervals">
-<span class="sig-name descname"><span class="pre">get_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#get_data.CMC.get_intervals" title="Permalink to this definition"><span>#</span></a></dt>
+<span class="sig-name descname"><span class="pre">get_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#get_data.CMC.get_intervals" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a list of integers for each available interval (in minutes)</p>
@@ -131,6 +137,9 @@ things such as getting the most recent price/volume data (spot prices or OHLC).<
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>cryptocurrency_name</strong> – String specifying the cryptocurrency symbol to query the CMC scraper with</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
 </dd>
 </dl>
 </dd></dl>
@@ -165,24 +174,12 @@ then loaded back from that file.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="get_data.CoinGecko.get_ids">
-<span class="sig-name descname"><span class="pre">get_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.CoinGecko.get_ids" title="Permalink to this definition"><span>#</span></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of useable IDs for the specific API</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="get_data.CoinGecko.get_intervals">
-<span class="sig-name descname"><span class="pre">get_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#get_data.CoinGecko.get_intervals" title="Permalink to this definition"><span>#</span></a></dt>
-<dd><dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">get_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#get_data.CoinGecko.get_intervals" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Return the available intervals (in minutes) for CoinGecko</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of integers for each available interval (in minutes)</p>
+<dd class="field-odd"><p>a list of integers representing OHLC time intervals in minutes</p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,8 +204,7 @@ daily intervals: More than 90 days from query time</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Returns spot price/volume data in json format if coin_id is valid. 
-Otherwise, None is returned.</p>
+<dd class="field-even"><p>Returns spot price/volume data in json format if coin_id is valid.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>json</p>
@@ -223,8 +219,13 @@ Otherwise, None is returned.</p>
 automatically set by Coingecko as follows:</p>
 <blockquote>
 <div><p>1-2 days: 30 minute intervals
-2 &lt; days &lt;= 30: 4 hour intervals</p>
+2 &lt; days &lt;= 30: 4 hour intervals
+days &gt; 30: 4 day intervals</p>
 </div></blockquote>
+<dl class="simple">
+<dt>Allowed days:</dt><dd><p>1, 7, 14, 30, 90, 180, 365, max</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -256,9 +257,28 @@ days &gt; 31: 4 day intervals</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="get_data.CoinGecko.get_range">
+<span class="sig-name descname"><span class="pre">get_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#get_data.CoinGecko.get_range" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The allowed CG range (in days)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array of integers</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="get_data.CoinGecko.search_symbols">
-<span class="sig-name descname"><span class="pre">search_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.CoinGecko.search_symbols" title="Permalink to this definition"><span>#</span></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">search_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#get_data.CoinGecko.search_symbols" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>This attempts to find a symbol in the available IDs list for the API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -284,7 +304,7 @@ ignore_currencies   Currencies to ignore when parsing</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.get_available_symbols_from_source">
-<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_available_symbols_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.get_available_symbols_from_source" title="Permalink to this definition"><span>#</span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">get_available_symbols_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#get_data.get_available_symbols_from_source" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>Return the available cryptocurrency symbols from kraken and coingecko
 :return: A list of available symbols 
 :rtype: list</p>
@@ -292,7 +312,7 @@ ignore_currencies   Currencies to ignore when parsing</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="get_data.pull_CMC_scraper_data">
-<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">pull_CMC_scraper_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cryptocurrency_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.pull_CMC_scraper_data" title="Permalink to this definition"><span>#</span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">pull_CMC_scraper_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cryptocurrency_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#get_data.pull_CMC_scraper_data" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>Query CMC Scraper API to get the cryptocurrency price data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -307,7 +327,7 @@ ignore_currencies   Currencies to ignore when parsing</p>
 <p>Library code for the Machine Learning prediction backend</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ML_predictor_backend.predict_next_N_timesteps">
-<span class="sig-prename descclassname"><span class="pre">ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition"><span>#</span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
