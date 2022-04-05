@@ -2,6 +2,7 @@
 This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
 things such as getting the most recent price/volume data (spot prices or OHLC).
+Requests to the CoinGecko API that take longer than 8 seconds are cancelled. 
 """
 import ast
 from datetime import datetime, timedelta
@@ -13,11 +14,12 @@ import os
 import re
 import requests
 import time
+from typing import List
 
 url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}", 
                 "kraken" : "https://api.kraken.com/0/public/{}"}
-
 sources_list = ["coingecko", "kraken", "cmc"]
+max_api_timeout = 8
 
 class KrakenCurrencyTableParser(HTMLParser):
     """
@@ -107,7 +109,17 @@ class CMC(APIInterface):
         super().__init__()
         self.url_prefix = "https://coinmarketcap.com/all/views/all/"
         self.file_name = "data/cmc_id_list.json"
-    def get_ids(self, update_cache = False):
+    def get_ids(self, update_cache = False) -> List[str]:
+        """
+        To get IDs for the CoinMarketCap API, a page on their website is scraped
+        for available symbols. Unfortunately, this only returns a small portion 
+        of the symbols that are actually available through the API, since the 
+        webpage is resistant to scraping (i.e. the web page wants a browser to
+        make the requests).
+
+        :return: A list of symbols for available cryptocurrencies on CMC
+        :rtype: a list of strings
+        """
         if update_cache or not os.path.isfile(self.file_name):
             parser = CMCCurrencyTableParser()
             r = requests.get(self.url_prefix)
@@ -118,13 +130,14 @@ class CMC(APIInterface):
         with open(self.file_name, "r") as f:
             coin_list = json.load(f)
         return coin_list
-    def get_intervals(self):
+    def get_intervals(self) -> List[int]:
         return [60 * 24]
     def get_opening_price(self, id):
         """
         Query CMC Scraper API to get the cryptocurrency price data
 
         :param cryptocurrency_name: String specifying the cryptocurrency symbol to query the CMC scraper with
+        :return: 
         """
         assert type(id) is str, "Cryptocurrency name must be a string"
         scraper = CmcScraper(id)
@@ -164,6 +177,9 @@ class Kraken(APIInterface):
             pairs_list = list(set(json.load(f)))
         return pairs_list
     def get_intervals(self):
+        """
+        :return: The valid intervals (in minutes) for Kraken API 
+        """
         return [1, 5, 15, 30, 60, 240, 1440, 10080, 21600]
     def get_ohlc(self, id, vs_currency, days, interval):
         """
@@ -204,9 +220,11 @@ class CoinGecko(APIInterface):
     """
     def __init__(self):
         super().__init__()
-    def search_symbols(self, symbol):
+    def search_symbols(self, symbol: str) -> List[str]:
         """
-        
+        This attempts to find a symbol in the available IDs list for the API.
+
+        :return: 
         """
         found = []
         for coin_dict in self.get_dict_ids(update_cache = False):
@@ -224,7 +242,7 @@ class CoinGecko(APIInterface):
         file_name = "data/coingecko_id_list.json"
         if not os.path.isdir("data"): os.mkdir("data")
         if update_cache or not os.path.isfile(file_name):
-            r = requests.get(url_prefixes["coingecko"].format("coins/list"))
+            r = requests.get(url_prefixes["coingecko"].format("coins/list"), timeout = max_api_timeout)
             data = r.json()
             with open(file_name, "w") as f:
                 json.dump(data, f)
@@ -232,29 +250,43 @@ class CoinGecko(APIInterface):
             data = json.load(f)
         return data
     def get_ids(self, update_cache = False):
+        """"""
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
-        ids.remove("")
         return ids
-    def get_intervals(self):
+    def get_intervals(self) -> List[int]:
+        """
+        Return the available intervals (in minutes) for CoinGecko
+
+        :return: a list of integers representing OHLC time intervals in minutes
+        """
         return [30, 60 * 4, 60 * 24 * 4]
+    def get_range(self) -> np.ndarray:
+        """
+        :return: The allowed CG range (in days)
+        :rtype: numpy array of integers
+        """
+        return np.array([1, 7, 14, 30, 90, 180, 365])
     def get_ohlc(self, id, vs_currency, days):
         """
         Coingecko's OHLC API for OHLC data. The time step intervals are 
         automatically set by Coingecko as follows:
             1-2 days: 30 minute intervals
             2 < days <= 30: 4 hour intervals
+            days > 30: 4 day intervals
+        Allowed days:
+            1, 7, 14, 30, 90, 180, 365, max
 
         :param str id: The Coingecko coin ID (ethereum, litecoin, etc.)
         :param str vs_currency: The currency to weigh the coin against (usd, eur, etc.)
         :return: Timestamp (ms), Open, High, Low, Close in a numpy array
         """
         assert self.is_valid_id(id)
-        url_suffix = "coins/{}/ohlc/?vs_currency={}&days={}".format(id, vs_currency.lower(), days)
-        alt_url_suffix = "coins/{}/ohlc/?vs_currency={}&days=max".format(id, vs_currency.lower())
+        url_suffix = "coins/{}/ohlc?vs_currency={}&days={}".format(id, vs_currency.lower(), days)
+        alt_url_suffix = "coins/{}/ohlc?vs_currency={}&days=max".format(id, vs_currency.lower())
         url = url_prefixes['coingecko'].format(url_suffix)
         alt_url = url_prefixes['coingecko'].format(alt_url_suffix)
-        response = requests.get(url)
+        response = requests.get(url, timeout = max_api_timeout)
         try:
             data = response.json()
         except Exception as e:
@@ -290,7 +322,6 @@ class CoinGecko(APIInterface):
         :param str vs_currency: A valid quote currency (e.g. USD)
         :param int end: The ending time in the range (UTC Unix Timestamp)
         :return: Returns spot price/volume data in json format if coin_id is valid. 
-            Otherwise, None is returned.
         :rtype: json
         """
         end = time.time()
@@ -310,7 +341,7 @@ def get_available_sources():
     """
     return sources_list
 
-def get_available_symbols_from_source(source, update_cache=False):
+def get_available_symbols_from_source(source: str, update_cache=False) -> List[str]:
     """
     Return the available cryptocurrency symbols from kraken and coingecko
     :return: A list of available symbols 
@@ -328,7 +359,7 @@ def get_available_symbols_from_source(source, update_cache=False):
     ids = source_api.get_ids(update_cache)
     return ids
 
-def pull_CMC_scraper_data(cryptocurrency_name):
+def pull_CMC_scraper_data(cryptocurrency_name: str) -> np.ndarray:
 	"""
 	Query CMC Scraper API to get the cryptocurrency price data
 
@@ -342,3 +373,13 @@ def pull_CMC_scraper_data(cryptocurrency_name):
 	for a in json_data:
 		data.append(a["Open"])
 	return data
+
+def fifa(n):
+    url_suffix = "coins/{}/ohlc?vs_currency={}&days={}"
+    url = url_prefixes["coingecko"].format(url_suffix.format("ethereum", "usd", n))
+    r = requests.get(url, timeout = 5)
+    return r
+
+### For Debugging CoinGecko API
+if __name__ == "__main__":
+    r = fifa(2)

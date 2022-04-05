@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from re import X
 from ML_predictor_backend import *
 from get_data import *
 import sys
@@ -8,6 +9,7 @@ from PySide6.QtWidgets import (QApplication, QPushButton, QComboBox,
     QFormLayout, QGridLayout, QLabel, QLineEdit, QListWidget, QMainWindow, 
     QMessageBox, QToolBar, QWidget)
 import pyqtgraph as pg
+from typing import List, Tuple
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 lineEditValidator = QRegularExpressionValidator(r"[1-9][0-9]*")
@@ -22,6 +24,12 @@ def format_intervals(intervals):
     for interval in intervals:
         new_intervals.append(str(timedelta(minutes = interval)))
     return new_intervals
+def get_comma_separated_list(array):
+    """
+    Return a comma separated string of elements in an array
+    """
+    return "".join("{}, ".format(val) for val in list(array))[:-2]
+
 
 class MainWindow(QMainWindow):
     """
@@ -58,6 +66,7 @@ class MainWindow(QMainWindow):
         self.palette.setColor(QPalette.Base, "#2d3436")
         self.palette.setColor(QPalette.Text, "#ffffff")
         self.setPalette(self.palette)
+
 class CentralWidget(QWidget):
     """
     This is the widget to contain the APIWindow, MLWindow, as well as 
@@ -80,9 +89,13 @@ class CentralWidget(QWidget):
         self.gridLayout.addWidget(self.analyticsWindow, 0, 2)
     def _getForecast(self):
         data = self.apiWindow.getData()
+        interval = self.apiWindow.getInterval()
         if data is None:
             return
-        print(data)
+        model, hyperparameters, forecast = self.modelWindow.getPrediction(data)
+        if forecast is None:
+            return
+        self.analyticsWindow.setForecast(model, interval, hyperparameters, forecast)
 
 class APIWindow(QWidget):
     """
@@ -107,7 +120,7 @@ class APIWindow(QWidget):
         self.selectedSymbol = QLabel()
         self.intervalComboBox = QComboBox()
         self.rangeEdit = QLineEdit()
-        self.rangeEdit.setText("20")
+        self.rangeEdit.setText("1")
         self.rangeEdit.setPlaceholderText("Number of days behind the current to collect data.")
         self.rangeEdit.setValidator(lineEditValidator)
         self.rangeEdit.textEdited.connect(self._setAvailableIntervals)
@@ -139,14 +152,15 @@ class APIWindow(QWidget):
         intervals = self.intervals[source]
         range_str = self.rangeEdit.text()
         if len(range_str) > 0:
-            range_val = abs(int(range_str))
+            rangeVal = abs(int(range_str))
             if source == "coingecko":
-                if 1 <= range_val <= 2: index = 0
-                elif 2 < range_val <= 30: index = 1
-                elif range_val > 30: index = 2
+                if 1 <= rangeVal <= 2: index = 0
+                elif 2 < rangeVal <= 30: index = 1
+                elif rangeVal > 30: index = 2
                 else: 
                     index = 0
                 intervals = [intervals[index]]
+                self.errLabel.setText("Allowed values for CG range: " + get_comma_separated_list(self.api_dict['coingecko'].get_range()))
             self.intervalComboBox.clear()
             self.intervalComboBox.addItems(intervals)
 
@@ -161,20 +175,8 @@ class APIWindow(QWidget):
         self.api_dict = {"coingecko": CoinGecko(), "kraken": Kraken(), "cmc": CMC()}
         self.ids = dict(zip(sources_list, [api.get_ids() for api in list(self.api_dict.values())]))
         self.intervals = dict(zip(sources_list, [format_intervals(api.get_intervals()) for api in list(self.api_dict.values())]))
-    def getData(self):
-        source = self.sourceComboBox.currentText()
-        symbolWidget = self.symbolListWidget.currentItem()
-        if symbolWidget == None:
-            self.errLabel.setText("Must select a symbol.")
-            return
-        symbol = symbolWidget.text()
-        rangeVal = self.rangeEdit.text()
-        if len(rangeVal) == 0:
-            self.errLabel.setText("Range must be at least 1.")
-            return
-        rangeVal = int(rangeVal)
-        # We only need the interval values for Kraken since the intervals for other APIs are fixed. 
-        self.errLabel.setText("")
+    def getInterval(self):
+        ### This converts the interval string into an integer in minutes
         intervalString = self.intervalComboBox.currentText()
         if len(intervalString) > 7: 
             interval = int(intervalString.split()[0]) * 24 * 60
@@ -182,19 +184,59 @@ class APIWindow(QWidget):
             dt = datetime.strptime(intervalString, "%H:%M:%S")
             td = timedelta(hours = dt.hour, minutes = dt.minute, seconds = dt.second)
             interval = int(td.seconds / 60)
-            print("Interval %d" % interval)
+        return interval
+        #######
+    def getData(self) -> np.ndarray:
+        """
+        To get the data from the values on the window, the values are first 
+        validated, then sent into the desired API for data retrieval.
+
+        :return: 
+        """
+        ### Getting the source API from the sourceComboBox
+        source = self.sourceComboBox.currentText()
+        #######
+        ### Verifying that a symbol has been selected from the list
+        symbolWidget = self.symbolListWidget.currentItem()
+        if symbolWidget == None:
+            self.errLabel.setText("Must select a symbol.")
+            return
+        symbol = symbolWidget.text()
+        #######
+        ### Did the user supply a range value?
+        rangeVal = self.rangeEdit.text()
+        if len(rangeVal) == 0:
+            self.errLabel.setText("Range must be at least 1.")
+            return
+        rangeVal = int(rangeVal)
+        #######
+        ### Reset the error label
+        self.errLabel.setText("")
+        #######
+        ### Get the inteval in the interval combo box
+        interval = self.getInterval()
+        #######
         if source == "kraken":
-            data = np.array(self.api_dict[source].get_ohlc(symbol, "USD", rangeVal, interval))
+            data = np.array(self.api_dict[source].get_ohlc(symbol, "USD", rangeVal, interval)).transpose()[1]
+        ### If CoinGecko API is used, the range must be in the array returned by CoinGecko.get_range(), defined in get_data.py
         if source == "coingecko":
+            allowed_range = self.api_dict["coingecko"].get_range()
+            if rangeVal > 365:
+                rangeVal = "max"
+            elif rangeVal not in allowed_range:
+                rangeVal = allowed_range[np.argmin(np.abs(rangeVal - allowed_range))]
+                self.rangeEdit.setText("{}".format(rangeVal))
+                self.errLabel.setText("Setting range to the nearest value in {}.".format(allowed_range))
             data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal)
+        #######
         if source == "cmc":
             data = self.api_dict[source].get_opening_price(symbol)
         return data
-        # If all API inputs are correct then unset text from errLabel
 
 class MLWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.paramEditors = {}
         self.formLayout = QFormLayout(self)
         self.modelComboBox = QComboBox()
         self.modelComboBox.addItems(models)
@@ -211,13 +253,23 @@ class MLWindow(QWidget):
         self.maxIterLineEdit = QLineEdit()
         self.maxIterLineEdit.setValidator(lineEditValidator)
         #self.maxIterLineEdit.setPlaceholderText("Applied to lasso and ridge models")
+        self.nStepsForward = QLineEdit()
+        self.nStepsForward.setValidator(lineEditValidator)
+        self.errLabel = QLabel()
         self.trainButton = QPushButton("Forecast")
+        self.paramEditors["lags"] = self.lagsLineEdit
+        self.paramEditors["n_estimators"] = self.nEstimatorsLineEdit
+        self.paramEditors["max_depth"] = self.maxDepthLineEdit
+        self.paramEditors["max_iter"] = self.maxIterLineEdit
+        self.paramEditors["N"] = self.nStepsForward
         self.formLayout.addRow("Regression Model:", self.modelComboBox)
         self.formLayout.addRow("Lags:", self.lagsLineEdit)
         self.formLayout.addRow("Number of Estimators:", self.nEstimatorsLineEdit)
         self.formLayout.addRow("Max Depth:", self.maxDepthLineEdit)
         self.formLayout.addRow("Max Iterations:", self.maxIterLineEdit)
+        self.formLayout.addRow("Predict Next N Steps:", self.nStepsForward)
         self.formLayout.addRow("", self.trainButton)
+        self.formLayout.addRow("", self.errLabel)
         self._modelChanged()
     def _modelChanged(self):
         model = self.modelComboBox.currentText()
@@ -237,6 +289,28 @@ class MLWindow(QWidget):
             self.nEstimatorsLineEdit.setEnabled(True)
             self.maxDepthLineEdit.setEnabled(False)
             self.maxIterLineEdit.setEnabled(False)
+    def getHyperparameters(self) -> dict:
+        params = {}
+        for param_key, editor in self.paramEditors.items():
+            if(editor.isEnabled()):
+                param_val = editor.text()
+                if param_val == "":
+                    self.errLabel.setText("\"{}\" field cannot be empty.".format(param_key))
+                    return 
+                params[param_key] = int(param_val)
+                print("{}: {}".format(param_key, params[param_key]))
+        return params
+    def getPrediction(self, data) -> Tuple[str, dict, list]:
+        model = self.modelComboBox.currentText()
+        hyperparameters = self.getHyperparameters()
+        if hyperparameters is None:
+            return
+        if hyperparameters["lags"] > len(data) // 2:
+            self.errLabel.setText("Lags cannot be greater than half the length of the data.")
+            return
+        prediction = predict_next_N_timesteps(data, model, **hyperparameters)
+        return model, hyperparameters, prediction
+
 
 class AnalyticsWindow(QWidget):
     def __init__(self):
@@ -251,6 +325,11 @@ class AnalyticsWindow(QWidget):
         self.formLayout.addRow("Forecast (USD):", self.forecastedPricesListWidget)
     def plot(self, x, y):
         self.graphWidget.plot(x, y, pen = (0, 0, 255), name = "Predicted Prices")
+    def setForecast(self, model, interval, hyperparameters, forecast):
+        start = int(time.time())
+        self.forecastedPricesListWidget.addItem("Model: {}".format(model))
+        self.forecastedPricesListWidget.addItem("Hyperparameters: " + str(hyperparameters))
+        self.forecastedPricesListWidget.addItems(["Time: {}\t Price: {}".format(datetime.fromtimestamp(start + i * interval * 60).strftime("%Y-%m-%d %H:%M:%SZ"), price) for i, price in enumerate(forecast)])
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

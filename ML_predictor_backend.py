@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import time
 
-def predict_next_N_timesteps(data, lags, N, model_name):
+def predict_next_N_timesteps(data, model_name, **kwargs): 
 	"""
 	Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
 
@@ -24,23 +24,32 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	:return: List of time-ordered price predictions. Exits if the specified model_name is not recognized. 
 	:rtype: list
 	"""
+	params = {
+		"lags" : len(data),
+		"N" : 10,
+		"n_estimators" : 200,
+		"max_depth" : 1000,
+		"max_iter" : 1000,
+	}
+	params.update(kwargs)
+	print(params)
 	data = list(data)
 	assert type(data) is list, "price data must be a list"
-	assert type(lags) is int, "lag parameter must be an integer"
-	assert type(N) is int, "Number of steps to predict into the future must be an integer"
+	assert type(params["lags"]) is int, "lag parameter must be an integer"
+	assert type(params["N"]) is int and params["N"] > 0, "Number of steps to predict into the future must be an integer"
 	assert type(model_name) is str, "model name must be a string"
 	if model_name == "random_forest":
-		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(n_estimators=200, max_depth=1000), lags = lags)
+		forecaster = ForecasterAutoreg(regressor = RandomForestRegressor(n_estimators=params["n_estimators"], max_depth=params["max_depth"]), lags = params["lags"])
 	elif model_name == "linear":
-		forecaster = ForecasterAutoreg(regressor = LinearRegression(), lags = lags)
+		forecaster = ForecasterAutoreg(regressor = LinearRegression(), lags = params["lags"])
 	elif model_name == "lasso":
-		forecaster = ForecasterAutoreg(regressor = Lasso(max_iter=100000), lags = lags)
+		forecaster = ForecasterAutoreg(regressor = Lasso(max_iter=params["max_iter"]), lags = params["lags"])
 	elif model_name == "gradient_boosting":
-		forecaster = ForecasterAutoreg(regressor=GradientBoostingRegressor(max_depth=4, n_estimators=120), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=GradientBoostingRegressor(n_estimators=params["n_estimators"], max_depth=params["max_depth"]), lags=params["lags"])
 	elif model_name == "bagging":
-		forecaster = ForecasterAutoreg(regressor=BaggingRegressor(n_estimators=20), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=BaggingRegressor(n_estimators=params["n_estimators"]), lags=params["lags"])
 	elif model_name == "ridge":
-		forecaster = ForecasterAutoreg(regressor=Ridge(max_iter=10000), lags=lags)
+		forecaster = ForecasterAutoreg(regressor=Ridge(max_iter=params["max_iter"]), lags=params["lags"])
 	else:
 		print("model not recognized, exiting")
 		exit(0)
@@ -50,5 +59,5 @@ def predict_next_N_timesteps(data, lags, N, model_name):
 	forecaster.fit(y=data_train)
 	end = time.time()
 	print("Total training time = "+str(round(end-start, 4))+" seconds")
-	predictions = forecaster.predict(steps=N)
+	predictions = forecaster.predict(steps=params["N"])
 	return list(predictions)
