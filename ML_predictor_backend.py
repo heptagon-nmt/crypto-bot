@@ -32,7 +32,6 @@ def predict_next_N_timesteps(data, model_name, **kwargs):
 		"max_iter" : 1000,
 	}
 	params.update(kwargs)
-	print(params)
 	data = list(data)
 	assert type(data) is list, "price data must be a list"
 	assert type(params["lags"]) is int, "lag parameter must be an integer"

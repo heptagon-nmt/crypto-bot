@@ -52,8 +52,9 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## TODOs
 
-- Add user input flag that allows the user to specify those time intervals, which are associated with the source APIs.
 - Add method to save and load previously trained ML model files using the python library `pickle`.
-- Create GUI and integrate all user input functionality into it. 
-- Finish graphing functionality in GUI (partially done/needs tabs maybe??)
 - Implement training functionality (get_data already done)
+- Add more ML models maybe? Maybe make a more customizable model, such as being able to make a 1D
+  convolutional neural network with specified inputs (e.g. price of BTC correlated with other coins)
+  and user-specfied outputs (whether a particular trend appears bearish or bullish). 
+- More color palettes for the MainWindow (variations of dark mode)

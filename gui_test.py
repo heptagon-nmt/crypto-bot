@@ -7,7 +7,7 @@ from PySide6 import QtWidgets
 from PySide6.QtGui import QAction, QPalette, QRegularExpressionValidator
 from PySide6.QtWidgets import (QApplication, QPushButton, QComboBox,
     QFormLayout, QGridLayout, QLabel, QLineEdit, QListWidget, QMainWindow, 
-    QMessageBox, QToolBar, QWidget)
+    QMenu, QMessageBox, QTabWidget, QToolBar, QWidget)
 import pyqtgraph as pg
 from typing import List, Tuple
 
@@ -30,7 +30,6 @@ def get_comma_separated_list(array):
     """
     return "".join("{}, ".format(val) for val in list(array))[:-2]
 
-
 class MainWindow(QMainWindow):
     """
     This window contains only the CentralWidget, which itself contains all of 
@@ -42,23 +41,27 @@ class MainWindow(QMainWindow):
     """
     def __init__(self):
         super().__init__()
-
         toolBar = QToolBar()
         self.addToolBar(toolBar)
         fileMenu = self.menuBar().addMenu("&File")
         editMenu = self.menuBar().addMenu("&Edit")
+        viewMenu = self.menuBar().addMenu("&View")
         exitAction = QAction("&Exit", self, shortcut="Ctrl+Q", triggered=self.close)
+        fullScreenAction = QAction("&Fullscreen", self, shortcut="F11", triggered = self.maximize)
+        savePlotAction = QAction("&Save Plot", self, shortcut="Ctrl+S", triggered = self.savePlot)
         fileMenu.addAction(exitAction)
-
+        fileMenu.addAction(savePlotAction)
+        viewMenu.addAction(fullScreenAction)
         self.centralWidget = CentralWidget()
+        self.centralWidget.addAction(fullScreenAction)
+        self.centralWidget.addAction(savePlotAction)
         self.setCentralWidget(self.centralWidget)
+        self.maximized = False
         self.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
         # Create a palette that looks nice. Dark mode, maybe?
         #self.createPalette()
-
     def load(self):
         QMessageBox.warning(self, "AxViewer", f"Unable to load the veendow.")
-
     def createPalette(self):
         self.palette = QPalette()
         self.palette.setColor(QPalette.Window, "#636e72")
@@ -66,6 +69,17 @@ class MainWindow(QMainWindow):
         self.palette.setColor(QPalette.Base, "#2d3436")
         self.palette.setColor(QPalette.Text, "#ffffff")
         self.setPalette(self.palette)
+    def maximize(self):
+        if self.maximized:
+            self.showNormal()
+        else:
+            self.showMaximized()
+        self.maximized = not self.maximized
+    def savePlot(self):
+        # TODO : Finish adding this function. Ideally open a filesystem window 
+        # which prompts for the path and name of the plot, as well as the file
+        # extension.
+        print("To be added later...")
 
 class CentralWidget(QWidget):
     """
@@ -82,21 +96,37 @@ class CentralWidget(QWidget):
         self.apiWindow = APIWindow()
         self.modelWindow = MLWindow()
         self.modelWindow.trainButton.clicked.connect(self._getForecast)
-        self.analyticsWindow = AnalyticsWindow()
-        
+        self.forecastTabWindow = ForecastTab()
+        #self.forecastTabWindow.setVisible(False)
+        self.tabs = []
         self.gridLayout.addWidget(self.apiWindow, 0, 0)
         self.gridLayout.addWidget(self.modelWindow, 0, 1)
-        self.gridLayout.addWidget(self.analyticsWindow, 0, 2)
+        self.gridLayout.addWidget(self.forecastTabWindow, 0, 2)
     def _getForecast(self):
         data = self.apiWindow.getData()
         interval = self.apiWindow.getInterval()
+        symbol = self.apiWindow.getSymbol()
         if data is None:
             return
-        model, hyperparameters, forecast = self.modelWindow.getPrediction(data)
+        forecast = self.modelWindow.getPrediction(data)
         if forecast is None:
             return
-        self.analyticsWindow.setForecast(model, interval, hyperparameters, forecast)
+        #if not self.forecastTabWindow.isVisible():
+        #    self.forecastTabWindow.setVisible(True)
+        model = self.modelWindow.getModel()
+        hyperparameters = self.modelWindow.getHyperparameters()
+        analyticsTab = AnalyticsWindow(symbol, model, interval, hyperparameters)
+        self.tabs.append(analyticsTab)
+        self.forecastTabWindow.addTab(analyticsTab, str(len(self.tabs)))
+        forecast = list(data[-1:]) + list(forecast)
+        analyticsTab.createForecast(data, forecast)
+        print(self.forecastTabWindow.tabPosition())
 
+
+class ForecastTab(QTabWidget):
+    def __init__(self, parent = None):
+        super().__init__(parent)
+        
 class APIWindow(QWidget):
     """
     This is the leftmost section of the main window that allows the user to 
@@ -105,7 +135,7 @@ class APIWindow(QWidget):
     def __init__(self):
         super().__init__()
         self._getSymbolListsAndInfo()
-
+        self.setMaximumWidth(800)
         formLayout = QFormLayout(self)
         self.sourceComboBox = QComboBox()
         self.sourceComboBox.addItems(sources_list)
@@ -186,6 +216,11 @@ class APIWindow(QWidget):
             interval = int(td.seconds / 60)
         return interval
         #######
+    def getSymbol(self) -> str:
+        symbolWidget = self.symbolListWidget.currentItem()
+        if symbolWidget == None:
+            return None
+        return symbolWidget.text()
     def getData(self) -> np.ndarray:
         """
         To get the data from the values on the window, the values are first 
@@ -197,11 +232,10 @@ class APIWindow(QWidget):
         source = self.sourceComboBox.currentText()
         #######
         ### Verifying that a symbol has been selected from the list
-        symbolWidget = self.symbolListWidget.currentItem()
-        if symbolWidget == None:
+        symbol = self.getSymbol()
+        if symbol == None:
             self.errLabel.setText("Must select a symbol.")
             return
-        symbol = symbolWidget.text()
         #######
         ### Did the user supply a range value?
         rangeVal = self.rangeEdit.text()
@@ -237,6 +271,7 @@ class MLWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.paramEditors = {}
+        self.setMaximumWidth(300)
         self.formLayout = QFormLayout(self)
         self.modelComboBox = QComboBox()
         self.modelComboBox.addItems(models)
@@ -256,7 +291,7 @@ class MLWindow(QWidget):
         self.nStepsForward = QLineEdit()
         self.nStepsForward.setValidator(lineEditValidator)
         self.errLabel = QLabel()
-        self.trainButton = QPushButton("Forecast")
+        self.trainButton = QPushButton("New Forecast")
         self.paramEditors["lags"] = self.lagsLineEdit
         self.paramEditors["n_estimators"] = self.nEstimatorsLineEdit
         self.paramEditors["max_depth"] = self.maxDepthLineEdit
@@ -298,9 +333,11 @@ class MLWindow(QWidget):
                     self.errLabel.setText("\"{}\" field cannot be empty.".format(param_key))
                     return 
                 params[param_key] = int(param_val)
-                print("{}: {}".format(param_key, params[param_key]))
+                #print("{}: {}".format(param_key, params[param_key]))
         return params
-    def getPrediction(self, data) -> Tuple[str, dict, list]:
+    def getModel(self):
+        return self.modelComboBox.currentText()
+    def getPrediction(self, data) -> List[float]:
         model = self.modelComboBox.currentText()
         hyperparameters = self.getHyperparameters()
         if hyperparameters is None:
@@ -309,12 +346,15 @@ class MLWindow(QWidget):
             self.errLabel.setText("Lags cannot be greater than half the length of the data.")
             return
         prediction = predict_next_N_timesteps(data, model, **hyperparameters)
-        return model, hyperparameters, prediction
-
+        return prediction
 
 class AnalyticsWindow(QWidget):
-    def __init__(self):
+    def __init__(self, symbol: str, model: str, interval: int, hyperparameters: dict):
         super().__init__()
+        self.symbol = symbol
+        self.model = model
+        self.interval = interval
+        self.hyperparameters = hyperparameters
         self.formLayout = QFormLayout(self)
         self.forecastedPricesListWidget = QListWidget()
         self.forecastedPricesListWidget.setMinimumWidth(300)
@@ -323,13 +363,25 @@ class AnalyticsWindow(QWidget):
         self.graphWidget.setMinimumWidth(self.graphWidget.height())
         self.formLayout.addRow("", self.graphWidget)
         self.formLayout.addRow("Forecast (USD):", self.forecastedPricesListWidget)
-    def plot(self, x, y):
-        self.graphWidget.plot(x, y, pen = (0, 0, 255), name = "Predicted Prices")
-    def setForecast(self, model, interval, hyperparameters, forecast):
+    def plot(self, historicalY: List[float], forecastedY: List[float]):
+        historicalX = [i for i in range(len(historicalY))]
+        startForecastX = historicalX[-1]
+        forecastedX = [i for i in range(startForecastX, startForecastX + len(forecastedY))]
+        hPen = pg.mkPen('b', width=3)
+        fPen = pg.mkPen('r', width=3)
+        self.graphWidget.plot(historicalX, historicalY, pen = hPen, name = "Historical Prices")
+        self.graphWidget.plot(forecastedX, forecastedY, pen = fPen, name = "Predicted Prices")
+        self.graphWidget.setLabel("top", "Model: {}; Hyperparameters: {}".format(self.model, str(self.hyperparameters)), color = (0, 0, 0))
+        self.graphWidget.setLabel("left", "{} Price (USD)".format(self.symbol))
+        self.graphWidget.setLabel("bottom", "Interval: {} (min)".format(self.interval))
+    def createForecast(self, historicalY, forecastedY):
         start = int(time.time())
-        self.forecastedPricesListWidget.addItem("Model: {}".format(model))
-        self.forecastedPricesListWidget.addItem("Hyperparameters: " + str(hyperparameters))
-        self.forecastedPricesListWidget.addItems(["Time: {}\t Price: {}".format(datetime.fromtimestamp(start + i * interval * 60).strftime("%Y-%m-%d %H:%M:%SZ"), price) for i, price in enumerate(forecast)])
+        self.forecastedPricesListWidget.addItem("Model: {}".format(self.model))
+        self.forecastedPricesListWidget.addItem("Hyperparameters: " + str(self.hyperparameters))
+        self.forecastedPricesListWidget.addItems(["Time: {}\t Price: {}". \
+            format(datetime.fromtimestamp(start + i * self.interval * 60). \
+                strftime("%Y-%m-%d %H:%M:%S"), price) for i, price in enumerate(forecastedY)])
+        self.plot(historicalY, forecastedY)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
