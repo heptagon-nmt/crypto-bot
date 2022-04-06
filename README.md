@@ -58,3 +58,4 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
   convolutional neural network with specified inputs (e.g. price of BTC correlated with other coins)
   and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
+- Fix tabs. Automatically switch tabs after new forecast

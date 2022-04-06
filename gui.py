@@ -44,18 +44,22 @@ class MainWindow(QMainWindow):
         super().__init__()
         toolBar = QToolBar()
         self.addToolBar(toolBar)
+        self.centralWidget = CentralWidget()
         fileMenu = self.menuBar().addMenu("&File")
         editMenu = self.menuBar().addMenu("&Edit")
         viewMenu = self.menuBar().addMenu("&View")
         exitAction = QAction("&Exit", self, shortcut="Ctrl+Q", triggered=self.close)
         fullScreenAction = QAction("&Fullscreen", self, shortcut="F11", triggered = self.maximize)
         savePlotAction = QAction("&Save Plot", self, shortcut="Ctrl+S", triggered = self.savePlot)
-        fileMenu.addAction(exitAction)
+        nextTabAction = QAction("&Next Tab", self, shortcut="Ctrl+Tab", triggered = self.nextTab)
+        prevTabAction = QAction("&Prev Tab", self, shortcut="Ctrl+Shift+Tab", triggered = self.prevTab)
         fileMenu.addAction(savePlotAction)
+        fileMenu.addAction(exitAction)
         viewMenu.addAction(fullScreenAction)
-        self.centralWidget = CentralWidget()
         self.centralWidget.addAction(fullScreenAction)
         self.centralWidget.addAction(savePlotAction)
+        self.centralWidget.addAction(nextTabAction)
+        self.centralWidget.addAction(prevTabAction)
         self.setCentralWidget(self.centralWidget)
         self.maximized = False
         self.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
@@ -63,6 +67,10 @@ class MainWindow(QMainWindow):
         #self.createPalette()
     def load(self):
         QMessageBox.warning(self, "AxViewer", f"Unable to load the veendow.")
+    def nextTab(self):
+        self.centralWidget.nextTab()
+    def prevTab(self):
+        self.centralWidget.prevTab()
     def createPalette(self):
         self.palette = QPalette()
         self.palette.setColor(QPalette.Window, "#636e72")
@@ -121,7 +129,15 @@ class CentralWidget(QWidget):
         self.forecastTabWindow.addTab(analyticsTab, str(len(self.tabs)))
         forecast = list(data[-1:]) + list(forecast)
         analyticsTab.createForecast(data, forecast)
-        print(self.forecastTabWindow.tabPosition())
+        self.forecastTabWindow.setCurrentIndex(len(self.tabs) - 1)
+    def nextTab(self):
+        if len(self.tabs) > 0:
+            index = (self.forecastTabWindow.currentIndex() + 1) % len(self.tabs)
+            self.forecastTabWindow.setCurrentIndex(index)
+    def prevTab(self):
+        if len(self.tabs) > 0:
+            index = (self.forecastTabWindow.currentIndex() - 1) % len(self.tabs)
+            self.forecastTabWindow.setCurrentIndex(index)
 
 
 class ForecastTab(QTabWidget):
@@ -156,7 +172,6 @@ class APIWindow(QWidget):
         self.rangeEdit.setValidator(lineEditValidator)
         self.rangeEdit.textEdited.connect(self._setAvailableIntervals)
         self.errLabel = QLabel()
-
         formLayout.addRow("API Source:", self.sourceComboBox)
         formLayout.addRow("Symbol:", self.symbolFilter)
         formLayout.addRow("", self.symbolListWidget)
