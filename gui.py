@@ -1,3 +1,4 @@
+from cProfile import label
 from datetime import datetime, timedelta
 from re import X
 from ML_predictor_backend import *
@@ -371,9 +372,10 @@ class AnalyticsWindow(QWidget):
         fPen = pg.mkPen('r', width=3)
         self.graphWidget.plot(historicalX, historicalY, pen = hPen, name = "Historical Prices")
         self.graphWidget.plot(forecastedX, forecastedY, pen = fPen, name = "Predicted Prices")
-        self.graphWidget.setLabel("top", "Model: {}; Hyperparameters: {}".format(self.model, str(self.hyperparameters)), color = (0, 0, 0))
-        self.graphWidget.setLabel("left", "{} Price (USD)".format(self.symbol))
-        self.graphWidget.setLabel("bottom", "Interval: {} (min)".format(self.interval))
+        labelColor = (0, 0, 0)
+        self.graphWidget.setLabel("top", "Model: {}; Hyperparameters: {}".format(self.model, str(self.hyperparameters)), color = labelColor)
+        self.graphWidget.setLabel("left", "{} Price (USD)".format(self.symbol), color = labelColor)
+        self.graphWidget.setLabel("bottom", "Interval: {} (min)".format(self.interval), color = labelColor)
     def createForecast(self, historicalY, forecastedY):
         start = int(time.time())
         self.forecastedPricesListWidget.addItem("Model: {}".format(self.model))

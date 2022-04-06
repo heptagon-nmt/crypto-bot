@@ -74,7 +74,7 @@ def test_default() -> None:
 	ML prediction module
 	"""
 	import ML_predictor_backend as ML
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "linear")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "linear", lags = 3, N = 4)
 	#Linear regression is expected to predict linear functions well, as opposed to other models
 	assert type(pred) is list
 	assert len(pred) == 4
@@ -84,27 +84,27 @@ def test_default() -> None:
 	np.testing.assert_allclose(9, pred[2])
 	np.testing.assert_allclose(10, pred[3])
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "random_forest")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "random_forest", lags = 3, N = 4)
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "ridge")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "ridge", lags = 3, N = 4)
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "bagging")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "bagging", lags = 3, N = 4)
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "gradient_boosting")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "gradient_boosting", lags = 3, N = 4)
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
-	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], 3, 4, "lasso")
+	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "lasso", lags = 3, N = 4)
 	assert type(pred) is list
 	assert len(pred) == 4
 	assert type(pred[0]) is float
