@@ -44,7 +44,11 @@ class MainWindow(QMainWindow):
         super().__init__()
         toolBar = QToolBar()
         self.addToolBar(toolBar)
+        self.tabWindow = QTabWidget()
         self.centralWidget = CentralWidget()
+        self.classificationWindow = ClassificationWindow()
+        self.tabWindow.addTab(self.centralWidget, "Spot Price Forecasting")
+        self.tabWindow.addTab(self.classificationWindow, "Color Prediction")
         fileMenu = self.menuBar().addMenu("&File")
         editMenu = self.menuBar().addMenu("&Edit")
         viewMenu = self.menuBar().addMenu("&View")
@@ -53,6 +57,7 @@ class MainWindow(QMainWindow):
         savePlotAction = QAction("&Save Plot", self, shortcut="Ctrl+S", triggered = self.savePlot)
         nextTabAction = QAction("&Next Tab", self, shortcut="Ctrl+Tab", triggered = self.nextTab)
         prevTabAction = QAction("&Prev Tab", self, shortcut="Ctrl+Shift+Tab", triggered = self.prevTab)
+        closeTabAction = QAction("&Close Tab", self, shortcut="Ctrl+W", triggered = self.closeTab)
         fileMenu.addAction(savePlotAction)
         fileMenu.addAction(exitAction)
         viewMenu.addAction(fullScreenAction)
@@ -60,7 +65,8 @@ class MainWindow(QMainWindow):
         self.centralWidget.addAction(savePlotAction)
         self.centralWidget.addAction(nextTabAction)
         self.centralWidget.addAction(prevTabAction)
-        self.setCentralWidget(self.centralWidget)
+        self.centralWidget.addAction(closeTabAction)
+        self.setCentralWidget(self.tabWindow)
         self.maximized = False
         self.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
         # Create a palette that looks nice. Dark mode, maybe?
@@ -71,6 +77,8 @@ class MainWindow(QMainWindow):
         self.centralWidget.nextTab()
     def prevTab(self):
         self.centralWidget.prevTab()
+    def closeTab(self):
+        self.centralWidget.closeTab()
     def createPalette(self):
         self.palette = QPalette()
         self.palette.setColor(QPalette.Window, "#636e72")
@@ -101,12 +109,11 @@ class CentralWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.gridLayout = QGridLayout(self)
-
         self.apiWindow = APIWindow()
         self.modelWindow = MLWindow()
-        self.modelWindow.trainButton.clicked.connect(self._getForecast)
+        self.modelWindow.forecastButton.clicked.connect(self._getForecast)
         self.forecastTabWindow = ForecastTab()
-        #self.forecastTabWindow.setVisible(False)
+        self.forecastTabWindow.setVisible(False)
         self.tabs = []
         self.gridLayout.addWidget(self.apiWindow, 0, 0)
         self.gridLayout.addWidget(self.modelWindow, 0, 1)
@@ -120,8 +127,8 @@ class CentralWidget(QWidget):
         forecast = self.modelWindow.getPrediction(data)
         if forecast is None:
             return
-        #if not self.forecastTabWindow.isVisible():
-        #    self.forecastTabWindow.setVisible(True)
+        if not self.forecastTabWindow.isVisible():
+            self.forecastTabWindow.setVisible(True)
         model = self.modelWindow.getModel()
         hyperparameters = self.modelWindow.getHyperparameters()
         analyticsTab = AnalyticsWindow(symbol, model, interval, hyperparameters)
@@ -138,6 +145,9 @@ class CentralWidget(QWidget):
         if len(self.tabs) > 0:
             index = (self.forecastTabWindow.currentIndex() - 1) % len(self.tabs)
             self.forecastTabWindow.setCurrentIndex(index)
+    def closeTab(self):
+        index = self.forecastTabWindow.currentIndex()
+        self.forecastTabWindow.removeTab(index)
 
 
 class ForecastTab(QTabWidget):
@@ -307,7 +317,7 @@ class MLWindow(QWidget):
         self.nStepsForward = QLineEdit()
         self.nStepsForward.setValidator(lineEditValidator)
         self.errLabel = QLabel()
-        self.trainButton = QPushButton("New Forecast")
+        self.forecastButton = QPushButton("New Forecast")
         self.paramEditors["lags"] = self.lagsLineEdit
         self.paramEditors["n_estimators"] = self.nEstimatorsLineEdit
         self.paramEditors["max_depth"] = self.maxDepthLineEdit
@@ -319,7 +329,7 @@ class MLWindow(QWidget):
         self.formLayout.addRow("Max Depth:", self.maxDepthLineEdit)
         self.formLayout.addRow("Max Iterations:", self.maxIterLineEdit)
         self.formLayout.addRow("Predict Next N Steps:", self.nStepsForward)
-        self.formLayout.addRow("", self.trainButton)
+        self.formLayout.addRow("", self.forecastButton)
         self.formLayout.addRow("", self.errLabel)
         self._modelChanged()
     def _modelChanged(self):
@@ -399,6 +409,32 @@ class AnalyticsWindow(QWidget):
             format(datetime.fromtimestamp(start + i * self.interval * 60). \
                 strftime("%Y-%m-%d %H:%M:%S"), price) for i, price in enumerate(forecastedY)])
         self.plot(historicalY, forecastedY)
+
+class ClassificationWindow(QWidget):
+    def __init__(self, parent = None):
+        super().__init__(parent)
+        self.gridLayout = QGridLayout(self)
+        self.apiWindow = APIWindow()
+        self.nnWindow = NNWindow()
+        self.gridLayout.addWidget(self.apiWindow, 0, 0)
+        self.gridLayout.addWidget(self.nnWindow, 0, 1)
+
+class NNWindow(QWidget):
+    def __init__(self, parent = None):
+        super().__init__(parent)
+        self.formLayout = QFormLayout(self)
+        self.epochsEdit = QLineEdit()
+        self.epochsEdit.setValidator(lineEditValidator)
+        self.batchEdit = QLineEdit()
+        self.batchEdit.setValidator(lineEditValidator)
+        self.lagsEdit = QLineEdit()
+        self.lagsEdit.setValidator(lineEditValidator)
+        self.layerEdit = QLineEdit()
+        self.layerEdit.setValidator(lineEditValidator)
+        self.formLayout.addRow("Lags:", self.lagsEdit)
+        self.formLayout.addRow("Epochs:", self.epochsEdit)
+        self.formLayout.addRow("Batch Size:", self.batchEdit)
+        self.formLayout.addRow("Number of Non-Input Layers:", self.layerEdit)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
