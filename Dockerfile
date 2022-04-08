@@ -4,6 +4,6 @@ RUN git clone https://github.com/1103s/crypto-bot.git
 WORKDIR ./crypto-bot
 RUN python3 -m pip install -r ./requirements.txt
 RUN apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6  -y
+RUN apt-get install ffmpeg libsm6 libxext6 libgl1 python3-opencv libgl1-mesa-glx  -y
 # CMD ["-h"]
-ENTRYPOINT ["python3", "./gui.py"]
+CMD ["python3", "./gui.py"]
