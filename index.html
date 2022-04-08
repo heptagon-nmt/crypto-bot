@@ -159,6 +159,26 @@ small subset of available coins.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">get_data.</span></span><span class="sig-name descname"><span class="pre">CoinGecko</span></span><a class="headerlink" href="#get_data.CoinGecko" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>Interacts with the Coingecko API and handles data retrieval tasks</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="get_data.CoinGecko.get_current_price">
+<span class="sig-name descname"><span class="pre">get_current_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs_currency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#get_data.CoinGecko.get_current_price" title="Permalink to this definition"><span>#</span></a></dt>
+<dd><p>Get the current live price of the specified coin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – The CoinGecko coin ID (e.g. ethereum, litecoin, etc.)</p></li>
+<li><p><strong>vs_currency</strong> (<em>str</em>) – e.g. usd, eur, jpy</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The current price of the coin, or None if there are network problems.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="get_data.CoinGecko.get_dict_ids">
 <span class="sig-name descname"><span class="pre">get_dict_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_data.CoinGecko.get_dict_ids" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>If the cache is updated, then the data is saved to a json file first
@@ -274,8 +294,14 @@ days &gt; 31: 4 day intervals</p>
 <span class="sig-name descname"><span class="pre">search_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#get_data.CoinGecko.search_symbols" title="Permalink to this definition"><span>#</span></a></dt>
 <dd><p>This attempts to find a symbol in the available IDs list for the API.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol</strong> (<em>str</em>) – The symbol to search for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of strings containing the symbol in them</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[str]</p>
 </dd>
 </dl>
 </dd></dl>
