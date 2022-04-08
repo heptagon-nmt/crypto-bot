@@ -125,3 +125,28 @@ def test_default() -> None:
 	"""
 	utils module
 	"""
+
+def test_gui():
+    """
+    Tests the gui.
+    """
+    import gui
+    app = gui.QApplication()
+    mainWin = gui.MainWindow()
+    availableGeometry = mainWin.screen().availableGeometry()
+    mainWin.resize(availableGeometry.width() / 3, availableGeometry.height() / 2)
+
+    mainWin.maximize()
+    # mainWin.load()
+    mainWin.nextTab()
+    mainWin.prevTab()
+    mainWin.closeTab()
+    mainWin.createPalette()
+    mainWin.savePlot()
+
+    central = mainWin.centralWidget
+    # Ill add in more latter, bugs to fix first
+
+
+
+
