@@ -59,3 +59,4 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
   and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
 - Fix tabs. Automatically switch tabs after new forecast
+- Add moving averages toggling to graph (IDK what a moving average is)

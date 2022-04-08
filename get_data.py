@@ -5,7 +5,7 @@ things such as getting the most recent price/volume data (spot prices or OHLC).
 Requests to the CoinGecko API that take longer than 8 seconds are cancelled. 
 """
 import ast
-from datetime import datetime, timedelta
+from datetime import datetime
 from cryptocmd import CmcScraper
 from html.parser import HTMLParser
 import json
@@ -19,7 +19,7 @@ from typing import List
 url_prefixes = {"coingecko": "https://api.coingecko.com/api/v3/{}", 
                 "kraken" : "https://api.kraken.com/0/public/{}"}
 sources_list = ["coingecko", "kraken", "cmc"]
-max_api_timeout = 8
+max_api_timeout = 10
 
 class KrakenCurrencyTableParser(HTMLParser):
     """
@@ -151,6 +151,7 @@ class CMC(APIInterface):
 class Kraken(APIInterface):
     def __init__(self):
         super().__init__()
+        self.url_prefix = url_prefixes["kraken"]
     def get_ids(self, update_cache = False):
         """
         If update_cache is true pull the html from a table on Kraken's website 
@@ -176,16 +177,37 @@ class Kraken(APIInterface):
         with open(file_name, "r") as f:
             pairs_list = list(set(json.load(f)))
         return pairs_list
+    def get_asset_pairs(self, update_cache = False) -> List[str]:
+        filepath = "data/kraken_asset_pairs.json"
+        if not os.path.isfile(filepath) or update_cache:
+            url_suffix = "AssetPairs?"
+            r = requests.get(self.url_prefix.format(url_suffix))
+            data = r.json()
+            assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
+            asset_pairs = list(data['result'].keys())
+            ids = self.get_ids(False)
+            for id in ids:
+                asset_pairs.append(id + "USD")
+            with open(filepath, "w") as f:
+                json.dump(asset_pairs, f)
+        with open(filepath, "r") as f:
+            asset_pairs = json.load(f)
+        return asset_pairs
     def get_intervals(self):
         """
         :return: The valid intervals (in minutes) for Kraken API 
         """
         return [1, 5, 15, 30, 60, 240, 1440, 10080, 21600]
-    def get_ohlc(self, id, vs_currency, days, interval):
+    def get_ohlc(self, id: str, vs_currency: str, days: int, interval: int) -> List[List[float]]:
         """
         Retrieve OHLC that ranges from a specified date to current. The granularity 
         can be supplied as well. This one might be preferable to the user since it 
-        is quite a bit more flexible with time step intervals.
+        is quite a bit more flexible with time step intervals. If a valid interval
+        less than 240 is supplied, the "days" parameter be ignored and Kraken will
+        return the most recent 720 OHLCV data points. For intervals of at least 240,
+        Kraken will return approximately the correct number of data points 
+        corresponding to the number of days with the given interval.
+        TODO Ensure that the last row of data points does not contain random zeros.   
 
         :param str id: This is a ticker, such as ETH, XRP, BTC, etc.
         :param int days: Number of days to go back to 
@@ -196,23 +218,48 @@ class Kraken(APIInterface):
         :param str kraken: The external source of the data
         :return: a numpy array of volume (USD) and OHLC data; or None if the request
             cannot be completed either because an invalid symbol pair was passed or
-            for some other reason. All fields are converted to np.float32 type
+            for some other reason. All fields are converted to np.float32 type. The
+            OHLCV rows are returned in order of increasing UNIX timestamp value.
         """
         id = id.upper()
         assert self.is_valid_id(id), "Symbol not found."
         assert interval in self.get_intervals()
-        since = time.time() - days * 24 * 60 * 60
+        since = int(time.time() - days * 24 * 60 * 60)
         url_suffix = "OHLC?pair={}&since={}&interval={}".format(id.upper() + \
             vs_currency, since, interval)
-        url = url_prefixes['kraken'].format(url_suffix)
+        url = self.url_prefix.format(url_suffix)
         response = requests.get(url)
         data = response.json()
         assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
         return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
-    def get_opening_price(self, id, vs_currency, days):
+    def get_opening_price(self, id, vs_currency, days) -> List[float]:
+        """
+        Get the daily opening price
+
+        :return: The opening price of the given symbol over a specified number of days
+        :rtype: List[List]
+        """
         data = self.get_ohlc(id, vs_currency, days, 1440).transpose()
         assert len(data) > 1
         return data[1]
+    def get_current_price(self, id: str, vs_currency: str, bid_type = "a") -> float:
+        """
+        Get the most recent ask price for an asset.
+        
+        :param str id: the Kraken ID for the coin
+        :param str vs_currency: (e.g. USD, JPY, EUR, etc.)
+        :param str bid_type: either 'a' or 'b' for "ask" or "bid", respectively
+        """
+        assert bid_type.lower() == "a" or bid_type.lower() == "b", "Bid type must be 'a' or 'b' (ask or bid)"
+        id = id.upper()
+        vs_currency = vs_currency.upper()
+        assert (id + vs_currency) in self.get_asset_pairs(False), "Not a valid Kraken currency pair."
+        url_suffix = "Ticker?pair={}{}".format(id, vs_currency)
+        url = self.url_prefix.format(url_suffix)
+        r = requests.get(url)
+        assert r.status_code == 200, "Kraken server returned {}.".format(data['error'][0])
+        data = r.json()
+        return float(list(data['result'].values())[0][bid_type][0])
 
 class CoinGecko(APIInterface):
     """
@@ -224,7 +271,9 @@ class CoinGecko(APIInterface):
         """
         This attempts to find a symbol in the available IDs list for the API.
 
-        :return: 
+        :param str symbol: The symbol to search for
+        :return: A list of strings containing the symbol in them
+        :rtype: list[str]
         """
         found = []
         for coin_dict in self.get_dict_ids(update_cache = False):
@@ -242,7 +291,7 @@ class CoinGecko(APIInterface):
         file_name = "data/coingecko_id_list.json"
         if not os.path.isdir("data"): os.mkdir("data")
         if update_cache or not os.path.isfile(file_name):
-            r = requests.get(url_prefixes["coingecko"].format("coins/list"), timeout = max_api_timeout)
+            r = requests.get(url_prefixes["coingecko"].format("coins/list")) 
             data = r.json()
             with open(file_name, "w") as f:
                 json.dump(data, f)
@@ -267,6 +316,25 @@ class CoinGecko(APIInterface):
         :rtype: numpy array of integers
         """
         return np.array([1, 7, 14, 30, 90, 180, 365])
+    def get_current_price(self, id: str, vs_currency: str) -> float:
+        """
+        Get the current live price of the specified coin.
+
+        :param str id: The CoinGecko coin ID (e.g. ethereum, litecoin, etc.)
+        :param str vs_currency: e.g. usd, eur, jpy
+        :return: The current price of the coin, or None if there are network problems.
+        :rtype: float
+        """
+        assert self.is_valid_id(id), "Invalid CoinGecko ID."
+        url_suffix = "simple/price?ids={}&vs_currencies={}&include_market_cap=false&" \
+            "include_24hr_vol=false&include_24hr_change=false&" \
+            "include_last_updated_at=false".format(id, vs_currency)
+        url = url_prefixes["coingecko"].format(url_suffix)
+        r = requests.get(url, headers = {"User-Agent" : "Mozilla/5.0"}) 
+        assert r.status_code == 200, "Request for {} vs {} failed.".format(id, vs_currency)
+        data = r.json()
+        return data[id][vs_currency]
+
     def get_ohlc(self, id, vs_currency, days):
         """
         Coingecko's OHLC API for OHLC data. The time step intervals are 
@@ -286,7 +354,7 @@ class CoinGecko(APIInterface):
         alt_url_suffix = "coins/{}/ohlc?vs_currency={}&days=max".format(id, vs_currency.lower())
         url = url_prefixes['coingecko'].format(url_suffix)
         alt_url = url_prefixes['coingecko'].format(alt_url_suffix)
-        response = requests.get(url, timeout = max_api_timeout)
+        response = requests.get(url)
         try:
             data = response.json()
         except Exception as e:
@@ -373,13 +441,3 @@ def pull_CMC_scraper_data(cryptocurrency_name: str) -> np.ndarray:
 	for a in json_data:
 		data.append(a["Open"])
 	return data
-
-def fifa(n):
-    url_suffix = "coins/{}/ohlc?vs_currency={}&days={}"
-    url = url_prefixes["coingecko"].format(url_suffix.format("ethereum", "usd", n))
-    r = requests.get(url, timeout = 5)
-    return r
-
-### For Debugging CoinGecko API
-if __name__ == "__main__":
-    r = fifa(2)
