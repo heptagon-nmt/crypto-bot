@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install ffmpeg libsm6 libxext6 libgl1 python3-opencv -y
+        sudo apt-get install ffmpeg libsm6 libxext6 libgl1 python3-opencv libgl1-mesa-glx -y
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
