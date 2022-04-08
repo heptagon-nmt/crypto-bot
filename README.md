@@ -24,7 +24,17 @@ Real time cryptocurrency price data prediction command line utility using machin
 
 ## Usage
 
-### Local command line usage
+### GUI
+
+- Podman: `podman run yacu`
+
+- Docker: `docker run yacu`
+
+- Python: `python3 gui.py`
+
+### CLI
+
+#### Local command line usage
 
 - `python3 crypto_util.py --crypto BTC`: The basic functionality requires the user to input at least the cryptocurrency symbol. Note that by default images of the data and predictions are saved to `figures/`
 - `python3 crypto_uitl.py --crypto ETH --days 10 --lags 80`: More specific flags can be specified, such as the number of days into the future to predict the price.
@@ -32,7 +42,7 @@ Real time cryptocurrency price data prediction command line utility using machin
 - `python3 crypto_util.py --ls --source kraken`: In order for the user to see what cryptocurrency symbols are available for an API source, the utility allows for this listing argument with no additional flags. 
 - `python3 crypto_util.py --help`: Prints the usage instructions. 
 
-### Docker or podman
+#### Docker or podman
 
 - `docker run yacu` or
 - `podman run yacu`
