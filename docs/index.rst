@@ -25,5 +25,8 @@ Public API
 Internals
 ---------
 
+These are the internal modules that make YACU tick. Really only the devs shoud
+need ths.
+
 .. automodule:: src 
    :members:
