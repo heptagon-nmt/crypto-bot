@@ -51,7 +51,7 @@ exclude_patterns = []
 #
 # html_theme = 'alabaster'
 html_permalinks_icon = '<span>#</span>'
-html_theme = 'sphinxawesome_theme'
+html_theme = 'spinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
