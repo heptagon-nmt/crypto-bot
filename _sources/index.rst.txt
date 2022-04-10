@@ -5,19 +5,25 @@
 
 Welcome to YACU's documentation!
 ======================================
-Each component file and its corasponding methods are documeted below.
+Documentation is divided into two catagories: Public API, which describes how
+you can use yacu as a library to intergrate into your own application; And the
+internal documentation, primarily used by the developers.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   Public API
+   Internals
 
+Public API
+----------
 
-.. automodule:: auto_doc 
+.. automodule:: yacu 
    :members:
 
-Indices and tables
-==================
+Internals
+---------
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. automodule:: src 
+   :members:
