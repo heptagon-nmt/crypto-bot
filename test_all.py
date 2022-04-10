@@ -73,7 +73,7 @@ def test_default() -> None:
 	"""
 	ML prediction module
 	"""
-	import ML_predictor_backend as ML
+	import src.ML_predictor_backend as ML
 	pred = ML.predict_next_N_timesteps([1, 2, 3, 4, 5, 6], "linear", lags = 3, N = 4)
 	#Linear regression is expected to predict linear functions well, as opposed to other models
 	assert type(pred) is list
@@ -113,11 +113,11 @@ def test_default() -> None:
 	"""
 	get_data module
 	"""
-	import get_data
+	import src.get_data
 	price_data = get_data.pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
 	assert len(price_data) > 1
-	price_data = get_data.pull_CMC_scraper_data("ETH")
+	price_data = src.get_data.pull_CMC_scraper_data("ETH")
 	assert type(price_data) is list
 	assert len(price_data) > 1
 
@@ -126,10 +126,8 @@ def test_default() -> None:
 	utils module
 	"""
 
+"""
 def test_gui():
-    """
-    Tests the gui.
-    """
     import gui
     app = gui.QApplication()
     mainWin = gui.MainWindow()
@@ -149,4 +147,4 @@ def test_gui():
 
 
 
-
+"""

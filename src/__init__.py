@@ -1,21 +1,21 @@
 """
 get_data.py
 ===========
-..  automodule:: get_data
+..  automodule:: src.get_data
     :members:
 
 ML_predictor_backend.py
 =======================
-..  automodule:: ML_predictor_backend
+..  automodule:: src.ML_predictor_backend
     :members:
 
 utils.py
 ========
-..  automodule:: utils
+..  automodule:: src.utils
     :members:
 
 test_all.py
 ========
-..  automodule:: test_all
+..  automodule:: src.test_all
     :members:
 """
