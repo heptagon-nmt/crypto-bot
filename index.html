@@ -39,7 +39,7 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Welcome to YACU’s documentation!</a><ul>
 <li><a class="reference internal" href="#module-yacu">Public API</a></li>
-<li><a class="reference internal" href="#module-src">Internals</a><ul>
+<li><a class="reference internal" href="#internals">Internals</a><ul>
 <li><a class="reference internal" href="#module-src.get_data">get_data.py</a></li>
 <li><a class="reference internal" href="#module-src.ML_predictor_backend">ML_predictor_backend.py</a></li>
 <li><a class="reference internal" href="#module-src.utils">utils.py</a></li>
@@ -85,9 +85,11 @@ internal documentation, primarily used by the developers.</p>
 <span id="public-api"></span><h2>Public API<a class="headerlink" href="#module-yacu" title="Permalink to this headline"></a></h2>
 <p>Top level file for the application.</p>
 </section>
-<section id="module-src">
-<span id="internals"></span><h2>Internals<a class="headerlink" href="#module-src" title="Permalink to this headline"></a></h2>
-<section id="module-src.get_data">
+<section id="internals">
+<h2>Internals<a class="headerlink" href="#internals" title="Permalink to this headline"></a></h2>
+<p>These are the internal modules that make YACU tick. Really only the devs shoud
+need ths.</p>
+<span class="target" id="module-src"></span><section id="module-src.get_data">
 <span id="get-data-py"></span><h3>get_data.py<a class="headerlink" href="#module-src.get_data" title="Permalink to this headline"></a></h3>
 <p>This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
@@ -480,7 +482,7 @@ If there are multiple ML model predictions, all of the model predictions are plo
   </div>
   <script>
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.Navigation.enable(false);
       });
   </script> 
 
