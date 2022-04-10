@@ -297,7 +297,7 @@ class MLWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.paramEditors = {}
-        self.setMaximumWidth(300)
+        #self.setMaximumWidth(300)
         self.formLayout = QFormLayout(self)
         self.modelComboBox = QComboBox()
         self.modelComboBox.addItems(models)
@@ -369,8 +369,8 @@ class MLWindow(QWidget):
         if hyperparameters is None:
             return
         if hyperparameters["lags"] > len(data) // 2:
-            self.errLabel.setText("Lags cannot be greater than half the length of the data.")
-            return
+            self.errLabel.setText("Setting lags={}".format(len(data) // 2))
+            hyperparameters["lags"] = len(data) // 2
         prediction = predict_next_N_timesteps(data, model, **hyperparameters)
         return prediction
 
