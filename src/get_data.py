@@ -2,7 +2,6 @@
 This module is to handle everything related to data collection (historical
 or real-time). The command-line utility can call these functions for doing 
 things such as getting the most recent price/volume data (spot prices or OHLC).
-Requests to the CoinGecko API that take longer than 8 seconds are cancelled. 
 """
 import ast
 from datetime import datetime
@@ -155,31 +154,6 @@ class Kraken(APIInterface):
         super().__init__()
         self.url_prefix = url_prefixes["kraken"]
         self.file_name = "data/kraken_pairs_list.json"
-    """def get_ids(self, update_cache = False):
-        If update_cache is true pull the html from a table on Kraken's website 
-        and parse it for the available base currencies.
-
-        :return: a list of available symbol pairs offered by Kraken. The base 
-            currency will always be USD. (ETHUSD, BTCUSD, LTCUSD, etc.)
-        support_url = "https://support.kraken.com/hc/en-us/articles/201893658-Currency-pairs-available-for-trading-on-Kraken"
-        if not os.path.isdir("data"): 
-            os.mkdir("data")
-        if update_cache or not os.path.isfile(self.file_name):
-            #r = requests.get(support_url, headers = {"User-Agent" : "Mozilla/5.0"})
-            r = requests.get(self.url_prefix.format("AssetPairs?"))
-            parser = KrakenCurrencyTableParser()
-            parser.feed(r.text)
-            pairs_list = parser.get_coins()
-            pairs_list = r.json()
-            print(pairs_list)
-            for i, coin in enumerate(pairs_list):
-                pairs_list[i] = coin
-            with open(self.file_name, "w") as f:
-                json.dump(pairs_list, f)
-        assert(os.path.isfile(self.file_name))
-        with open(self.file_name, "r") as f:
-            pairs_list = list(set(json.load(f)))
-        return pairs_list"""
     def get_ids(self, update_cache = False):
         if not os.path.isdir("data"): 
             os.mkdir("data")
@@ -193,6 +167,9 @@ class Kraken(APIInterface):
                 json.dump(coin_ids, f)
         with open(self.file_name, "r") as f:
             coin_ids = json.load(f)
+            # I really don't like that I have to hardcode these in here. IDK why Kraken doesn't return them in the assetpairs response.
+            coin_ids.extend(["BTC", "ETH", "LTC", "XRP"])
+            coin_ids.sort()
             return coin_ids
             
     def get_asset_pairs(self, update_cache = False) -> List[str]:
@@ -320,6 +297,7 @@ class CoinGecko(APIInterface):
         """"""
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
+
         return ids
     def get_intervals(self) -> List[int]:
         """
