@@ -37,8 +37,8 @@ Real time cryptocurrency price data prediction command line utility using machin
 #### Local command line usage
 
 - `python3 crypto_util.py --crypto BTC`: The basic functionality requires the user to input at least the cryptocurrency symbol. Note that by default images of the data and predictions are saved to `figures/`
-- `python3 crypto_uitl.py --crypto ETH --days 10 --lags 80`: More specific flags can be specified, such as the number of days into the future to predict the price.
-- `python3 crypto_uitl.py --crypto ETH --days 50 --lags 400`: The larger `lags` is the longer the training time, but also the higher the accuracy will be. 
+- `python3 crypto_util.py --crypto ETH --days 10 --lags 80`: More specific flags can be specified, such as the number of days into the future to predict the price.
+- `python3 crypto_util.py --crypto ETH --days 50 --lags 400`: The larger `lags` is the longer the training time, but also the higher the accuracy will be. 
 - `python3 crypto_util.py --ls --source kraken`: In order for the user to see what cryptocurrency symbols are available for an API source, the utility allows for this listing argument with no additional flags. 
 - `python3 crypto_util.py --help`: Prints the usage instructions. 
 
@@ -69,4 +69,4 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
   and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
 - Fix tabs. Automatically switch tabs after new forecast
-- Add moving averages toggling to graph (IDK what a moving average is)
+- Add moving averages toggling to graph
