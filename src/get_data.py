@@ -275,8 +275,8 @@ class Kraken(APIInterface):
         url_suffix = "Ticker?pair={}{}".format(id, vs_currency)
         url = self.url_prefix.format(url_suffix)
         r = requests.get(url)
-        assert r.status_code == 200, "Kraken server returned {}.".format(data['error'][0])
         data = r.json()
+        assert r.status_code == 200, "Kraken server returned {}.".format(data['error'][0])
         return float(list(data['result'].values())[0][bid_type][0])
 
 class CoinGecko(APIInterface):

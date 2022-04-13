@@ -12,7 +12,7 @@ def run(cmd):
     """
     if (not DO_DETAIL):
         return
-    sp.    run(cmd, capture_output=True, shell=True, check=True)
+    sp.run(cmd, capture_output=True, shell=True, check=True)
 
 def test_help():
     run("python3 crypto_util.py -h")
@@ -67,7 +67,7 @@ def test_lags():
 
 def test_default() -> None:
 	"""
-	The default tests to be     run.
+	The default tests to be run.
 	"""
 
 	"""
