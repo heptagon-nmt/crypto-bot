@@ -7,7 +7,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = fh.read()
     setup(
         name='yacu',
-        version='0.0.1',
+        version='0.0.2.7',
         author='Yet Another Crypto Util Team',
         author_email='',
         license='GPL3',
@@ -25,8 +25,8 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
         ],
         entry_points={
             'console_scripts': [
-                'yacu = main:gui',
-                'yacu-cli = main:cli'
+                'yacu = yacu:gui',
+                'yacu-cli = yacu:cli'
                 ],
             },
     )

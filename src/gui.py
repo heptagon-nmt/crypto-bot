@@ -1,8 +1,8 @@
 from cProfile import label
 from datetime import datetime, timedelta
 from re import X
-from ML_predictor_backend import *
-from get_data import *
+from src.ML_predictor_backend import *
+from src.get_data import *
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtGui import QAction, QPalette, QRegularExpressionValidator
@@ -436,10 +436,17 @@ class NNWindow(QWidget):
         self.formLayout.addRow("Batch Size:", self.batchEdit)
         self.formLayout.addRow("Number of Non-Input Layers:", self.layerEdit)
 
-if __name__ == '__main__':
+def start_gui():
+    """
+    Starts up a gui session
+    """
     app = QApplication(sys.argv)
     mainWin = MainWindow()
     availableGeometry = mainWin.screen().availableGeometry()
     mainWin.resize(availableGeometry.width() / 3, availableGeometry.height() / 2)
     mainWin.show()
     sys.exit(app.exec())
+
+if __name__ == '__main__':
+    start_gui()
+
