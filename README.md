@@ -1,4 +1,4 @@
-[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml) [![Publish To Docker](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml)
+[![Code Is Passing All Unit Tests?](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/python-app.yml) [![Documentation Is Generated?](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/gh-pages.yml) [![Publish To Docker](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish.yml) [![Publish To PyPi](https://github.com/1103s/crypto-bot/actions/workflows/publish-pypi.yml/badge.svg)](https://github.com/1103s/crypto-bot/actions/workflows/publish-pypi.yml)
 
 # Crypto Util
 
@@ -6,15 +6,23 @@ Real time cryptocurrency price data prediction command line utility using machin
 
 ## Install
 
-### Docker or podman
+### Python
+    
+- `pip3 install yacu` or
+
+- `python3 -m pip install yacu`
+
+### Docker or Podman (CLI ONLY!)
 
 
 - `docker pull yetanothercryptoutil/yacu` or
 
 - `podman pull yetanothercryptoutil/yacu`
 
+**NOTE:** If you use this method, only the CLI features of the program will be
+available.
 
-### Local installation via anaconda
+### Local installation via anaconda (for development)
 - Download and install anaconda
 - `git clone https://github.com/1103s/crypto-bot.git`
 - `cd crypto-bot`
@@ -26,13 +34,19 @@ Real time cryptocurrency price data prediction command line utility using machin
 
 ### GUI
 
+- Default: `yacu`
+
+- Anaconda: `python3 src/gui.py`
+
+### CLI
+
+- Default: `yacu-cli`
+
 - Podman: `podman run yacu`
 
 - Docker: `docker run yacu`
 
-- Python: `python3 gui.py`
-
-### CLI
+- Anaconda: `python3 src/crypto_util.py`
 
 #### Local command line usage
 
