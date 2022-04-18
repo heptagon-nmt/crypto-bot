@@ -162,13 +162,14 @@ class Kraken(APIInterface):
             r = requests.get(url)
             data = r.json()
             assert r.status_code == 200, "Kraken server returned {}.".format(data['error'][0])
-            coin_ids = list(data['result'].keys())
+            coin_ids = list(set(data['result'].keys()))
             with open(self.file_name, "w") as f:
                 json.dump(coin_ids, f)
         with open(self.file_name, "r") as f:
             coin_ids = json.load(f)
             # I really don't like that I have to hardcode these in here. IDK why Kraken doesn't return them in the assetpairs response.
             coin_ids.extend(["BTC", "ETH", "LTC", "XRP"])
+            coin_ids = list(set(coin_ids))
             coin_ids.sort()
             return coin_ids
             
