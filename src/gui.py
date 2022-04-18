@@ -6,13 +6,14 @@ from src.get_data import *
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtGui import QAction, QPalette, QRegularExpressionValidator
-from PySide6.QtWidgets import (QApplication, QPushButton, QComboBox,
-    QFormLayout, QGridLayout, QLabel, QLineEdit, QListWidget, QMainWindow, 
+from PySide6.QtWidgets import (QApplication, QPushButton, QCheckBox, QComboBox,
+    QHBoxLayout, QFormLayout, QGridLayout, QLabel, QLineEdit, QListWidget, QMainWindow, 
     QMenu, QMessageBox, QTabWidget, QToolBar, QWidget)
 import pyqtgraph as pg
 from typing import List, Tuple
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
+max_layers = 5
 lineEditValidator = QRegularExpressionValidator(r"[1-9][0-9]*")
 
 def format_intervals(intervals):
@@ -429,12 +430,55 @@ class NNWindow(QWidget):
         self.batchEdit.setValidator(lineEditValidator)
         self.lagsEdit = QLineEdit()
         self.lagsEdit.setValidator(lineEditValidator)
-        self.layerEdit = QLineEdit()
-        self.layerEdit.setValidator(lineEditValidator)
+        #self.layerEdit = QLineEdit()
+        #layerValidator = QRegularExpressionValidator(r"[1-5]")
+        self.layerComboBox = QComboBox()
+        self.layerComboBox.addItems([str(i) for i in range(2, max_layers + 1)])
+        self.layerComboBox.currentIndexChanged.connect(self._updateLayerWidgets)
         self.formLayout.addRow("Lags:", self.lagsEdit)
         self.formLayout.addRow("Epochs:", self.epochsEdit)
         self.formLayout.addRow("Batch Size:", self.batchEdit)
-        self.formLayout.addRow("Number of Non-Input Layers:", self.layerEdit)
+        self.formLayout.addRow("Hidden Layers:", self.layerComboBox)
+        # This adds the dynamic layer parameter tuning for layers 1 through n
+        self.createLayerWidgets()
+        self._updateLayerWidgets()
+
+    def createLayerWidgets(self):
+        self.layerWidgets = []
+        enabled = ["Enabled", "Disabled"]
+        for i in range(max_layers):
+            widget = QWidget()
+            formLayout = QFormLayout(widget)
+            self.layerWidgets.append(widget)
+            neuronEdit = QLineEdit()
+            neuronEdit.setValidator(lineEditValidator)
+            activationComboBox = QComboBox()
+            activationComboBox.addItems(["sigmoid", "relu", "selu", "elu", "tanh", "softplus", "softsign"])
+            hBox = QHBoxLayout()
+            l1Check = QCheckBox("L1")
+            l2Check = QCheckBox("L2")
+            dropoutCheck = QCheckBox("Dropout")
+            hBox.addWidget(l1Check)
+            hBox.addWidget(l2Check)
+            hBox.addWidget(dropoutCheck)
+            formLayout.addRow("Units/Neurons", neuronEdit)
+            formLayout.addRow(activationComboBox)
+            formLayout.addRow(hBox)
+            self.formLayout.addRow("Layer %d" % (i + 1), widget)
+        widget = QWidget()
+        formLayout = QFormLayout(widget)
+        self.layerWidgets.append(widget)
+        activationComboBox = QComboBox()
+        activationComboBox.addItems(["sigmoid"])
+        formLayout.addRow(activationComboBox)
+        self.formLayout.addRow("Output Layer", widget)
+
+    def _updateLayerWidgets(self):
+        layers = int(self.layerComboBox.currentText())
+        for i in range(max_layers):
+            if i < layers:
+                pass
+
 
 def start_gui():
     """
