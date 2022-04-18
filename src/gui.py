@@ -412,6 +412,10 @@ class AnalyticsWindow(QWidget):
         self.plot(historicalY, forecastedY)
 
 class ClassificationWindow(QWidget):
+    """
+    This is the second primary tab of the window. This implements the functionality
+    for 
+    """
     def __init__(self, parent = None):
         super().__init__(parent)
         self.gridLayout = QGridLayout(self)
@@ -421,6 +425,8 @@ class ClassificationWindow(QWidget):
         self.gridLayout.addWidget(self.nnWindow, 0, 1)
 
 class NNWindow(QWidget):
+    """
+    """
     def __init__(self, parent = None):
         super().__init__(parent)
         self.formLayout = QFormLayout(self)
@@ -433,12 +439,18 @@ class NNWindow(QWidget):
         #self.layerEdit = QLineEdit()
         #layerValidator = QRegularExpressionValidator(r"[1-5]")
         self.layerComboBox = QComboBox()
-        self.layerComboBox.addItems([str(i) for i in range(2, max_layers + 1)])
+        self.layerComboBox.addItems([str(i) for i in range(1, max_layers + 1)])
+        # Update the number of hidden layer widgets depending on the value in 
+        self.lossComboBox = QComboBox()
+        self.lossComboBox.addItems(["mean_squared_error", "mean_absolute_error", 
+                                    "cosine_similarity", "mean_absolute_percentage_error",
+                                    "mean_squared_logarithmic_error"])
         self.layerComboBox.currentIndexChanged.connect(self._updateLayerWidgets)
         self.formLayout.addRow("Lags:", self.lagsEdit)
         self.formLayout.addRow("Epochs:", self.epochsEdit)
         self.formLayout.addRow("Batch Size:", self.batchEdit)
         self.formLayout.addRow("Hidden Layers:", self.layerComboBox)
+        self.formLayout.addRow("Loss Function:", self.lossComboBox)
         # This adds the dynamic layer parameter tuning for layers 1 through n
         self.createLayerWidgets()
         self._updateLayerWidgets()
@@ -453,7 +465,9 @@ class NNWindow(QWidget):
             neuronEdit = QLineEdit()
             neuronEdit.setValidator(lineEditValidator)
             activationComboBox = QComboBox()
-            activationComboBox.addItems(["sigmoid", "relu", "selu", "elu", "tanh", "softplus", "softsign"])
+            activationComboBox.addItems(["relu", "sigmoid", "selu", "elu", 
+                                         "tanh", "softplus", "softsign"])
+            layerLabel = QLabel("Layer %d" % (i + 1))
             hBox = QHBoxLayout()
             l1Check = QCheckBox("L1")
             l2Check = QCheckBox("L2")
@@ -461,23 +475,24 @@ class NNWindow(QWidget):
             hBox.addWidget(l1Check)
             hBox.addWidget(l2Check)
             hBox.addWidget(dropoutCheck)
-            formLayout.addRow("Units/Neurons", neuronEdit)
-            formLayout.addRow(activationComboBox)
-            formLayout.addRow(hBox)
-            self.formLayout.addRow("Layer %d" % (i + 1), widget)
+            formLayout.addRow("", layerLabel)
+            formLayout.addRow("Units/Neurons:", neuronEdit)
+            formLayout.addRow("Activation Function:", activationComboBox)
+            formLayout.addRow("Regularization:", hBox)
+            self.formLayout.addRow("", widget)
         widget = QWidget()
         formLayout = QFormLayout(widget)
         self.layerWidgets.append(widget)
         activationComboBox = QComboBox()
         activationComboBox.addItems(["sigmoid"])
+        formLayout.addRow(QLabel("Output Layer"))
         formLayout.addRow(activationComboBox)
-        self.formLayout.addRow("Output Layer", widget)
+        self.formLayout.addRow(widget)
 
     def _updateLayerWidgets(self):
         layers = int(self.layerComboBox.currentText())
         for i in range(max_layers):
-            if i < layers:
-                pass
+            self.layerWidgets[i].setVisible(i < layers)
 
 
 def start_gui():
