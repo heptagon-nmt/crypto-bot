@@ -85,3 +85,8 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 - Add moving averages toggling to graph
 - Add comments to gui.py
 - Finish adding comments to gui.py
+
+## Installation problems
+- On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found`
+  - The fix for this is `sudo apt-get install libc6`
+
