@@ -1,6 +1,10 @@
-from src.ML_predictor_backend import predict_next_N_timesteps
-from src.get_data import *
-from src.utils import *
+#from src.ML_predictor_backend import predict_next_N_timesteps
+#from src.get_data import *
+#from src.utils import *
+from utils import *
+from get_data import *
+from ML_predictor_backend import predict_next_N_timesteps
+
 import argparse
 import ast
 from pathlib import Path
@@ -89,7 +93,7 @@ def main():
 	if args.model == "all":
 		predictions_over_models = {}
 		for model in models:
-			prediction = predict_next_N_timesteps(data, args.lags, args.days, model)
+			prediction = predict_next_N_timesteps(data, args.model, lags=args.lags)
 			print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+model+" model are:\n")
 			for (index, p) in enumerate(prediction):
 				print("Predicted Day "+str(index+1)+" price = "+str(p))

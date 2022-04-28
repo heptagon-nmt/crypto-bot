@@ -74,6 +74,10 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 - docker, podman, pip, or anaconda
 
+## Command line GUI
+- Once installed via pip you will be able to initialize the GUI using the command `yacu` in the command line.
+  - In some cases, such as in Linux Mint installations, this will fail. If the happens it means that `.bin` is not in your path (which you can check using `echo $PATH`). Therefore you need to add `.bin` to your path is required in order to fix this. 
+
 ## TODOs
 
 - Add method to save and load previously trained ML model files using the python library `pickle`.
