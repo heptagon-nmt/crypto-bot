@@ -72,7 +72,7 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## Requirements
 
-- docker, podman, or anaconda
+- docker, podman, pip, or anaconda
 
 ## TODOs
 
