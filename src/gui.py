@@ -291,7 +291,7 @@ class APIWindow(QWidget):
             data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal)
         #######
         if source == "cmc":
-            data = self.api_dict[source].get_opening_price(symbol)
+            data = self.api_dict[source].get_opening_price(symbol)[-1*rangeVal:]
         return data
 
 class MLWindow(QWidget):
