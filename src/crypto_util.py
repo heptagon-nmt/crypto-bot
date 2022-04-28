@@ -3,6 +3,7 @@ from get_data import *
 from utils import *
 import argparse
 import ast
+from pathlib import Path
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 sources = ["kraken", "coingecko", "cmc"]
@@ -81,7 +82,9 @@ def main():
 		print("Source not recognized, exiting")
 		exit(1)
 	if args.plot_data:
-		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
+		plot_and_save_price_graph(data,
+                Path(f'./{args.filename}_{args.crypto}'),
+                args.filetype, args.crypto)
 	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
 	if args.model == "all":
 		predictions_over_models = {}
@@ -93,7 +96,9 @@ def main():
 			predictions_over_models[model] = prediction
 			print("\n")
 		if args.plot_data:
-			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, predictions_over_models)
+			plot_and_save_price_graph_with_predictions(data,
+                    Path(f'./{args.filename}_{args.crypto}'),
+                    args.filetype, args.crypto, predictions_over_models)
 		print_summary_statistics_of_predicted_prices(predictions_over_models)
 		if(args.csv):
 			export_csv(predictions_over_models)

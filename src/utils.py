@@ -9,6 +9,7 @@ import random
 import numpy as np
 import csv
 import matplotlib.patches as mpatches
+from pathlib import Path
 
 def export_csv(data, filename = "data/data_out.csv"):
     """
@@ -59,7 +60,7 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	plt.ylabel("USD price")
 	plt.xlabel("Time index")
 	plt.legend()
-	plt.savefig("figures/"+filename+"."+file_extension)
+	plt.savefig(Path(f'./{filename}.{file_extension}'))
 	plt.close()
 	print("Figure of historical price data has been written to "+"figures/"+filename+"."+file_extension)
 	return None
