@@ -295,7 +295,8 @@ class CoinGecko(APIInterface):
             data = json.load(f)
         return data
     def get_ids(self, update_cache = False):
-        """"""
+        """
+        """
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
 
