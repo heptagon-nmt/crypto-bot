@@ -96,7 +96,7 @@ def main():
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, predictions_over_models)
 		print_summary_statistics_of_predicted_prices(predictions_over_models)
 		if(args.csv):
-			export.export_csv(predictions_over_models)
+			export_csv(predictions_over_models)
 	else:
 		prediction = predict_next_N_timesteps(data, args.lags, args.days, args.model)
 		print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+args.model+" model are:\n")
@@ -106,7 +106,7 @@ def main():
 		if args.plot_data:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
 		if(args.csv):
-			export.export_csv({args.model: prediction})
+			export_csv({args.model: prediction})
 	return
 
 if __name__ == "__main__":
