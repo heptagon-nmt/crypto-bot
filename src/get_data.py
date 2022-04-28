@@ -102,7 +102,7 @@ class APIInterface:
 
 class CMC(APIInterface):
     """
-    CMC API... Similar to the other two
+    CMC API. Pulls daily price data from the CMC scraper
     """
     def __init__(self):
         super().__init__()
@@ -132,6 +132,10 @@ class CMC(APIInterface):
             coin_list = json.load(f)
         return coin_list
     def get_intervals(self) -> List[int]:
+        """
+        util for API time steps
+        :return: list of intervals
+        """
         return [60 * 24]
     def get_opening_price(self, id):
         """
@@ -296,6 +300,7 @@ class CoinGecko(APIInterface):
         return data
     def get_ids(self, update_cache = False):
         """
+        :return: a list of cryptocurrency ids
         """
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
@@ -360,7 +365,7 @@ class CoinGecko(APIInterface):
             data = response.json()
             print(f'Warning: {days} days is more than the allowed amount for this'
             f' api. Processing wil continue with {len(data)} as this is the max.')
-        assert isinstance(data, list)
+        assert isinstance(data, list), "data instance type error"
         return np.array(data)
     def get_opening_price(self, id: str, vs_currency: str, days: int) -> np.ndarray:
         """
@@ -373,7 +378,7 @@ class CoinGecko(APIInterface):
         :rtype: list
         """
         data = self.get_ohlc(id, vs_currency, days).transpose()
-        assert len(data) > 1 
+        assert len(data) > 1, "Something has gone wrong in the data parsing"
         return data[1]
     def get_market_range(self, id, vs_currency, days):
         """
@@ -392,8 +397,8 @@ class CoinGecko(APIInterface):
         """
         end = time.time()
         start = end - days * 24 * 60 * 60
-        assert start < end
-        assert(self.is_valid_id(id))
+        assert start < end, "Time window will cause an API error"
+        assert(self.is_valid_id(id)), "Not a valid id"
         start = int(start); end = int(end)
         range_str = "coins/{}/market_chart/range?vs_currency={}&from={}&to={}".format(id, vs_currency, start, end)
         url = url_prefixes["coingecko"].format(range_str)
@@ -402,7 +407,7 @@ class CoinGecko(APIInterface):
 
 def get_available_sources():
     """
-    TODO Add CmcScraper 
+    prints the API source names
     :return: list of available sources
     """
     return sources_list
