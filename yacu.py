@@ -29,3 +29,6 @@ class Coin():
     days: int = 7
     model: str = "all"
     lags: int = 300
+
+if __name__ == "__main__":
+    src.crypto_util.main()
