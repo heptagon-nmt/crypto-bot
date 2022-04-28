@@ -1,8 +1,8 @@
 from cProfile import label
 from datetime import datetime, timedelta
 from re import X
-from ML_predictor_backend import *
-from get_data import *
+from src.ML_predictor_backend import *
+from src.get_data import *
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtGui import QAction, QPalette, QRegularExpressionValidator
