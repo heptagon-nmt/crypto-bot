@@ -95,5 +95,3 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 ## Installation problems
 - On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found`
   - The fix for this is `sudo apt-get install libc6`
-
->>>>>>> 875355c051fd3e12b4e3684ad2a3f0d3f212e225
