@@ -83,8 +83,6 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
   and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
 - Add moving averages toggling to graph
-- Add comments to gui.py
-- Finish adding comments to gui.py
 
 ## Installation problems
 - On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found`
