@@ -10,14 +10,14 @@ models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "r
 sources = ["kraken", "coingecko", "cmc"]
 
 def main(api_args = None):
-    """
-    The top level prediction function, complete with argparsing and other
-    features for comandline interfration.
+	"""
+	The top level prediction function, complete with argparsing and other
+	features for comandline interfration.
 
-    :args api_args: A string of flags to be passed to the parser.
-    :return: A list of predicted prices for each day requested.
-    """
-    prediction = None
+	:args api_args: A string of flags to be passed to the parser.
+	:return: A list of predicted prices for each day requested.
+	"""
+	prediction = None
 	parser = argparse.ArgumentParser(description="Command Line Cryptocurrency price prediction utility")
 	parser.add_argument("--crypto", "-c", type=str, required=False, help="Symbol of the cryptocurrency. Required unless --ls is called")
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
