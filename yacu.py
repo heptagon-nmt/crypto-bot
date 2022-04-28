@@ -5,6 +5,7 @@ import os
 import sys
 import src.crypto_util
 import src.gui
+import src.get_data
 from dataclasses import dataclass
 
 def gui():
@@ -59,6 +60,33 @@ class Coin(_CoinDataClass):
         except Exception as e:
             raise YacuError(f'Yacu could not predict the price of {self.name}'
                             f' due to the folowing error: {e}')
+
+@dataclass()
+class Source():
+    """
+    Represents a source of crypto data.
+    """
+    name: str
+
+    def get_avalible_coins(self):
+        """
+        Uses the internal get coin ids to generate a list of coin sigints.
+
+        :returns: List of strings.
+        """
+        try:
+            ret = src.get_data.get_available_symbols_from_source(self.name, True)
+        except Exception as e:
+            pass
+        try:
+            ret = src.get_data.get_available_symbols_from_source(self.name, False)
+        except Exception as e:
+            raise YacuError(f'Yacu could not generate a list of ids'
+                            f' from {self.name}')
+        return ret
+
+
+SOURCES = [Source(x) for x in ["kraken", "coingecko"]]
 
 if __name__ == "__main__":
     src.crypto_util.main()
