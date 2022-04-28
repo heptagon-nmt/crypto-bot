@@ -96,7 +96,7 @@ things such as getting the most recent price/volume data (spot prices or OHLC).<
 <dl class="py class">
 <dt class="sig sig-object py" id="src.get_data.CMC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.get_data.</span></span><span class="sig-name descname"><span class="pre">CMC</span></span><a class="headerlink" href="#src.get_data.CMC" title="Permalink to this definition"></a></dt>
-<dd><p>CMC API… Similar to the other two</p>
+<dd><p>CMC API. Pulls daily price data from the CMC scraper</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.get_data.CMC.get_ids">
 <span class="sig-name descname"><span class="pre">get_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.get_data.CMC.get_ids" title="Permalink to this definition"></a></dt>
@@ -118,11 +118,8 @@ make the requests).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.get_data.CMC.get_intervals">
 <span class="sig-name descname"><span class="pre">get_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.get_data.CMC.get_intervals" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of integers for each available interval (in minutes)</p>
-</dd>
-</dl>
+<dd><p>util for API time steps
+:return: list of intervals</p>
 </dd></dl>
 
 <dl class="py method">
@@ -191,7 +188,12 @@ then loaded back from that file.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.get_data.CoinGecko.get_ids">
 <span class="sig-name descname"><span class="pre">get_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.get_data.CoinGecko.get_ids" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of cryptocurrency ids</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.get_data.CoinGecko.get_intervals">
@@ -324,7 +326,7 @@ ignore_currencies   Currencies to ignore when parsing</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.get_data.get_available_sources">
 <span class="sig-prename descclassname"><span class="pre">src.get_data.</span></span><span class="sig-name descname"><span class="pre">get_available_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.get_data.get_available_sources" title="Permalink to this definition"></a></dt>
-<dd><p>TODO Add CmcScraper 
+<dd><p>prints the API source names
 :return: list of available sources</p>
 </dd></dl>
 
