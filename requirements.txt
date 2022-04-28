@@ -7,10 +7,10 @@ skforecast==0.4.2
 art==5.5
 numpy==1.22.2
 requests==2.27.1
-pyqt5==5.15.6
+pyqt5>=5.15.6
 sphinxawesome_theme
-pyside6==6.2.4
-PyQt5==5.15.6
+pyside6>=6.2.4
+PyQt5>=5.15.6
 pyqtgraph==0.12.4
 sphinx-rtd-theme
 tk-tools>=0.15.0

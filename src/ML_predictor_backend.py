@@ -16,6 +16,8 @@ import time
 def predict_next_N_timesteps(data, model_name, **kwargs): 
 	"""
 	Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
+	Importantly, this function takes an input of a linear vector of scalars which means that implicitely the time steps
+	in between different values are assumed to be the same. 
 
 	:arg data: Input time-ordered historical price data to predict on
 	:arg lags: Integer hyperparamater for the forecasting prediction

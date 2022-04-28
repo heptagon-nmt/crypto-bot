@@ -72,7 +72,11 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## Requirements
 
-- docker, podman, or anaconda
+- docker, podman, pip, or anaconda
+
+## Command line GUI
+- Once installed via pip you will be able to initialize the GUI using the command `yacu` in the command line.
+  - In some cases, such as in Linux Mint installations, this will fail. If the happens it means that `.bin` is not in your path (which you can check using `echo $PATH`). Therefore you need to add `.bin` to your path is required in order to fix this. 
 
 ## TODOs
 
@@ -83,5 +87,13 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
   and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
 - Add moving averages toggling to graph
+<<<<<<< HEAD
 - Add fullscreen toggling for graphs (if not too difficult)
 - Add comments to gui.py
+=======
+
+## Installation problems
+- On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found`
+  - The fix for this is `sudo apt-get install libc6`
+
+>>>>>>> 875355c051fd3e12b4e3684ad2a3f0d3f212e225

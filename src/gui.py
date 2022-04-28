@@ -83,10 +83,16 @@ class MainWindow(QMainWindow):
         self.centralWidget.closeTab()
     def createPalette(self):
         self.palette = QPalette()
-        self.palette.setColor(QPalette.Window, "#636e72")
-        self.palette.setColor(QPalette.WindowText, "#dddeee")
-        self.palette.setColor(QPalette.Base, "#2d3436")
-        self.palette.setColor(QPalette.Text, "#ffffff")
+        self.palette.setColor(QPalette.Window, "#2e3440")
+        self.palette.setColor(QPalette.WindowText, "#eceff4")
+        self.palette.setColor(QPalette.Base, "#3b4252")
+        self.palette.setColor(QPalette.AlternateBase, "#434c5e")
+        self.palette.setColor(QPalette.ToolTipBase, "#4c566a")
+        self.palette.setColor(QPalette.PlaceholderText, "#d8dee9")
+        self.palette.setColor(QPalette.Text, "#eceff4")
+        self.palette.setColor(QPalette.Button, "#5e81ac")
+        self.palette.setColor(QPalette.ButtonText, "#4c566a")
+        self.palette.setColor(QPalette.BrightText, "#81a1c1")
         self.setPalette(self.palette)
     def maximize(self):
         if self.maximized:
@@ -294,7 +300,7 @@ class APIWindow(QWidget):
             data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal)
         #######
         if source == "cmc":
-            data = self.api_dict[source].get_opening_price(symbol)
+            data = self.api_dict[source].get_opening_price(symbol)[-1*rangeVal:]
         return data
 
 class MLWindow(QWidget):

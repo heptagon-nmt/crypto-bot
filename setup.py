@@ -7,7 +7,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = fh.read()
     setup(
         name='yacu',
-        version='0.0.2.8',
+        version='0.0.3.6',
         author='Yet Another Crypto Util Team',
         author_email='',
         license='GPL3',

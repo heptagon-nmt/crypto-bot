@@ -1,8 +1,13 @@
-from src.ML_predictor_backend import predict_next_N_timesteps
-from src.get_data import *
-from src.utils import *
+#from src.ML_predictor_backend import predict_next_N_timesteps
+#from src.get_data import *
+#from src.utils import *
+from utils import *
+from get_data import *
+from ML_predictor_backend import predict_next_N_timesteps
+
 import argparse
 import ast
+from pathlib import Path
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 sources = ["kraken", "coingecko", "cmc"]
@@ -81,24 +86,28 @@ def main():
 		print("Source not recognized, exiting")
 		exit(1)
 	if args.plot_data:
-		plot_and_save_price_graph(data, args.filename+"_"+args.crypto, args.filetype, args.crypto)
+		plot_and_save_price_graph(data,
+                Path(f'./{args.filename}_{args.crypto}'),
+                args.filetype, args.crypto)
 	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
 	if args.model == "all":
 		predictions_over_models = {}
 		for model in models:
-			prediction = predict_next_N_timesteps(data, args.lags, args.days, model)
+			prediction = predict_next_N_timesteps(data, args.model, lags=args.lags)
 			print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+model+" model are:\n")
 			for (index, p) in enumerate(prediction):
 				print("Predicted Day "+str(index+1)+" price = "+str(p))
 			predictions_over_models[model] = prediction
 			print("\n")
 		if args.plot_data:
-			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, predictions_over_models)
+			plot_and_save_price_graph_with_predictions(data,
+                    Path(f'./{args.filename}_{args.crypto}'),
+                    args.filetype, args.crypto, predictions_over_models)
 		print_summary_statistics_of_predicted_prices(predictions_over_models)
 		if(args.csv):
-			export.export_csv(predictions_over_models)
+			export_csv(predictions_over_models)
 	else:
-		prediction = predict_next_N_timesteps(data, args.lags, args.days, args.model)
+		prediction = predict_next_N_timesteps(data, args.model, lags=args.lags)
 		print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+args.model+" model are:\n")
 		for (index, p) in enumerate(prediction):
 			print("Predicted Day "+str(index+1)+" price = "+str(p))
@@ -106,7 +115,7 @@ def main():
 		if args.plot_data:
 			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
 		if(args.csv):
-			export.export_csv({args.model: prediction})
+			export_csv({args.model: prediction})
 	return
 
 if __name__ == "__main__":
