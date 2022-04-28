@@ -103,7 +103,7 @@ def main():
 		if(args.csv):
 			export_csv(predictions_over_models)
 	else:
-		prediction = predict_next_N_timesteps(data, args.lags, args.days, args.model)
+		prediction = predict_next_N_timesteps(data, args.model, lags=args.lags)
 		print("The predicted prices of "+args.crypto+" over the next "+str(args.days)+" days based on the "+args.model+" model are:\n")
 		for (index, p) in enumerate(prediction):
 			print("Predicted Day "+str(index+1)+" price = "+str(p))
