@@ -5,6 +5,7 @@ import os
 import sys
 import src.crypto_util
 import src.gui
+from dataclasses import dataclass
 
 def gui():
     """
@@ -18,3 +19,13 @@ def cli():
     """
     src.crypto_util.main()
 
+@dataclass()
+class Coin():
+    """
+    Use this to make you crypto bot!
+    """
+    name: str
+    source: str
+    days: int = 7
+    model: str = "all"
+    lags: int = 300
