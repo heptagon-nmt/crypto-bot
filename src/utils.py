@@ -62,7 +62,7 @@ def plot_and_save_price_graph(data, filename, file_extension, crypto):
 	plt.legend()
 	plt.savefig(Path(f'./{filename}.{file_extension}'))
 	plt.close()
-	print("Figure of historical price data has been written to "+"figures/"+filename+"."+file_extension)
+	print("Figure of historical price data has been written to" + str(filename)+ "."+file_extension)
 	return None
 
 def plot_and_save_price_graph_with_predictions(data, filename, file_extension, crypto, predictions):
@@ -101,7 +101,7 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	plt.legend(handles=[red_patch]+h)
 	plt.savefig("figures/"+filename+"_prediction."+file_extension)
 	plt.close()
-	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+filename+"_prediction."+file_extension)
+	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+str(filename)+"_prediction."+file_extension)
 	return None
 
 def print_summary_statistics_of_predicted_prices(predictions_for_different_models):
