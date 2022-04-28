@@ -189,6 +189,11 @@ then loaded back from that file.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="src.get_data.CoinGecko.get_ids">
+<span class="sig-name descname"><span class="pre">get_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.get_data.CoinGecko.get_ids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="src.get_data.CoinGecko.get_intervals">
 <span class="sig-name descname"><span class="pre">get_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.get_data.CoinGecko.get_intervals" title="Permalink to this definition"></a></dt>
 <dd><p>Return the available intervals (in minutes) for CoinGecko</p>
@@ -349,7 +354,9 @@ ignore_currencies   Currencies to ignore when parsing</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.ML_predictor_backend.predict_next_N_timesteps">
 <span class="sig-prename descclassname"><span class="pre">src.ML_predictor_backend.</span></span><span class="sig-name descname"><span class="pre">predict_next_N_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.ML_predictor_backend.predict_next_N_timesteps" title="Permalink to this definition"></a></dt>
-<dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction.</p>
+<dd><p>Forecasts price data given an input of historical price data, and a ML regression model to do the prediction. 
+Importantly, this function takes an input of a linear vector of scalars which means that implicitely the time steps
+in between different values are assumed to be the same.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
