@@ -127,7 +127,7 @@ def test_default() -> None:
 	utils module
 	"""
 
-"""
+
 def test_gui():
     import gui
     app = gui.QApplication()
@@ -148,4 +148,4 @@ def test_gui():
 
 
 
-"""
+

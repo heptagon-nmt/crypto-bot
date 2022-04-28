@@ -83,5 +83,5 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
   and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
 - Add moving averages toggling to graph
+- Add fullscreen toggling for graphs (if not too difficult)
 - Add comments to gui.py
-- Finish adding comments to gui.py

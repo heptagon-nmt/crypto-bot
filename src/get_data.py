@@ -228,14 +228,14 @@ class Kraken(APIInterface):
         data = response.json()
         assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
         return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
-    def get_opening_price(self, id, vs_currency, days) -> List[float]:
+    def get_opening_price(self, id, vs_currency, days, interval = 1440) -> List[float]:
         """
         Get the daily opening price
 
         :return: The opening price of the given symbol over a specified number of days
         :rtype: List[List]
         """
-        data = self.get_ohlc(id, vs_currency, days, 1440).transpose()
+        data = self.get_ohlc(id, vs_currency, days, interval).transpose()
         assert len(data) > 1
         return data[1]
     def get_current_price(self, id: str, vs_currency: str, bid_type = "a") -> float:
@@ -299,7 +299,7 @@ class CoinGecko(APIInterface):
         data = self.get_dict_ids(update_cache)
         ids = [data[i]['id'] for i in range(len(data))]
 
-        return ids
+        return list(set(ids))
     def get_intervals(self) -> List[int]:
         """
         Return the available intervals (in minutes) for CoinGecko

@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self.tabWindow = QTabWidget()
         self.centralWidget = CentralWidget()
         self.classificationWindow = ClassificationWindow()
+        self.classificationWindow.nnWindow.trainButton.clicked.connect(self.train)
         self.tabWindow.addTab(self.centralWidget, "Spot Price Forecasting")
         self.tabWindow.addTab(self.classificationWindow, "Color Prediction")
         fileMenu = self.menuBar().addMenu("&File")
@@ -98,6 +99,8 @@ class MainWindow(QMainWindow):
         # which prompts for the path and name of the plot, as well as the file
         # extension.
         print("To be added later...")
+    def train(self):
+        pass
 
 class CentralWidget(QWidget):
     """
@@ -230,7 +233,7 @@ class APIWindow(QWidget):
         self._setAvailableIntervals()
     def _getSymbolListsAndInfo(self):
         self.api_dict = {"coingecko": CoinGecko(), "kraken": Kraken(), "cmc": CMC()}
-        self.ids = dict(zip(sources_list, [api.get_ids() for api in list(self.api_dict.values())]))
+        self.ids = dict(zip(sources_list, [sorted(list(set(api.get_ids()))) for api in list(self.api_dict.values())]))
         self.intervals = dict(zip(sources_list, [format_intervals(api.get_intervals()) for api in list(self.api_dict.values())]))
     def getInterval(self):
         ### This converts the interval string into an integer in minutes
@@ -426,6 +429,8 @@ class ClassificationWindow(QWidget):
 
 class NNWindow(QWidget):
     """
+    This window goes to the right of the API selection window. Users can select 
+    various hyperparameters for 
     """
     def __init__(self, parent = None):
         super().__init__(parent)
@@ -457,7 +462,6 @@ class NNWindow(QWidget):
 
     def createLayerWidgets(self):
         self.layerWidgets = []
-        enabled = ["Enabled", "Disabled"]
         for i in range(max_layers):
             widget = QWidget()
             formLayout = QFormLayout(widget)
@@ -487,13 +491,14 @@ class NNWindow(QWidget):
         activationComboBox.addItems(["sigmoid"])
         formLayout.addRow(QLabel("Output Layer"))
         formLayout.addRow(activationComboBox)
+        self.trainButton = QPushButton("Train")
         self.formLayout.addRow(widget)
+        self.formLayout.addRow(self.trainButton)
 
     def _updateLayerWidgets(self):
         layers = int(self.layerComboBox.currentText())
         for i in range(max_layers):
             self.layerWidgets[i].setVisible(i < layers)
-
 
 def start_gui():
     """
