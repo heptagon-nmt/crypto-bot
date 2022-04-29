@@ -240,7 +240,6 @@ class Kraken(APIInterface):
         :rtype: List[List]
         """
         # Debugging this weird fucking error with the extra ghost variable
-        print(dummy)
         data = self.get_ohlc(id, vs_currency, days, interval).transpose()
         assert len(data) > 1
         return data[1]
