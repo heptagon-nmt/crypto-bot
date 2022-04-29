@@ -232,13 +232,15 @@ class Kraken(APIInterface):
         data = response.json()
         assert len(data['error']) == 0, "Kraken server returned {}.".format(data['error'][0])
         return np.array(data['result'][list(data['result'])[0]], dtype = np.float64)
-    def get_opening_price(self, id, vs_currency, days, interval = 1440) -> List[float]:
+    def get_opening_price(self, id: str, vs_currency: str, days: int, interval: int) -> List[float]:
         """
         Get the daily opening price
 
         :return: The opening price of the given symbol over a specified number of days
         :rtype: List[List]
         """
+        # Debugging this weird fucking error with the extra ghost variable
+        print(dummy)
         data = self.get_ohlc(id, vs_currency, days, interval).transpose()
         assert len(data) > 1
         return data[1]
@@ -444,3 +446,7 @@ def pull_CMC_scraper_data(cryptocurrency_name: str) -> np.ndarray:
 	for a in json_data:
 		data.append(a["Open"])
 	return data
+
+if __name__ == "__main__":
+    k = Kraken()
+    k.get_opening_price("xrp", "usd", 1, 1)

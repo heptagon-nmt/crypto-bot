@@ -1,16 +1,14 @@
-from cProfile import label
 from datetime import datetime, timedelta
-from re import X
 from src.ML_predictor_backend import *
 from src.get_data import *
 import sys
 from PySide6 import QtWidgets
-from PySide6.QtGui import QAction, QPalette, QRegularExpressionValidator
+from PySide6.QtGui import QAction, QColor, QPalette, QRegularExpressionValidator
 from PySide6.QtWidgets import (QApplication, QPushButton, QCheckBox, QComboBox,
     QHBoxLayout, QFormLayout, QGridLayout, QLabel, QLineEdit, QListWidget, QMainWindow, 
-    QMenu, QMessageBox, QTabWidget, QToolBar, QWidget)
+    QMessageBox, QTabWidget, QToolBar, QWidget)
 import pyqtgraph as pg
-from typing import List, Tuple
+from typing import List
 
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 max_layers = 5
@@ -72,7 +70,7 @@ class MainWindow(QMainWindow):
         self.maximized = False
         self.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
         # Create a palette that looks nice. Dark mode, maybe?
-        #self.createPalette()
+        self.createPalette()
     def load(self):
         QMessageBox.warning(self, "AxViewer", f"Unable to load the veendow.")
     def nextTab(self):
@@ -83,7 +81,7 @@ class MainWindow(QMainWindow):
         self.centralWidget.closeTab()
     def createPalette(self):
         self.palette = QPalette()
-        self.palette.setColor(QPalette.Window, "#2e3440")
+        """self.palette.setColor(QPalette.Window, "#2e3440")
         self.palette.setColor(QPalette.WindowText, "#eceff4")
         self.palette.setColor(QPalette.Base, "#3b4252")
         self.palette.setColor(QPalette.AlternateBase, "#434c5e")
@@ -92,7 +90,20 @@ class MainWindow(QMainWindow):
         self.palette.setColor(QPalette.Text, "#eceff4")
         self.palette.setColor(QPalette.Button, "#5e81ac")
         self.palette.setColor(QPalette.ButtonText, "#4c566a")
-        self.palette.setColor(QPalette.BrightText, "#81a1c1")
+        self.palette.setColor(QPalette.BrightText, "#81a1c1")"""
+        self.palette.setColor(QPalette.Window, QColor(53, 53, 53))
+        self.palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+        self.palette.setColor(QPalette.Base, QColor(25, 25, 25))
+        self.palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+        self.palette.setColor(QPalette.ToolTipBase, QColor(255, 255, 255))
+        self.palette.setColor(QPalette.ToolTipText, QColor(255, 255, 255))
+        self.palette.setColor(QPalette.Text, QColor(255, 255, 255))
+        self.palette.setColor(QPalette.Button, QColor(63, 63, 63))
+        self.palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))
+        self.palette.setColor(QPalette.BrightText, QColor(23, 23, 200))
+        self.palette.setColor(QPalette.Link, QColor(42, 130, 218))
+        self.palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+        self.palette.setColor(QPalette.HighlightedText, QColor(0, 0, 0))
         self.setPalette(self.palette)
     def maximize(self):
         if self.maximized:
@@ -106,6 +117,9 @@ class MainWindow(QMainWindow):
         # extension.
         print("To be added later...")
     def train(self):
+        """
+        Get OHLC data from selected API with the following fields: (Open, High, Low, Close, Volume)
+        """
         pass
 
 class CentralWidget(QWidget):
@@ -130,6 +144,7 @@ class CentralWidget(QWidget):
         self.gridLayout.addWidget(self.forecastTabWindow, 0, 2)
     def _getForecast(self):
         data = self.apiWindow.getData()
+        print(data)
         interval = self.apiWindow.getInterval()
         symbol = self.apiWindow.getSymbol()
         if data is None:
@@ -287,7 +302,8 @@ class APIWindow(QWidget):
         interval = self.getInterval()
         #######
         if source == "kraken":
-            data = np.array(self.api_dict[source].get_ohlc(symbol, "USD", rangeVal, interval)).transpose()[1]
+            # UNEXPLAINABLE TYPE ERROR OCCURRING HERE. Clearly passing 4 arguments but it thinks I'm passing 5
+            data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal, interval)
         ### If CoinGecko API is used, the range must be in the array returned by CoinGecko.get_range(), defined in get_data.py
         if source == "coingecko":
             allowed_range = self.api_dict["coingecko"].get_range()
@@ -519,4 +535,3 @@ def start_gui():
 
 if __name__ == '__main__':
     start_gui()
-
