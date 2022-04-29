@@ -137,7 +137,7 @@ class CMC(APIInterface):
         :return: list of intervals
         """
         return [60 * 24]
-    def get_opening_price(self, id):
+    def get_opening_price(self, id: str):
         """
         Query CMC Scraper API to get the cryptocurrency price data
 
@@ -152,6 +152,18 @@ class CMC(APIInterface):
         for a in json_data:
             data.append(a["Open"])
         return data
+    def get_ohlc(self, id: str) -> np.ndarray:
+        """
+        Get CMC's OHLC/Volume data
+        :param str id: coin id, such as "eth", "btc", etc.
+        :return: matrix of OHLCV data; each row contains the daily Open, High, Low and Volume (USD) values up to the previous day
+        :rtype: np.ndarray
+        """
+        assert type(id) is str, "Cryptocurrency name must be a string"
+        cols = ["Open", "High", "Low", "Close", "Volume"]
+        scraper = CmcScraper(id)
+        json_data = scraper.get_dataframe()[::-1][cols]
+        return np.array(json_data[cols], dtype = np.float64)
     
 class Kraken(APIInterface):
     def __init__(self):
