@@ -34,11 +34,11 @@ def get_comma_separated_list(array):
 
 class MainWindow(QMainWindow):
     """
-    This window contains only the CentralWidget, which itself contains all of 
+    This window contains only the RegressionTab, which itself contains all of 
     the important subwidgets.
 
     Attributes:
-        centralWidget       The widget to contain all other widgets
+        regressionTab       The widget to contain all other widgets
         fileMenu            The "File" tab at the top left
     """
     def __init__(self):
@@ -46,11 +46,11 @@ class MainWindow(QMainWindow):
         toolBar = QToolBar()
         self.addToolBar(toolBar)
         self.tabWindow = QTabWidget()
-        self.centralWidget = CentralWidget()
-        self.classificationWindow = ClassificationWindow()
-        self.classificationWindow.nnWindow.trainButton.clicked.connect(self.train)
-        self.tabWindow.addTab(self.centralWidget, "Spot Price Forecasting")
-        self.tabWindow.addTab(self.classificationWindow, "Color Prediction")
+        self.regressionTab = RegressionTab()
+        self.classificationTab = ClassificationTab()
+        self.classificationTab.nnWindow.trainButton.clicked.connect(self.train)
+        self.tabWindow.addTab(self.regressionTab, "Spot Price Forecasting")
+        self.tabWindow.addTab(self.classificationTab, "Color Prediction")
         fileMenu = self.menuBar().addMenu("&File")
         editMenu = self.menuBar().addMenu("&Edit")
         viewMenu = self.menuBar().addMenu("&View")
@@ -63,11 +63,11 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(savePlotAction)
         fileMenu.addAction(exitAction)
         viewMenu.addAction(fullScreenAction)
-        self.centralWidget.addAction(fullScreenAction)
-        self.centralWidget.addAction(savePlotAction)
-        self.centralWidget.addAction(nextTabAction)
-        self.centralWidget.addAction(prevTabAction)
-        self.centralWidget.addAction(closeTabAction)
+        self.regressionTab.addAction(fullScreenAction)
+        self.regressionTab.addAction(savePlotAction)
+        self.regressionTab.addAction(nextTabAction)
+        self.regressionTab.addAction(prevTabAction)
+        self.regressionTab.addAction(closeTabAction)
         self.setCentralWidget(self.tabWindow)
         self.maximized = False
         self.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
@@ -76,11 +76,11 @@ class MainWindow(QMainWindow):
     def load(self):
         QMessageBox.warning(self, "AxViewer", f"Unable to load the veendow.")
     def nextTab(self):
-        self.centralWidget.nextTab()
+        self.regressionTab.nextTab()
     def prevTab(self):
-        self.centralWidget.prevTab()
+        self.regressionTab.prevTab()
     def closeTab(self):
-        self.centralWidget.closeTab()
+        self.regressionTab.closeTab()
     def createPalette(self):
         self.palette = QPalette()
         """self.palette.setColor(QPalette.Window, "#2e3440")
@@ -99,6 +99,7 @@ class MainWindow(QMainWindow):
         self.palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
         self.palette.setColor(QPalette.ToolTipBase, QColor(255, 255, 255))
         self.palette.setColor(QPalette.ToolTipText, QColor(255, 255, 255))
+        self.palette.setColor(QPalette.PlaceholderText, QColor(140, 140, 140))
         self.palette.setColor(QPalette.Text, QColor(255, 255, 255))
         self.palette.setColor(QPalette.Button, QColor(63, 63, 63))
         self.palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))
@@ -106,6 +107,18 @@ class MainWindow(QMainWindow):
         self.palette.setColor(QPalette.Link, QColor(42, 130, 218))
         self.palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
         self.palette.setColor(QPalette.HighlightedText, QColor(0, 0, 0))
+        self.palette.setColor(QPalette.Disabled, QPalette.WindowText,
+                         QColor(127, 127, 127))
+        self.palette.setColor(QPalette.Disabled, QPalette.Text,
+                         QColor(127, 127, 127))
+        self.palette.setColor(QPalette.Disabled, QPalette.ButtonText,
+                         QColor(127, 127, 127))
+        self.palette.setColor(QPalette.Disabled, QPalette.Highlight,
+                         QColor(80, 80, 80))
+        self.palette.setColor(QPalette.Disabled, QPalette.HighlightedText,
+                         QColor(127, 127, 127))
+        self.palette.setColor(QPalette.Disabled, QPalette.Base, QColor(39, 39, 39))
+
         self.setPalette(self.palette)
     def maximize(self):
         if self.maximized:
@@ -120,11 +133,12 @@ class MainWindow(QMainWindow):
         print("To be added later...")
     def train(self):
         """
-        Get OHLC data from selected API with the following fields: (Open, High, Low, Close, Volume)
+        Get OHLC data from selected API with the following fields: (Unix Timestamp, Open, High, Low, Close, Volume)
         """
+        #self.classificationTab
         pass
 
-class CentralWidget(QWidget):
+class RegressionTab(QWidget):
     """
     This is the widget to contain the APIWindow, MLWindow, as well as 
     AnalyticsWindow and GraphsWindow.
@@ -258,7 +272,13 @@ class APIWindow(QWidget):
         self.api_dict = {"coingecko": CoinGecko(), "kraken": Kraken(), "cmc": CMC()}
         self.ids = dict(zip(sources_list, [sorted(list(set(api.get_ids()))) for api in list(self.api_dict.values())]))
         self.intervals = dict(zip(sources_list, [format_intervals(api.get_intervals()) for api in list(self.api_dict.values())]))
-    def getInterval(self):
+    def getInterval(self) -> int:
+        """
+        This converts the interval string into an integer in minutes
+
+        :return: integer representing the number of minutes per interval
+        :rtype: int
+        """
         ### This converts the interval string into an integer in minutes
         intervalString = self.intervalComboBox.currentText()
         if len(intervalString) > 7: 
@@ -274,13 +294,17 @@ class APIWindow(QWidget):
         if symbolWidget == None:
             return None
         return symbolWidget.text()
-    def getData(self) -> np.ndarray:
+    def getData(self, isOHLC = False) -> np.ndarray:
         """
         To get the data from the values on the window, the values are first 
         validated, then sent into the desired API for data retrieval.
 
         :return: 
         """
+        if isOHLC:
+            method = "get_ohlc"
+        else:
+            method = "get_opening_price"
         ### Getting the source API from the sourceComboBox
         source = self.sourceComboBox.currentText()
         #######
@@ -304,8 +328,7 @@ class APIWindow(QWidget):
         interval = self.getInterval()
         #######
         if source == "kraken":
-            # UNEXPLAINABLE TYPE ERROR OCCURRING HERE. Clearly passing 4 arguments but it thinks I'm passing 5
-            data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal, interval)
+            params = [symbol, "USD", rangeVal, interval]
         ### If CoinGecko API is used, the range must be in the array returned by CoinGecko.get_range(), defined in get_data.py
         if source == "coingecko":
             allowed_range = self.api_dict["coingecko"].get_range()
@@ -315,10 +338,11 @@ class APIWindow(QWidget):
                 rangeVal = allowed_range[np.argmin(np.abs(rangeVal - allowed_range))]
                 self.rangeEdit.setText("{}".format(rangeVal))
                 self.errLabel.setText("Setting range to the nearest value in {}.".format(allowed_range))
-            data = self.api_dict[source].get_opening_price(symbol, "USD", rangeVal)
+            params = [symbol, "USD", rangeVal]
         #######
         if source == "cmc":
-            data = self.api_dict[source].get_opening_price(symbol)[-1*rangeVal:]
+            params = [symbol]
+        data = getattr(self.api_dict[source], method)(*params)[-1*int(rangeVal*1440/interval):]
         return data
 
 class MLWindow(QWidget):
@@ -428,7 +452,6 @@ class AnalyticsWindow(QWidget):
         fPen = pg.mkPen('r', width=3)
         self.graphWidget.plot(historicalX, historicalY, pen = hPen, name = "Historical Prices")
         self.graphWidget.plot(forecastedX, forecastedY, pen = fPen, name = "Predicted Prices")
-        labelColor = (255, 255, 255)
         self.graphWidget.setLabel("top", "Model: {}; Hyperparameters: {}".format(self.model, str(self.hyperparameters)))
         self.graphWidget.setLabel("left", "{} Price (USD)".format(self.symbol))
         self.graphWidget.setLabel("bottom", "Interval: {} (min)".format(self.interval))
@@ -441,7 +464,12 @@ class AnalyticsWindow(QWidget):
                 strftime("%Y-%m-%d %H:%M:%S"), price) for i, price in enumerate(forecastedY)])
         self.plot(historicalY, forecastedY)
 
-class ClassificationWindow(QWidget):
+class CandleChartWindow(AnalyticsWindow):
+    def __init__(self, symbol: str, model: str, interval: int, hyperparameters: dict):
+        super().__init__(symbol, model, interval, hyperparameters)
+        print(self.model)
+
+class ClassificationTab(QWidget):
     """
     This is the second primary tab of the window. This implements the functionality
     for 
