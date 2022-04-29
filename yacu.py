@@ -89,4 +89,4 @@ class Source():
 SOURCES = [Source(x) for x in ["kraken", "coingecko"]]
 
 if __name__ == "__main__":
-    src.crypto_util.main()
+    src.gui.start_gui()
