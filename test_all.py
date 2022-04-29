@@ -127,7 +127,7 @@ def test_default() -> None:
 	utils module
 	"""
 
-
+"""
 def test_gui():
     import gui
     app = gui.QApplication()
@@ -144,8 +144,4 @@ def test_gui():
     mainWin.savePlot()
 
     central = mainWin.centralWidget
-    # Ill add in more latter, bugs to fix first
-
-
-
-
+"""

@@ -11,7 +11,7 @@ import csv
 import matplotlib.patches as mpatches
 from pathlib import Path
 
-def export_csv(data, filename = "data/data_out.csv"):
+def export_csv(data, filename = "./data_out.csv"):
     """
     Exports prediction data as a CSV file.
 
@@ -20,7 +20,7 @@ def export_csv(data, filename = "data/data_out.csv"):
     :arg filename: The name of the file to save to within data/
     """
     try:
-        with open(filename, "w", newline='') as csv_file:
+        with open(Path(filename), "w", newline='') as csv_file:
             tmp = csv.writer(csv_file, delimiter=" ",
                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             tmp.writerow(data.keys())
@@ -78,7 +78,7 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	:return: None
 	"""
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
-	assert type(filename) is str
+	assert isinstance(filename, Path)
 	assert type(file_extension) is str
 	assert type(data) is list
 	assert type(crypto) is str
@@ -99,9 +99,9 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	red_patch = mpatches.Patch(color='green', label='Future prediction region', alpha=0.1)
 	h, l = ax.get_legend_handles_labels()
 	plt.legend(handles=[red_patch]+h)
-	plt.savefig("figures/"+filename+"_prediction."+file_extension)
+	plt.savefig(f'./{filename}_prediction.{file_extension}')
 	plt.close()
-	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+"figures/"+str(filename)+"_prediction."+file_extension)
+	print("Figure of (truncated) price data for the last 50 days with predictions has been written to "+f'./{filename}_prediction.{file_extension}')
 	return None
 
 def print_summary_statistics_of_predicted_prices(predictions_for_different_models):

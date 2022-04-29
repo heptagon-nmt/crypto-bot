@@ -1,9 +1,6 @@
-#from src.ML_predictor_backend import predict_next_N_timesteps
-#from src.get_data import *
-#from src.utils import *
-from utils import *
-from get_data import *
-from ML_predictor_backend import predict_next_N_timesteps
+from src.utils import *
+from src.get_data import *
+from src.ML_predictor_backend import predict_next_N_timesteps
 
 import argparse
 import ast
@@ -12,7 +9,15 @@ from pathlib import Path
 models = ["random_forest", "linear", "lasso", "gradient_boosting", "bagging", "ridge"]
 sources = ["kraken", "coingecko", "cmc"]
 
-def main():
+def main(api_args = None):
+	"""
+	The top level prediction function, complete with argparsing and other
+	features for comandline interfration.
+
+	:args api_args: A string of flags to be passed to the parser.
+	:return: A list of predicted prices for each day requested.
+	"""
+	prediction = None
 	parser = argparse.ArgumentParser(description="Command Line Cryptocurrency price prediction utility")
 	parser.add_argument("--crypto", "-c", type=str, required=False, help="Symbol of the cryptocurrency. Required unless --ls is called")
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
@@ -24,7 +29,10 @@ def main():
 	parser.add_argument("--source", "-s", type=str, required=False, help="API source to use. Options are "+str(sources)+". Default is CMC scraper")
 	parser.add_argument("--lags", type=int, required=False, help="Model hyperparamater for training the specified --model. Defaults to 300. Larger lag values requires more training time, and also typically results in higher accuracy. ")
 	parser.add_argument("--csv", action="store_true", help="Outputs prediction data to a csv in the `data/` directory to a file called `data_out.csv`")
-	args = parser.parse_args()
+	if (api_args):
+		args = parser.parse_args(api_args)
+	else:
+		args = parser.parse_args()
 
 	print_motd()
 
@@ -113,10 +121,12 @@ def main():
 			print("Predicted Day "+str(index+1)+" price = "+str(p))
 		print("\n")
 		if args.plot_data:
-			plot_and_save_price_graph_with_predictions(data, args.filename+"_"+args.crypto, args.filetype, args.crypto, {args.model: prediction})
+			plot_and_save_price_graph_with_predictions(data,
+                    Path(f'./{args.filename}_{args.crypto}'),
+                    args.filetype, args.crypto, {args.model: prediction})
 		if(args.csv):
 			export_csv({args.model: prediction})
-	return
+	return prediction
 
 if __name__ == "__main__":
 	main()

@@ -38,6 +38,10 @@ available.
 
 - Anaconda: `python3 src/gui.py`
 
+- Once installed via pip you will be able to initialize the GUI using the command `yacu` in the command line.
+  - In some cases, such as in Linux Mint installations, this will fail. If the happens it means that `.bin` is not in your path (which you can check using `echo $PATH`). Therefore you need to add `.bin` to your path in order to fix this. 
+
+
 ### CLI
 
 - Default: `yacu-cli`
@@ -74,26 +78,13 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 - docker, podman, pip, or anaconda
 
-## Command line GUI
-- Once installed via pip you will be able to initialize the GUI using the command `yacu` in the command line.
-  - In some cases, such as in Linux Mint installations, this will fail. If the happens it means that `.bin` is not in your path (which you can check using `echo $PATH`). Therefore you need to add `.bin` to your path is required in order to fix this. 
+## Installation problems
+- On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version GLIBC_2.28 not found`
+  - The fix for this is `sudo apt-get install libc6`
+
 
 ## TODOs
 
 - Add method to save and load previously trained ML model files using the python library `pickle`.
-- Implement training functionality (get_data already done)
-- Add more ML models maybe? Maybe make a more customizable model, such as being able to make a 1D
-  convolutional neural network with specified inputs (e.g. price of BTC correlated with other coins)
-  and user-specfied outputs (whether a particular trend appears bearish or bullish). 
 - More color palettes for the MainWindow (variations of dark mode)
 - Add moving averages toggling to graph
-<<<<<<< HEAD
-- Add fullscreen toggling for graphs (if not too difficult)
-- Add comments to gui.py
-=======
-
-## Installation problems
-- On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found`
-  - The fix for this is `sudo apt-get install libc6`
-
->>>>>>> 875355c051fd3e12b4e3684ad2a3f0d3f212e225
