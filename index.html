@@ -123,8 +123,17 @@ make the requests).</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="src.get_data.CMC.get_ohlc">
+<span class="sig-name descname"><span class="pre">get_ohlc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#src.get_data.CMC.get_ohlc" title="Permalink to this definition"></a></dt>
+<dd><p>Get CMC’s OHLC/Volume data
+:param str id: coin id, such as “eth”, “btc”, etc.
+:return: matrix of OHLCV data; each row contains the daily Open, High, Low and Volume (USD) values up to the previous day
+:rtype: np.ndarray</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="src.get_data.CMC.get_opening_price">
-<span class="sig-name descname"><span class="pre">get_opening_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.get_data.CMC.get_opening_price" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_opening_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.get_data.CMC.get_opening_price" title="Permalink to this definition"></a></dt>
 <dd><p>Query CMC Scraper API to get the cryptocurrency price data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
