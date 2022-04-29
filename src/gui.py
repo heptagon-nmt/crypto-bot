@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from numpy import full
 from src.ML_predictor_backend import *
 from src.get_data import *
 import sys
@@ -411,7 +413,10 @@ class AnalyticsWindow(QWidget):
         self.forecastedPricesListWidget = QListWidget()
         self.forecastedPricesListWidget.setMinimumWidth(300)
         self.graphWidget = pg.PlotWidget()
-        self.graphWidget.setBackground("w")
+        self.graphWidget.showFullScreen()
+        #fullScreenAction = QAction("&Fullscreen", self.graphWidget, shortcut="F", triggered = self.graphWidget.maximize)
+        #self.graphWidget.addAction(fullScreenAction)
+        #self.graphWidget.setBackground("w")
         self.graphWidget.setMinimumWidth(self.graphWidget.height())
         self.formLayout.addRow("", self.graphWidget)
         self.formLayout.addRow("Forecast (USD):", self.forecastedPricesListWidget)
@@ -419,14 +424,14 @@ class AnalyticsWindow(QWidget):
         historicalX = [i for i in range(len(historicalY))]
         startForecastX = historicalX[-1]
         forecastedX = [i for i in range(startForecastX, startForecastX + len(forecastedY))]
-        hPen = pg.mkPen('b', width=3)
+        hPen = pg.mkPen('#00FFFF', width=3)
         fPen = pg.mkPen('r', width=3)
         self.graphWidget.plot(historicalX, historicalY, pen = hPen, name = "Historical Prices")
         self.graphWidget.plot(forecastedX, forecastedY, pen = fPen, name = "Predicted Prices")
-        labelColor = (0, 0, 0)
-        self.graphWidget.setLabel("top", "Model: {}; Hyperparameters: {}".format(self.model, str(self.hyperparameters)), color = labelColor)
-        self.graphWidget.setLabel("left", "{} Price (USD)".format(self.symbol), color = labelColor)
-        self.graphWidget.setLabel("bottom", "Interval: {} (min)".format(self.interval), color = labelColor)
+        labelColor = (255, 255, 255)
+        self.graphWidget.setLabel("top", "Model: {}; Hyperparameters: {}".format(self.model, str(self.hyperparameters)))
+        self.graphWidget.setLabel("left", "{} Price (USD)".format(self.symbol))
+        self.graphWidget.setLabel("bottom", "Interval: {} (min)".format(self.interval))
     def createForecast(self, historicalY, forecastedY):
         start = int(time.time())
         self.forecastedPricesListWidget.addItem("Model: {}".format(self.model))
