@@ -10,6 +10,7 @@ from html.parser import HTMLParser
 import json
 import numpy as np
 import os
+import pandas as pd
 import re
 import requests
 import time
@@ -446,6 +447,6 @@ def pull_CMC_scraper_data(cryptocurrency_name: str) -> np.ndarray:
 		data.append(a["Open"])
 	return data
 
-if __name__ == "__main__":
-    k = Kraken()
-    k.get_opening_price("xrp", "usd", 1, 1)
+def get_x_and_y(ohlc: pd.DataFrame):
+    pass
+
