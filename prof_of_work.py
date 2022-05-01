@@ -11,12 +11,13 @@ import yacu
 import time
 from pathlib import Path
 import pickle
+from typing import Tuple, List, Dict
 
 MODELS = ['random_forest', 'linear',
           'lasso', 'gradient_boosting', 'bagging', 'ridge']
 
 def run_sim(days: int,
-        coin_name: str) -> tuple[list[float], dict[str, list[float]]]:
+        coin_name: str) -> Tuple[List[float], Dict[str, List[float]]]:
     """
     Actualy performs the prediction.
 
