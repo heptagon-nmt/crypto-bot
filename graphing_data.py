@@ -1,6 +1,5 @@
 """
-A simple tool that generates a report on how accurate the yacu prediction tool
-is.
+A simple tool that generates a report on how accurate the yacu prediction tool is.
 """
 
 import matplotlib.pyplot as plt
