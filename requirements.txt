@@ -14,3 +14,4 @@ PyQt5>=5.15.6
 pyqtgraph==0.12.4
 sphinx-rtd-theme
 tk-tools>=0.15.0
+matplotlib>=3.5.1
