@@ -42,19 +42,19 @@ class Coin(_CoinDataClass):
     """
     Represents a coin and its predicted values.
     """
-    def __init__(self, **args):
+    def __init__(self, *args):
         """
         Uses the internals to find the pedicted values and then passes the rest
         to the data classes.
         """
-        super().__init__(**args)
+        super().__init__(*args)
         try:
             self.predicted_prices = \
-            src.crypto_util.main(f'--crypto {self.name}'
-                                 f' --model {self.model}'
-                                 f' --source {self.source}'
-                                 f' --days {self.days}'
-                                 f' --lags {self.lags}')
+            src.crypto_util.main(['--crypto', str(self.name),
+                                 '--model', str(self.model),
+                                 '--source', str(self.source),
+                                 '--days', str(self.days),
+                                 '--lags', str(self.lags)])
             if (not isinstance(self.predicted_prices, list)):
                 raise Exception("No predicted data returned.")
         except Exception as e:

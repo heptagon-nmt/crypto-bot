@@ -22,7 +22,7 @@ def main(api_args = None):
 	parser.add_argument("--crypto", "-c", type=str, required=False, help="Symbol of the cryptocurrency. Required unless --ls is called")
 	parser.add_argument("--days", "-d", type=int, required=False, help="Days in the future to predict. Default is 7")
 	parser.add_argument("--ls", action="store_true", required=False, help="List all the cryptocurrencies available for an API source. If specified must also specify --source. If specified no other action will be taken, and the cryptocurrency symbols will be written to local files in `data/` ")
-	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all. Default is all")
+	parser.add_argument("--model", "-m", type=str, required=False, help="Regression machine larning model to predict the price given historical data. Options are "+str(models)+" or all. Default is linear", default='linear')
 	parser.add_argument("--plot_data", "-p", type=str, required=False, help="Plot the past data and predicted data. Options are True and False. Default is True. File is written to figures/")
 	parser.add_argument("--filename", "-f", type=str, required=False, help="Filename (prefix) to save data plots to. Default is data")
 	parser.add_argument("--filetype", "-ft", type=str, required=False, help="Image filetype to save data to. Must be either pdf png or jpg. Default is pdf")
@@ -87,10 +87,11 @@ def main(api_args = None):
 		data = pull_CMC_scraper_data(args.crypto)
 	elif args.source == "kraken":
 		api = Kraken()
+		data = pull_CMC_scraper_data(args.crypto)
 	elif args.source == "coingecko":
 		api = CoinGecko()
+		data = pull_CMC_scraper_data(args.crypto)
 	else:
-		data = api.get_opening_price(args.crypto, "USD", 10000)
 		print("Source not recognized, exiting")
 		exit(1)
 	if args.plot_data:
