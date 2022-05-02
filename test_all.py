@@ -109,39 +109,13 @@ def test_default() -> None:
 	assert len(pred) == 4
 	assert type(pred[0]) is float
 
-
 	"""
 	get_data module
 	"""
-	"""
-	import src.get_data
-	price_data = get_data.pull_CMC_scraper_data("BTC")
+	from src.get_data import pull_CMC_scraper_data
+	price_data = pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
 	assert len(price_data) > 1
-	price_data = src.get_data.pull_CMC_scraper_data("ETH")
+	price_data = pull_CMC_scraper_data("ETH")
 	assert type(price_data) is list
 	assert len(price_data) > 1
-	"""
-	
-	"""
-	utils module
-	"""
-
-"""
-def test_gui():
-    import gui
-    app = gui.QApplication()
-    mainWin = gui.MainWindow()
-    availableGeometry = mainWin.screen().availableGeometry()
-    mainWin.resize(availableGeometry.width() / 3, availableGeometry.height() / 2)
-
-    mainWin.maximize()
-    # mainWin.load()
-    mainWin.nextTab()
-    mainWin.prevTab()
-    mainWin.closeTab()
-    mainWin.createPalette()
-    mainWin.savePlot()
-
-    central = mainWin.centralWidget
-"""
