@@ -346,7 +346,9 @@ class APIWindow(QWidget):
         if source == "cmc":
             print("ass")
             params = [symbol]
-        data = getattr(self.api_dict[source], method)(*params)[-1*int(rangeVal*1440/interval):]
+            data = getattr(self.api_dict[source], method)(*params)[-1*rangeVal:]
+        else:
+            data = getattr(self.api_dict[source], method)(*params)[-1*int(rangeVal*1440/interval):]
         return data
 
 class MLWindow(QWidget):
