@@ -16,6 +16,8 @@ import itertools as it
 MODELS = ['random_forest', 'linear',
           'lasso', 'gradient_boosting', 'bagging', 'ridge']
 
+# MODELS = ['random_forest']
+
 def run_sim(days: int,
         coin_name: str) -> Tuple[List[float], Dict[str, List[float]]]:
     """
@@ -36,7 +38,7 @@ def run_sim(days: int,
     theoretic_prices = {}
     for m in MODELS:
         theoretic_prices[m] = yacu.Coin(coin_name,
-                "kraken", days, m, 600).predicted_prices
+                "kraken", days, m).predicted_prices
     return (real_prices, theoretic_prices)
 
 def plot_comp_chart(real: np.ndarray,
@@ -53,8 +55,11 @@ def plot_comp_chart(real: np.ndarray,
     fig, ax = plt.subplots()
     if (len(real) > len(days)):
         real = real[:len(days)]
-    plt.plot(days, np.ndarray.flatten(real),'ro',
-            days, predicted, 'bo')
+    diff = int(predicted[0] - real[0])
+    avrage = lambda x : x- diff
+    # predicted = list(map(avrage, predicted))
+    plt.plot(days, np.ndarray.flatten(real),'r',
+            days, predicted, 'b')
     r_slope = list(it.pairwise(np.ndarray.flatten(real)))
     p_slope = list(it.pairwise(predicted))
     get_slope = lambda x: x[1] - x[0]
@@ -81,7 +86,7 @@ if __name__ == "__main__":
         with open(Path("./cache_predicted.pickle"), 'rb') as f:
             predicted = pickle.load(f)
     except Exception as e:
-        real, predicted = run_sim(30, 'BTC')
+        real, predicted = run_sim(500, 'BTC')
         with open(Path("./cache_real.pickle"), 'wb') as f:
             pickle.dump(real, f)
         with open(Path("./cache_predicted.pickle"), 'wb') as f:
