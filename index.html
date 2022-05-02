@@ -97,7 +97,7 @@ while prediciting coins.</p>
 created, predicted prices will be avalible in the predicted_prices
 attribute.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Args str name</dt>
+<dt class="field-odd">Args name</dt>
 <dd class="field-odd"><p>The name of the coin.</p>
 </dd>
 <dt class="field-even">Args source</dt>
@@ -105,9 +105,13 @@ attribute.</p>
 </dd>
 </dl>
 <p>or ‘coingecko’.
-:args int days: The number of days you want to predict.
-:args str model: The learning model you want to use.
-:args int lags: The level of accuracy to use in the model.</p>
+:args days: The number of days you want to predict.
+:args model: The learning model you want to use.
+:args lags: The level of accuracy to use in the model.</p>
+<dl class="simple">
+<dt>CALULATED DATA:</dt><dd><p>Coin.predicted_prices ——— List of calculated prices.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -116,7 +120,7 @@ attribute.</p>
 <dd><p>Represents a source of crypto data.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="yacu.Source.get_avalible_coins">
-<span class="sig-name descname"><span class="pre">get_avalible_coins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yacu.Source.get_avalible_coins" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_avalible_coins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#yacu.Source.get_avalible_coins" title="Permalink to this definition"></a></dt>
 <dd><p>Uses the internal get coin ids to generate a list of coin names.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -135,13 +139,13 @@ attribute.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yacu.cli">
-<span class="sig-prename descclassname"><span class="pre">yacu.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yacu.cli" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">yacu.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#yacu.cli" title="Permalink to this definition"></a></dt>
 <dd><p>Start the cli</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yacu.gui">
-<span class="sig-prename descclassname"><span class="pre">yacu.</span></span><span class="sig-name descname"><span class="pre">gui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yacu.gui" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">yacu.</span></span><span class="sig-name descname"><span class="pre">gui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#yacu.gui" title="Permalink to this definition"></a></dt>
 <dd><p>Start the gui.</p>
 </dd></dl>
 
