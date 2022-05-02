@@ -76,11 +76,11 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## Requirements
 
-- docker, podman, or Python3 and pip
+- docker, podman, or Python3 and pip (or pip3)
 
 ## Installation problems
 - On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version GLIBC_2.28 not found`
-  - The fix for this is `sudo apt-get install libc6`
+  - A possible fix for this is `sudo apt-get install libc6`
 
 
 ## Future TODOs and improvements
