@@ -16,14 +16,15 @@ import src.crypto_util
 import src.gui
 import src.get_data
 from dataclasses import dataclass
+from typing import List
 
-def gui():
+def gui() -> None:
     """
     Start the gui.
     """
     src.gui.start_gui()
 
-def cli():
+def cli() -> None:
     """
     Start the cli
     """
@@ -53,12 +54,15 @@ class Coin(_CoinDataClass):
     created, predicted prices will be avalible in the predicted_prices
     attribute.
 
-    :args str name: The name of the coin.
+    :args name: The name of the coin.
     :args source: The data source to train the AI. Can be 'cmc', 'kraken',
     or 'coingecko'.
-    :args int days: The number of days you want to predict.
-    :args str model: The learning model you want to use.
-    :args int lags: The level of accuracy to use in the model.
+    :args days: The number of days you want to predict.
+    :args model: The learning model you want to use.
+    :args lags: The level of accuracy to use in the model.
+
+    CALULATED DATA:
+        Coin.predicted_prices --------- List of calculated prices.
     """
     def __init__(self, *args):
         """
@@ -86,7 +90,7 @@ class Source():
     """
     name: str
 
-    def get_avalible_coins(self):
+    def get_avalible_coins(self) -> List[str]:
         """
         Uses the internal get coin ids to generate a list of coin names.
 
