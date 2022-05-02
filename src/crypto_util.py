@@ -90,8 +90,6 @@ def main(api_args = None):
 		data = api.get_opening_price(args.crypto, "USD", args.days * 2, 1)
 	elif args.source == "coingecko":
 		api = CoinGecko()
-        # data = api.get_opening_price(args.crypto, "USD", 4)
-        # NOTE: hmmmmmmmm.
 		data = pull_CMC_scraper_data(args.crypto)
 	else:
 		print("Source not recognized, exiting")
@@ -100,7 +98,7 @@ def main(api_args = None):
 		plot_and_save_price_graph(data,
                 Path(f'./{args.filename}_{args.crypto}'),
                 args.filetype, args.crypto)
-	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+"\n")
+	print("\nNote that 'day 1' corresponds to the prediction of tomorrows prices of "+args.crypto+" (assuming the time interval is 1 day)\n")
 	if args.model == "all":
 		predictions_over_models = {}
 		for model in models:
