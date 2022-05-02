@@ -147,7 +147,7 @@ class CMC(APIInterface):
         """
         assert type(id) is str, "Cryptocurrency name must be a string"
         assert type(rangeVal) is int, "Range must be an integer"
-        assert rangeVal > 1, "Range value must be at least one"
+        assert rangeVal > 1, "Range value must be greater than 1"
         scraper = CmcScraper(id)
         json_data = ast.literal_eval(scraper.get_data("json"))
         json_data.reverse()
