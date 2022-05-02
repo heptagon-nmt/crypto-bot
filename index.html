@@ -83,11 +83,31 @@ internal documentation, primarily used by the developers.</p>
 </div>
 <section id="module-yacu">
 <span id="public-api"></span><h2>Public API<a class="headerlink" href="#module-yacu" title="Permalink to this headline"></a></h2>
-<p>Top level file for the application.</p>
+<p>There are two objects avalible with the public api, although the user is
+welcome to dive deeper.</p>
+<p>The Coin object can be used to predict the future prices of a given coin.</p>
+<p>The Source object represents a a data source that can be used for prediciton.
+All avalible Sources can be found in the SOURCES variable.</p>
+<p>The YacuError Exception will be raised and can be caught if an error occurs
+while prediciting coins.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="yacu.Coin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yacu.</span></span><span class="sig-name descname"><span class="pre">Coin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yacu.Coin" title="Permalink to this definition"></a></dt>
-<dd><p>Represents a coin and its predicted values.</p>
+<dd><p>Represents a coin and its predicted values. After the object has been
+created, predicted prices will be avalible in the predicted_prices
+attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Args str name</dt>
+<dd class="field-odd"><p>The name of the coin.</p>
+</dd>
+<dt class="field-even">Args source</dt>
+<dd class="field-even"><p>The data source to train the AI. Can be ‘cmc’, ‘kraken’,</p>
+</dd>
+</dl>
+<p>or ‘coingecko’.
+:args int days: The number of days you want to predict.
+:args str model: The learning model you want to use.
+:args int lags: The level of accuracy to use in the model.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -97,7 +117,7 @@ internal documentation, primarily used by the developers.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="yacu.Source.get_avalible_coins">
 <span class="sig-name descname"><span class="pre">get_avalible_coins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yacu.Source.get_avalible_coins" title="Permalink to this definition"></a></dt>
-<dd><p>Uses the internal get coin ids to generate a list of coin sigints.</p>
+<dd><p>Uses the internal get coin ids to generate a list of coin names.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>List of strings.</p>
@@ -110,7 +130,7 @@ internal documentation, primarily used by the developers.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="yacu.YacuError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yacu.</span></span><span class="sig-name descname"><span class="pre">YacuError</span></span><a class="headerlink" href="#yacu.YacuError" title="Permalink to this definition"></a></dt>
-<dd><p>Ued to manage errors with the Yacu prediciton system.</p>
+<dd><p>Used to manage errors with the Yacu prediciton system.</p>
 </dd></dl>
 
 <dl class="py function">
