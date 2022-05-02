@@ -54,11 +54,11 @@ class Coin(_CoinDataClass):
     created, predicted prices will be avalible in the predicted_prices
     attribute.
 
-    :args name: The name of the coin.
-    :args source: The data source to train the AI. Can be 'cmc', 'kraken', or 'coingecko'.
-    :args days: The number of days you want to predict.
-    :args model: The learning model you want to use.
-    :args lags: The level of accuracy to use in the model.
+    :arg name: The name of the coin.
+    :arg source: The data source to train the AI. Can be 'cmc', 'kraken', or 'coingecko'.
+    :arg days: The number of days you want to predict.
+    :arg model: The learning model you want to use.
+    :arg lags: The level of accuracy to use in the model.
 
     CALULATED DATA:
         Coin.predicted_prices --------- List of calculated prices.
