@@ -80,7 +80,7 @@ def plot_and_save_price_graph_with_predictions(data, filename, file_extension, c
 	assert file_extension in ["pdf", "png", "jpg"], "Supported file extensions are pdf, png and jpg"
 	assert isinstance(filename, Path)
 	assert type(file_extension) is str
-	assert type(data) is list
+	assert (type(data) is list) or (type(data) is np.ndarray)
 	assert type(crypto) is str
 	assert type(predictions) is dict
 	truncate_data = 50

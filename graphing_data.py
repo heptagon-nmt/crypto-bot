@@ -36,7 +36,7 @@ def run_sim(days: int,
     theoretic_prices = {}
     for m in MODELS:
         theoretic_prices[m] = yacu.Coin(coin_name,
-                "kraken", days, m, 500).predicted_prices
+                "kraken", days, m, 600).predicted_prices
     return (real_prices, theoretic_prices)
 
 def plot_comp_chart(real: np.ndarray,
@@ -81,7 +81,7 @@ if __name__ == "__main__":
         with open(Path("./cache_predicted.pickle"), 'rb') as f:
             predicted = pickle.load(f)
     except Exception as e:
-        real, predicted = run_sim(14, 'BTC')
+        real, predicted = run_sim(30, 'BTC')
         with open(Path("./cache_real.pickle"), 'wb') as f:
             pickle.dump(real, f)
         with open(Path("./cache_predicted.pickle"), 'wb') as f:

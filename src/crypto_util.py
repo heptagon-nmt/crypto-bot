@@ -87,9 +87,11 @@ def main(api_args = None):
 		data = pull_CMC_scraper_data(args.crypto)
 	elif args.source == "kraken":
 		api = Kraken()
-		data = pull_CMC_scraper_data(args.crypto)
+		data = api.get_opening_price(args.crypto, "USD", args.days * 2, 1)
 	elif args.source == "coingecko":
 		api = CoinGecko()
+        # data = api.get_opening_price(args.crypto, "USD", 4)
+        # NOTE: hmmmmmmmm.
 		data = pull_CMC_scraper_data(args.crypto)
 	else:
 		print("Source not recognized, exiting")
