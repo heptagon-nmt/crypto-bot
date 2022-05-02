@@ -55,8 +55,7 @@ class Coin(_CoinDataClass):
     attribute.
 
     :args name: The name of the coin.
-    :args source: The data source to train the AI. Can be 'cmc', 'kraken',
-    or 'coingecko'.
+    :args source: The data source to train the AI. Can be 'cmc', 'kraken', or 'coingecko'.
     :args days: The number of days you want to predict.
     :args model: The learning model you want to use.
     :args lags: The level of accuracy to use in the model.
