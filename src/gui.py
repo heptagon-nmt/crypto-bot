@@ -118,7 +118,6 @@ class MainWindow(QMainWindow):
         self.palette.setColor(QPalette.Disabled, QPalette.HighlightedText,
                          QColor(127, 127, 127))
         self.palette.setColor(QPalette.Disabled, QPalette.Base, QColor(49, 49, 49))
-
         self.setPalette(self.palette)
     def maximize(self):
         if self.maximized:
@@ -311,7 +310,12 @@ class APIWindow(QWidget):
         ### Verifying that a symbol has been selected from the list
         symbol = self.getSymbol()
         if symbol == None:
-            self.errLabel.setText("Must select a symbol.")
+            self.errLabel.setText("Must select a symbol.", )
+            self.errLabel.setStyleSheet("""
+                                        QLabel {
+                                            color: red
+                                        }
+                                        """)
             return
         #######
         ### Did the user supply a range value?
