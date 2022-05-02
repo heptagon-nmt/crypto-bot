@@ -1,5 +1,14 @@
 """
-Top level file for the application.
+There are two objects avalible with the public api, although the user is
+welcome to dive deeper.
+
+The Coin object can be used to predict the future prices of a given coin.
+
+The Source object represents a a data source that can be used for prediciton.
+All avalible Sources can be found in the SOURCES variable.
+
+The YacuError Exception will be raised and can be caught if an error occurs
+while prediciting coins.
 """
 import os
 import sys
@@ -23,7 +32,7 @@ def cli():
 
 class YacuError(Exception):
     """
-    Ued to manage errors with the Yacu prediciton system.
+    Used to manage errors with the Yacu prediciton system.
     """
     ...
 
@@ -40,7 +49,16 @@ class _CoinDataClass():
 
 class Coin(_CoinDataClass):
     """
-    Represents a coin and its predicted values.
+    Represents a coin and its predicted values. After the object has been
+    created, predicted prices will be avalible in the predicted_prices
+    attribute.
+
+    :args str name: The name of the coin.
+    :args source: The data source to train the AI. Can be 'cmc', 'kraken',
+    or 'coingecko'.
+    :args int days: The number of days you want to predict.
+    :args str model: The learning model you want to use.
+    :args int lags: The level of accuracy to use in the model.
     """
     def __init__(self, *args):
         """
@@ -70,7 +88,7 @@ class Source():
 
     def get_avalible_coins(self):
         """
-        Uses the internal get coin ids to generate a list of coin sigints.
+        Uses the internal get coin ids to generate a list of coin names.
 
         :returns: List of strings.
         """
