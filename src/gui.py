@@ -222,6 +222,10 @@ class APIWindow(QWidget):
         self.rangeEdit.setValidator(lineEditValidator)
         self.rangeEdit.textEdited.connect(self._setAvailableIntervals)
         self.errLabel = QLabel()
+        self.errLabel.setStyleSheet("""
+                                    QLabel {
+                                        color: red
+                                    }""")
         formLayout.addRow("API Source:", self.sourceComboBox)
         formLayout.addRow("Symbol:", self.symbolFilter)
         formLayout.addRow("", self.symbolListWidget)
@@ -311,11 +315,6 @@ class APIWindow(QWidget):
         symbol = self.getSymbol()
         if symbol == None:
             self.errLabel.setText("Must select a symbol.", )
-            self.errLabel.setStyleSheet("""
-                                        QLabel {
-                                            color: red
-                                        }
-                                        """)
             return
         #######
         ### Did the user supply a range value?
@@ -345,6 +344,7 @@ class APIWindow(QWidget):
             params = [symbol, "USD", rangeVal]
         #######
         if source == "cmc":
+            print("ass")
             params = [symbol]
         data = getattr(self.api_dict[source], method)(*params)[-1*int(rangeVal*1440/interval):]
         return data
