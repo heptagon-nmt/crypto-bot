@@ -76,14 +76,14 @@ Documentation can be found [here](https://1103s.github.io/crypto-bot/).
 
 ## Requirements
 
-- docker, podman, pip, or anaconda
+- docker, podman, or Python3 and pip
 
 ## Installation problems
 - On some Linus distributions the PySide6 import will throw an error like this: `ImportError: /lib/x86_64-linux-gnu/libc.so.6: version GLIBC_2.28 not found`
   - The fix for this is `sudo apt-get install libc6`
 
 
-## TODOs
+## Future TODOs and improvements
 
 - Add method to save and load previously trained ML model files using the python library `pickle`.
 - More color palettes for the MainWindow (variations of dark mode)
