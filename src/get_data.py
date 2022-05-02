@@ -138,7 +138,7 @@ class CMC(APIInterface):
         :return: list of intervals
         """
         return [60 * 24]
-    def get_opening_price(self, id: str):
+    def get_opening_price(self, id: str, rangeVal: int):
         """
         Query CMC Scraper API to get the cryptocurrency price data
 
@@ -146,13 +146,19 @@ class CMC(APIInterface):
         :return: 
         """
         assert type(id) is str, "Cryptocurrency name must be a string"
+        assert type(rangeVal) is int, "Range must be an integer"
+        assert rangeVal > 1, "Range value must be at least one"
         scraper = CmcScraper(id)
         json_data = ast.literal_eval(scraper.get_data("json"))
         json_data.reverse()
         data = []
         for a in json_data:
             data.append(a["Open"])
-        return data
+        print(rangeVal)
+        trunc = data[-1 * rangeVal:]
+        print(trunc)
+        print(len(trunc))
+        return trunc
     def get_ohlc(self, id: str) -> np.ndarray:
         """
         Get CMC's OHLC/Volume data

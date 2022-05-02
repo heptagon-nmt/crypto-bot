@@ -222,10 +222,6 @@ class APIWindow(QWidget):
         self.rangeEdit.setValidator(lineEditValidator)
         self.rangeEdit.textEdited.connect(self._setAvailableIntervals)
         self.errLabel = QLabel()
-        self.errLabel.setStyleSheet("""
-                                    QLabel {
-                                        color: red
-                                    }""")
         formLayout.addRow("API Source:", self.sourceComboBox)
         formLayout.addRow("Symbol:", self.symbolFilter)
         formLayout.addRow("", self.symbolListWidget)
@@ -260,6 +256,10 @@ class APIWindow(QWidget):
                 else: 
                     index = 0
                 intervals = [intervals[index]]
+                self.errLabel.setStyleSheet("""
+                                            QLabel {
+                                                color: white
+                                            }""")
                 self.errLabel.setText("Allowed values for CG range: " + get_comma_separated_list(self.api_dict['coingecko'].get_range()))
             self.intervalComboBox.clear()
             self.intervalComboBox.addItems(intervals)
@@ -314,6 +314,10 @@ class APIWindow(QWidget):
         ### Verifying that a symbol has been selected from the list
         symbol = self.getSymbol()
         if symbol == None:
+            self.errLabel.setStyleSheet("""
+                                        QLabel {
+                                            color: red
+                                        }""")
             self.errLabel.setText("Must select a symbol.", )
             return
         #######
@@ -345,10 +349,10 @@ class APIWindow(QWidget):
         #######
         if source == "cmc":
             print("ass")
-            params = [symbol]
-            data = getattr(self.api_dict[source], method)(*params)[-1*rangeVal:]
+            params = [symbol, rangeVal]
+            data = getattr(self.api_dict[source], method)(*params)
         else:
-            data = getattr(self.api_dict[source], method)(*params)[-1*int(rangeVal*1440/interval):]
+            data = getattr(self.api_dict[source], method)(*params)
         return data
 
 class MLWindow(QWidget):
@@ -567,6 +571,7 @@ def start_gui():
     """
     app = QApplication(sys.argv)
     mainWin = MainWindow()
+    mainWin.setWindowTitle("Cryptocurrency Graphing")
     availableGeometry = mainWin.screen().availableGeometry()
     mainWin.resize(availableGeometry.width() / 3, availableGeometry.height() / 2)
     mainWin.show()
