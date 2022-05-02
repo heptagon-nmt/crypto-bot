@@ -13,7 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../'))
-
+autodoc_mock_imports = ["PySide6", "pyqtgraph"]
 
 # -- Project information -----------------------------------------------------
 
@@ -22,7 +22,7 @@ copyright = 'YACU-Team'
 author = 'YACU-Team'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '1.0.10'
 
 
 # -- General configuration ---------------------------------------------------
@@ -64,11 +64,11 @@ html_theme_options = {
     'prev_next_buttons_location': 'bottom',
     'style_external_links': False,
     'vcs_pageview_mode': '',
-    'style_nav_header_background': 'white',
+    'style_nav_header_background': '#5e81ac',
     # Toc options
     'collapse_navigation': False,
-    'sticky_navigation': False,
-    'navigation_depth': 10,
+    'sticky_navigation': True,
+    'navigation_depth': -1,
     'includehidden': True,
     'titles_only': False
 }

@@ -1,5 +1,14 @@
 """
-Top level file for the application.
+There are two objects avalible with the public api, although the user is
+welcome to dive deeper.
+
+The Coin object can be used to predict the future prices of a given coin.
+
+The Source object represents a a data source that can be used for prediciton.
+All avalible Sources can be found in the SOURCES variable.
+
+The YacuError Exception will be raised and can be caught if an error occurs
+while prediciting coins.
 """
 import os
 import sys
@@ -7,14 +16,15 @@ import src.crypto_util
 import src.gui
 import src.get_data
 from dataclasses import dataclass
+from typing import List
 
-def gui():
+def gui() -> None:
     """
     Start the gui.
     """
     src.gui.start_gui()
 
-def cli():
+def cli() -> None:
     """
     Start the cli
     """
@@ -23,7 +33,7 @@ def cli():
 
 class YacuError(Exception):
     """
-    Ued to manage errors with the Yacu prediciton system.
+    Used to manage errors with the Yacu prediciton system.
     """
     ...
 
@@ -40,7 +50,18 @@ class _CoinDataClass():
 
 class Coin(_CoinDataClass):
     """
-    Represents a coin and its predicted values.
+    Represents a coin and its predicted values. After the object has been
+    created, predicted prices will be avalible in the predicted_prices
+    attribute.
+
+    :arg name: The name of the coin.
+    :arg source: The data source to train the AI. Can be 'cmc', 'kraken', or 'coingecko'.
+    :arg days: The number of days you want to predict.
+    :arg model: The learning model you want to use.
+    :arg lags: The level of accuracy to use in the model.
+
+    CALULATED DATA:
+        Coin.predicted_prices --------- List of calculated prices.
     """
     def __init__(self, *args):
         """
@@ -68,9 +89,9 @@ class Source():
     """
     name: str
 
-    def get_avalible_coins(self):
+    def get_avalible_coins(self) -> List[str]:
         """
-        Uses the internal get coin ids to generate a list of coin sigints.
+        Uses the internal get coin ids to generate a list of coin names.
 
         :returns: List of strings.
         """
