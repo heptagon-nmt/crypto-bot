@@ -181,7 +181,7 @@ class Kraken(APIInterface):
         url = self.url_prefix.format("SystemStatus")
         r = requests.get(url)
         data = r.json()
-        assert data["status"] == "online", "Kraken server cannot be reached currently"
+        assert data['result']['status'] == "online", "Kraken server cannot be reached currently"
         return True
     def get_ids(self, update_cache = False):
         if not os.path.isdir("data"): 
@@ -235,6 +235,7 @@ class Kraken(APIInterface):
         TODO Ensure that the last row of data points does not contain random zeros.   
 
         :param str id: This is a ticker, such as ETH, XRP, BTC, etc.
+        :param str vs_currency: This is the target currency to price the given coin by
         :param int days: Number of days to go back to 
         :type days: integer
         :param int interval: An integer which specifies the OHLC time interval in 
