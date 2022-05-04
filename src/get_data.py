@@ -177,6 +177,12 @@ class Kraken(APIInterface):
         super().__init__()
         self.url_prefix = url_prefixes["kraken"]
         self.file_name = "data/kraken_pairs_list.json"
+    def get_server_status(self) -> bool:
+        url = self.url_prefix.format("SystemStatus")
+        r = requests.get(url)
+        data = r.json()
+        assert data["status"] == "online", "Kraken server cannot be reached currently"
+        return True
     def get_ids(self, update_cache = False):
         if not os.path.isdir("data"): 
             os.mkdir("data")
@@ -287,6 +293,12 @@ class CoinGecko(APIInterface):
     """
     def __init__(self):
         super().__init__()
+    def get_server_status(self) -> bool:
+        url = url_prefixes["coingecko"].format("ping")
+        req = requests.get(url)
+        data = req.json()
+        assert data["gecko_says"] == "(V3) To the Moon!", "CoinGecko server cannot be reached currently"
+        return True
     def search_symbols(self, symbol: str) -> List[str]:
         """
         This attempts to find a symbol in the available IDs list for the API.
