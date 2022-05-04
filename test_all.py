@@ -116,6 +116,14 @@ def test_default() -> None:
 	price_data = pull_CMC_scraper_data("BTC")
 	assert type(price_data) is list
 	assert len(price_data) > 1
+	assert (type(price_data[0]) is float or type(price_data[0]) is int)
+
 	price_data = pull_CMC_scraper_data("ETH")
 	assert type(price_data) is list
 	assert len(price_data) > 1
+	assert (type(price_data[0]) is float or type(price_data[0]) is int)
+
+	price_data = pull_CMC_scraper_data("XRP")
+	assert type(price_data) is list
+	assert len(price_data) > 1
+	assert (type(price_data[0]) is float or type(price_data[0]) is int)
