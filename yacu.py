@@ -18,6 +18,20 @@ import src.get_data
 from dataclasses import dataclass
 from typing import List
 
+class _SilentContext:
+    """
+    Used to quite CLI text from being printed when the YACU tool is being used
+    as a library.
+    """
+
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
+
 def gui() -> None:
     """
     Start the gui.
@@ -70,14 +84,15 @@ class Coin(_CoinDataClass):
         """
         super().__init__(*args)
         try:
-            self.predicted_prices = \
-            src.crypto_util.main(['--crypto', str(self.name),
-                                 '--model', str(self.model),
-                                 '--source', str(self.source),
-                                 '--days', str(self.days),
-                                 '--lags', str(self.lags)])
-            if (not isinstance(self.predicted_prices, list)):
-                raise Exception("No predicted data returned.")
+            with _SilentContext():
+                self.predicted_prices = \
+                src.crypto_util.main(['--crypto', str(self.name),
+                                     '--model', str(self.model),
+                                     '--source', str(self.source),
+                                     '--days', str(self.days),
+                                     '--lags', str(self.lags)])
+                if (not isinstance(self.predicted_prices, list)):
+                    raise Exception("No predicted data returned.")
         except Exception as e:
             raise YacuError(f'Yacu could not predict the price of {self.name}'
                             f' due to the folowing error: {e}')
@@ -89,7 +104,7 @@ class Source():
     """
     name: str
 
-    def get_avalible_coins(self) -> List[str]:
+    def get_available_coins(self) -> List[str]:
         """
         Uses the internal get coin ids to generate a list of coin names.
 
